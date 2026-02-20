@@ -10,6 +10,27 @@ export default {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        mobile: "430px",
+      },
+      fontFamily: {
+        sans: ["var(--font-noto-sans-kr)", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        base: ["1rem", { lineHeight: "1.6" }],
+        sm: ["0.875rem", { lineHeight: "1.5" }],
+        xs: ["0.8125rem", { lineHeight: "1.5" }],
+        lg: ["1.125rem", { lineHeight: "1.5" }],
+      },
+      letterSpacing: {
+        normal: "0",
+        tight: "-0.01em",
+      },
+      spacing: {
+        "btn": "0.5rem",
+        "section": "1.5rem",
+        "block": "1rem",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

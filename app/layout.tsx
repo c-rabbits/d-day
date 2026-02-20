@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { PwaRegister } from "@/components/pwa-register";
 import "./globals.css";
@@ -18,12 +18,17 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const notoSansKR = Noto_Sans_KR({
+  variable: "--font-noto-sans-kr",
   display: "swap",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -32,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+    <html lang="ko" suppressHydrationWarning>
+      <body className={`${notoSansKR.variable} font-sans antialiased`}>
         <PwaRegister />
         <ThemeProvider
           attribute="class"
@@ -41,7 +46,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="mx-auto min-h-screen w-full max-w-mobile bg-background">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

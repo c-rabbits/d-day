@@ -7,6 +7,13 @@
     --background: 0 0% 99%;
     --foreground: 0 0% 3.9%;
     --gradient-end: 220 20% 97%;
+    --leading-body: 1.6;
+    --leading-heading: 1.35;
+    --tracking-body: 0;
+    --tracking-heading: -0.01em;
+    --space-buttons: 0.5rem;
+    --space-sections: 1.5rem;
+    --space-blocks: 1rem;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -68,7 +75,21 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: hsl(var(--background));
+    font-feature-settings: "kern" 1;
+    letter-spacing: var(--tracking-body);
+    line-height: var(--leading-body);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  p {
+    line-height: var(--leading-body);
+    letter-spacing: var(--tracking-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
   }
 }
 

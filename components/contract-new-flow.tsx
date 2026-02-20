@@ -179,7 +179,7 @@ export function ContractNewFlow() {
           ))}
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pb-6">
         {step === 0 && (
           <div className="space-y-3">
             <p className="text-muted-foreground text-sm">계약 종류를 선택하세요</p>
@@ -208,7 +208,7 @@ export function ContractNewFlow() {
           <div className="space-y-4">
             <div className="grid gap-2">
               <Label>입력 방식</Label>
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => setInputMode("direct")}

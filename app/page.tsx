@@ -22,7 +22,7 @@ async function HomeContent() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-6 bg-gradient-to-b from-background to-[hsl(var(--gradient-end))]">
       <div className="text-center opacity-0 animate-fade-in-up">
         <h1 className="text-3xl font-bold tracking-tight">디데이</h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="text-muted-foreground mt-2 leading-normal">
           내가 맺은 계약의 끝을 대신 기억해주는 앱
         </p>
       </div>
