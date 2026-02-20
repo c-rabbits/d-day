@@ -21,22 +21,28 @@ const STEPS = ["카테고리", "정보 입력", "알림 설정"] as const;
 
 type InputMode = "direct" | "photo";
 
-/** OCR 플레이스홀더: 실제 연동 시 이 함수를 Tesseract/Google Vision API 등으로 교체 */
-async function extractFromImage(_file: File): Promise<{
+/** Google Vision API 기반 OCR (서버 /api/ocr 호출) */
+async function extractFromImage(file: File): Promise<{
   title: string;
   start_date: string;
   end_date: string;
   amount: string;
 }> {
-  await new Promise((r) => setTimeout(r, 1200));
-  const today = new Date();
-  const end = new Date(today);
-  end.setMonth(end.getMonth() + 1);
+  const formData = new FormData();
+  formData.append("image", file);
+  const res = await fetch("/api/ocr", {
+    method: "POST",
+    body: formData,
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error ?? "OCR 요청 실패");
+  }
   return {
-    title: "[OCR 결과] 계약명을 확인해 주세요",
-    start_date: today.toISOString().slice(0, 10),
-    end_date: end.toISOString().slice(0, 10),
-    amount: "",
+    title: data.title ?? "",
+    start_date: data.start_date ?? "",
+    end_date: data.end_date ?? "",
+    amount: data.amount ?? "",
   };
 }
 

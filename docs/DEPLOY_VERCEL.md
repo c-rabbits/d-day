@@ -37,8 +37,9 @@ HTTPS에서 앱과 푸시를 사용하려면 Vercel에 배포하면 됩니다.
 | `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Firebase messagingSenderId |
 | `NEXT_PUBLIC_FIREBASE_APP_ID` | Firebase appId |
 | `NEXT_PUBLIC_FIREBASE_VAPID_KEY` | 웹 푸시 인증서(VAPID) 키 |
+| `GOOGLE_CLOUD_VISION_API_KEY` | (선택) 사진에서 추출(OCR) 사용 시 — GCP Vision API 키 |
 
-**중요:** `NEXT_PUBLIC_*` 변수가 있어야 빌드 시 `firebase-messaging-sw.js` 가 생성되고, 배포 후에도 알림 켜기가 동작합니다.
+**중요:** `NEXT_PUBLIC_*` 변수가 있어야 빌드 시 `firebase-messaging-sw.js` 가 생성되고, 배포 후에도 알림 켜기가 동작합니다. OCR을 쓰려면 `GOOGLE_CLOUD_VISION_API_KEY` 도 설정하세요.
 
 ---
 
@@ -86,7 +87,7 @@ FCM/로그인 등 Firebase를 쓰는 경우, 배포 도메인을 허용해 둡�
 
 - [ ] Git 저장소에 코드 push
 - [ ] Vercel에서 프로젝트 Import, **Root Directory** = `d-day` (필요 시)
-- [ ] 환경 변수 8개 모두 입력
+- [ ] 환경 변수 8개(필수) + OCR 사용 시 `GOOGLE_CLOUD_VISION_API_KEY` 입력
 - [ ] Supabase Redirect URLs 에 배포 URL 추가
 - [ ] (선택) Firebase Authorized domains 에 배포 도메인 추가
 - [ ] Deploy 후 로그인·알림 켜기 테스트
