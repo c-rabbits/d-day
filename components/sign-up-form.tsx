@@ -3,15 +3,9 @@
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthScreen } from "@/components/auth-screen";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,7 +28,7 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError("비밀번호가 일치하지 않습니다.");
       setIsLoading(false);
       return;
     }
@@ -49,72 +43,97 @@ export function SignUpForm({
       });
       if (error) throw error;
       router.push("/auth/sign-up-success");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
-                <Input
-                  id="repeat-password"
-                  type="password"
-                  required
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
-                Login
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+    <div className={cn("w-full max-w-[430px]", className)} {...props}>
+      <AuthScreen
+        title="회원가입"
+        subtitle="새 계정을 만드세요"
+        backHref="/"
+      >
+        <form onSubmit={handleSignUp} className="flex flex-col gap-5">
+          <div className="grid gap-2">
+            <Label
+              htmlFor="email"
+              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+            >
+              이메일
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="example@gmail.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-[hsl(var(--input))] border-0"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label
+              htmlFor="password"
+              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+            >
+              비밀번호
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="bg-[hsl(var(--input))] border-0"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label
+              htmlFor="repeat-password"
+              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+            >
+              비밀번호 확인
+            </Label>
+            <Input
+              id="repeat-password"
+              type="password"
+              required
+              value={repeatPassword}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              className="bg-[hsl(var(--input))] border-0"
+            />
+          </div>
+          {error && (
+            <p className="text-sm text-destructive">{error}</p>
+          )}
+          <Button
+            type="submit"
+            className="w-full font-semibold uppercase tracking-wide"
+            disabled={isLoading}
+          >
+            {isLoading ? "가입 중…" : "회원가입"}
+          </Button>
+          <div className="relative my-2">
+            <span className="bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground">
+              또는
+            </span>
+            <hr className="border-border" />
+          </div>
+          <p className="text-center text-sm text-muted-foreground">
+            이미 계정이 있으신가요?{" "}
+            <Link
+              href="/auth/login"
+              className="font-medium text-primary hover:underline"
+            >
+              로그인
+            </Link>
+          </p>
+        </form>
+      </AuthScreen>
     </div>
   );
 }

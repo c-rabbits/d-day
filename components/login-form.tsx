@@ -3,15 +3,9 @@
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthScreen } from "@/components/auth-screen";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -40,71 +34,89 @@ export function LoginForm({
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/dashboard");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/sign-up"
-                className="underline underline-offset-4"
+    <div className={cn("w-full max-w-[430px]", className)} {...props}>
+      <AuthScreen
+        title="로그인"
+        subtitle="기존 계정으로 로그인하세요"
+        backHref="/"
+      >
+        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          <div className="grid gap-2">
+            <Label
+              htmlFor="email"
+              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
+            >
+              이메일
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="example@gmail.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-[hsl(var(--input))] border-0"
+            />
+          </div>
+          <div className="grid gap-2">
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="password"
+                className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
               >
-                Sign up
+                비밀번호
+              </Label>
+              <Link
+                href="/auth/forgot-password"
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                비밀번호 찾기
               </Link>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+            <Input
+              id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="bg-[hsl(var(--input))] border-0"
+            />
+          </div>
+          {error && (
+            <p className="text-sm text-destructive">{error}</p>
+          )}
+          <Button
+            type="submit"
+            className="w-full font-semibold uppercase tracking-wide"
+            disabled={isLoading}
+          >
+            {isLoading ? "로그인 중…" : "로그인"}
+          </Button>
+          <div className="relative my-2">
+            <span className="bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground">
+              또는
+            </span>
+            <hr className="border-border" />
+          </div>
+          <p className="text-center text-sm text-muted-foreground">
+            계정이 없으신가요?{" "}
+            <Link
+              href="/auth/sign-up"
+              className="font-medium text-primary hover:underline"
+            >
+              회원가입
+            </Link>
+          </p>
+        </form>
+      </AuthScreen>
     </div>
   );
 }

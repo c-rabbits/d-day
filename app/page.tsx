@@ -26,13 +26,21 @@ async function HomeContent() {
           내가 맺은 계약의 끝을 대신 기억해주는 앱
         </p>
       </div>
-      <div className="flex gap-3 opacity-0 animate-fade-in-up [animation-delay:0.15s] [animation-fill-mode:forwards]">
-        <Button asChild className="transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
-          <Link href="/auth/login">로그인</Link>
-        </Button>
-        <Button asChild variant="outline" className="transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
-          <Link href="/auth/sign-up">회원가입</Link>
-        </Button>
+      <div className="flex flex-col gap-3 opacity-0 animate-fade-in-up [animation-delay:0.15s] [animation-fill-mode:forwards]">
+        <div className="flex gap-3">
+          <Button asChild className="transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
+            <Link href="/auth/login">로그인</Link>
+          </Button>
+          <Button asChild variant="outline" className="transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
+            <Link href="/auth/sign-up">회원가입</Link>
+          </Button>
+        </div>
+        <Link
+          href="/welcome"
+          className="text-center text-sm text-muted-foreground hover:text-primary"
+        >
+          앱 소개 보기
+        </Link>
       </div>
     </main>
   );
