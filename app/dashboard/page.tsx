@@ -27,7 +27,7 @@ async function DashboardContent() {
   }).length;
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
-      <section className="mb-6">
+      <section className="mb-6 opacity-0 animate-fade-in-up [animation-fill-mode:forwards]">
         <p className="text-muted-foreground text-sm">
           곧 만료 예정 <span className="font-semibold text-foreground">{soonCount}건</span>
         </p>

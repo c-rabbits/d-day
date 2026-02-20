@@ -35,6 +35,8 @@ async function extractFromImage(file: File): Promise<{
     body: formData,
   });
   const data = await res.json();
+  // API 호출 확인용 (개발 시 브라우저 콘솔에서 확인)
+  console.log("[OCR] status:", res.status, "response:", data);
   if (!res.ok) {
     throw new Error(data.error ?? "OCR 요청 실패");
   }
@@ -92,11 +94,13 @@ export function ContractNewFlow() {
     setError(null);
     try {
       const result = await extractFromImage(photoFile);
+      console.log("[OCR] 폼에 넣을 값:", result);
       setTitle(result.title);
       setStartDate(result.start_date);
       setEndDate(result.end_date);
       setAmount(result.amount);
-    } catch {
+    } catch (e) {
+      console.error("[OCR] 실패:", e);
       setError("추출에 실패했습니다. 직접 입력해 주세요.");
     } finally {
       setIsExtracting(false);
