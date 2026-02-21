@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CalendarClock, CheckCircle2, Sparkles } from "lucide-react";
+import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import { VectorHero } from "@/components/vector-hero";
 
 export default function WelcomePage() {
@@ -9,7 +11,7 @@ export default function WelcomePage() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_20%,hsl(var(--primary)/0.16),transparent_42%),radial-gradient(circle_at_100%_100%,hsl(var(--secondary)/0.13),transparent_35%)]" />
       <div className="relative mx-auto flex w-full max-w-mobile flex-col gap-7">
         <div className="inline-flex w-fit items-center gap-2 rounded-full border border-outline-variant bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <AutoAwesomeRoundedIcon sx={{ fontSize: 14, color: "primary.main" }} />
           한 번 등록하면 끝까지 챙겨주는 디데이
         </div>
 
@@ -34,7 +36,7 @@ export default function WelcomePage() {
             "원하는 시점(D-30, D-7, D-1) 알림 설정",
           ].map((item) => (
             <div key={item} className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 text-primary" />
+              <CheckCircleRoundedIcon sx={{ fontSize: 18, color: "primary.main", mt: 0.25 }} />
               <p className="text-[0.95rem] text-muted-foreground">{item}</p>
             </div>
           ))}
@@ -43,7 +45,7 @@ export default function WelcomePage() {
         <div className="mt-1 flex flex-col gap-3.5 pb-6">
           <Button asChild size="lg" className="w-full">
             <Link href="/auth/login">
-              <CalendarClock className="h-4 w-4" />
+              <ScheduleRoundedIcon sx={{ fontSize: 20 }} />
               시작하기
             </Link>
           </Button>

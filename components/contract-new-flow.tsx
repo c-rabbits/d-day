@@ -16,15 +16,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import {
-  BellRing,
-  Check,
-  ChevronRight,
-  ImagePlus,
-  LayoutGrid,
-  PencilLine,
-  Sparkles,
-} from "lucide-react";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
+import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 
 const STEPS = [
   {
@@ -41,7 +39,7 @@ const STEPS = [
   },
 ] as const;
 
-const STEP_ICONS = [LayoutGrid, PencilLine, BellRing] as const;
+const STEP_ICONS = [DashboardRoundedIcon, EditRoundedIcon, NotificationsActiveRoundedIcon] as const;
 
 const CATEGORY_META: Record<ContractCategory, { emoji: string; hint: string }> = {
   RENT: { emoji: "🏠", hint: "월세·전세, 관리비 계약" },
@@ -252,13 +250,13 @@ export function ContractNewFlow() {
               <div
                 key={stepItem.title}
                 className={cn(
-                  "flex items-center gap-2 rounded-2xl border px-3 py-2.5 text-xs transition-colors",
+                  "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-xs transition-colors",
                   i <= step
                     ? "border-primary/40 bg-primary/10 text-foreground"
                     : "border-outline-variant bg-surface text-muted-foreground",
                 )}
               >
-                <Icon className="h-3.5 w-3.5" />
+                <Icon sx={{ fontSize: 14 }} />
                 <span className="truncate">{stepItem.title}</span>
               </div>
             );
@@ -318,32 +316,32 @@ export function ContractNewFlow() {
                   type="button"
                   onClick={() => setInputMode("direct")}
                   className={cn(
-                    "flex min-h-[74px] items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-[0.95rem] transition-colors",
+                    "flex min-h-[74px] items-center justify-center gap-2 rounded-md border px-4 py-3.5 text-[0.95rem] transition-colors",
                     inputMode === "direct"
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
                   )}
                 >
-                  <PencilLine className="h-4 w-4" />
+                  <EditRoundedIcon sx={{ fontSize: 20 }} />
                   직접 입력
                 </button>
                 <button
                   type="button"
                   onClick={() => setInputMode("photo")}
                   className={cn(
-                    "flex min-h-[74px] items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-[0.95rem] transition-colors",
+                    "flex min-h-[74px] items-center justify-center gap-2 rounded-md border px-4 py-3.5 text-[0.95rem] transition-colors",
                     inputMode === "photo"
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
                   )}
                 >
-                  <ImagePlus className="h-4 w-4" /> 사진에서 추출
+                  <AddPhotoAlternateRoundedIcon sx={{ fontSize: 20 }} /> 사진에서 추출
                 </button>
               </div>
             </div>
 
             {inputMode === "photo" && (
-              <div className="space-y-3.5 rounded-2xl border border-outline-variant bg-surface-container-low/70 p-5">
+              <div className="space-y-3.5 rounded-lg border border-outline-variant bg-surface-container-low/70 p-5">
                 <Label className="text-xs font-medium text-muted-foreground">
                   계약서/영수증 사진 업로드
                 </Label>
@@ -362,7 +360,7 @@ export function ContractNewFlow() {
                       width={1200}
                       height={800}
                       unoptimized
-                      className="max-h-48 w-full rounded-xl border border-outline-variant bg-surface object-contain"
+                      className="max-h-48 w-full rounded-md border border-outline-variant bg-surface object-contain"
                     />
                     <Button
                       type="button"
@@ -415,7 +413,7 @@ export function ContractNewFlow() {
             </div>
 
             {startDate && endDate && (
-              <p className="rounded-xl border border-outline-variant bg-surface-container-low/60 px-4 py-2.5 text-sm text-muted-foreground">
+              <p className="rounded-md border border-outline-variant bg-surface-container-low/60 px-4 py-2.5 text-sm text-muted-foreground">
                 계약 기간 {getDurationText(startDate, endDate)}
               </p>
             )}
@@ -439,7 +437,7 @@ export function ContractNewFlow() {
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 placeholder="예: 카드 자동결제일은 매월 3일"
-                className="min-h-[104px] w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 text-[0.95rem] leading-relaxed shadow-sm transition-[border-color,box-shadow] placeholder:text-muted-foreground/90 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+                className="min-h-[104px] w-full rounded-md border border-outline-variant bg-surface px-4 py-3 text-[0.95rem] leading-relaxed shadow-sm transition-[border-color,box-shadow] placeholder:text-muted-foreground/90 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
               />
             </div>
           </div>
@@ -447,9 +445,9 @@ export function ContractNewFlow() {
 
         {step === 2 && (
           <div className="space-y-5">
-            <div className="rounded-2xl border border-outline-variant bg-surface-container-low/70 p-5">
+            <div className="rounded-lg border border-outline-variant bg-surface-container-low/70 p-5">
               <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
-                <Sparkles className="h-4 w-4 text-primary" />
+                <AutoAwesomeRoundedIcon sx={{ fontSize: 20, color: "primary.main" }} />
                 추천 설정
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground">
@@ -468,7 +466,7 @@ export function ContractNewFlow() {
                   type="button"
                   onClick={() => toggleNotify(d)}
                   className={cn(
-                    "rounded-xl border px-4 py-2.5 text-[0.95rem] transition-colors",
+                    "rounded-md border px-4 py-2.5 text-[0.95rem] transition-colors",
                     notifyDays.includes(d)
                       ? "border-primary bg-primary/10 font-semibold text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
@@ -481,7 +479,7 @@ export function ContractNewFlow() {
           </div>
         )}
 
-        <div className="rounded-2xl border border-outline-variant bg-surface-container-low/60 p-5">
+        <div className="rounded-lg border border-outline-variant bg-surface-container-low/60 p-5">
           <p className="text-xs font-semibold tracking-wide text-muted-foreground">
             현재 입력 요약
           </p>
@@ -520,7 +518,7 @@ export function ContractNewFlow() {
         </div>
 
         {error && (
-          <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p className="rounded-md border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {error}
           </p>
         )}
@@ -544,7 +542,7 @@ export function ContractNewFlow() {
               className="w-full sm:w-auto"
             >
               다음
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRightRoundedIcon sx={{ fontSize: 20 }} />
             </Button>
           ) : (
             <Button
@@ -553,7 +551,7 @@ export function ContractNewFlow() {
               className="w-full sm:w-auto"
             >
               {isSubmitting ? "저장 중…" : "완료하고 저장"}
-              {!isSubmitting && <Check className="h-4 w-4" />}
+              {!isSubmitting && <CheckRoundedIcon sx={{ fontSize: 20 }} />}
             </Button>
           )}
         </div>

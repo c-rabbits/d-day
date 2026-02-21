@@ -2,7 +2,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
-import { BellRing, LayoutDashboard, Sparkles } from "lucide-react";
+import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import { VectorHero } from "@/components/vector-hero";
 
 async function HomeContent() {
@@ -28,7 +30,7 @@ async function HomeContent() {
               <Button asChild className="w-full sm:w-auto">
                 <Link href="/dashboard">
                   대시보드로 이동
-                  <LayoutDashboard className="h-4 w-4" />
+                  <DashboardRoundedIcon sx={{ fontSize: 20 }} />
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full sm:w-auto">
@@ -48,7 +50,7 @@ async function HomeContent() {
       <div className="relative mx-auto flex w-full max-w-mobile flex-col gap-7">
         <section className="space-y-5 pt-2">
           <span className="inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface/80 px-3 py-1 text-xs font-medium text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <AutoAwesomeRoundedIcon sx={{ fontSize: 14, color: "primary.main" }} />
             계약 만료 알림을 더 똑똑하게
           </span>
           <div>
@@ -87,12 +89,12 @@ async function HomeContent() {
             {
               title: "등록은 간단하게",
               desc: "계약 종류를 고르고 필수 정보만 입력하면 끝나요.",
-              icon: <LayoutDashboard className="h-4 w-4 text-primary" />,
+              icon: <DashboardRoundedIcon sx={{ fontSize: 20, color: "primary.main" }} />,
             },
             {
               title: "만료일 리마인드",
               desc: "D-30, D-7, D-1 등 원하는 시점에 알림을 설정할 수 있어요.",
-              icon: <BellRing className="h-4 w-4 text-primary" />,
+              icon: <NotificationsActiveRoundedIcon sx={{ fontSize: 20, color: "primary.main" }} />,
             },
           ].map((item) => (
             <article

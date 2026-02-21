@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Suspense } from "react";
 
 async function ErrorContent({
@@ -53,7 +53,7 @@ export default function Page({
           <CardContent sx={{ p: 2.6 }}>
             <Stack spacing={2}>
               <Chip
-                icon={<ErrorOutlineRoundedIcon />}
+                icon={<ErrorOutlineIcon />}
                 label="AUTH ERROR"
                 color="error"
                 variant="outlined"

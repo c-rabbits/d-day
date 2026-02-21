@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import { VectorHero } from "@/components/vector-hero";
 
 type AuthScreenProps = {
@@ -29,7 +29,7 @@ export function AuthScreen({
           className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 text-white transition-colors hover:bg-white/22"
           aria-label="뒤로"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeftRoundedIcon sx={{ fontSize: 24 }} />
         </Link>
 
         <div className="mt-6 space-y-2.5">

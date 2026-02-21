@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
+import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 
 /**
  * 대시보드 등에서 사용. 알림 권한 요청 후 FCM 토큰을 push_tokens에 저장.
@@ -73,7 +73,7 @@ export function PushEnable() {
         onClick={handleEnable}
         disabled={status === "loading"}
       >
-        <Bell className="h-4 w-4" />
+        <NotificationsRoundedIcon sx={{ fontSize: 20 }} />
         {status === "loading" ? "설정 중…" : status === "ok" ? "알림 켜짐" : "알림 켜기"}
       </Button>
       {message && (

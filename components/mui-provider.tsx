@@ -12,18 +12,27 @@ export function MuiProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/* M3 shape: 4/8/12/16/28dp → 4/8/12/16/28px 균형 */
+const shape = {
+  radiusXs: 4,
+  radiusSm: 8,
+  radiusMd: 12,
+  radiusLg: 16,
+  radiusXl: 28,
+};
+
 const muiTheme = createTheme({
   palette: {
     mode: "light",
-    primary: { main: "#E9781A" },
-    secondary: { main: "#4E6898" },
+    primary: { main: "hsl(210 55% 38%)" },
+    secondary: { main: "hsl(210 35% 42%)" },
     background: {
-      default: "#FBF7F2",
-      paper: "#FFFFFF",
+      default: "hsl(var(--background))",
+      paper: "hsl(var(--surface))",
     },
   },
   shape: {
-    borderRadius: 18,
+    borderRadius: shape.radiusMd,
   },
   typography: {
     fontFamily:
@@ -38,7 +47,7 @@ const muiTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: shape.radiusMd,
         },
       },
     },
@@ -48,7 +57,7 @@ const muiTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: 14,
+          borderRadius: shape.radiusSm,
           textTransform: "none",
           fontWeight: 600,
         },
@@ -57,14 +66,14 @@ const muiTheme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
+          borderRadius: shape.radiusSm,
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         rounded: {
-          borderRadius: 18,
+          borderRadius: shape.radiusLg,
         },
       },
     },

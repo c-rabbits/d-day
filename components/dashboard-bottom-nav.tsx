@@ -11,14 +11,14 @@ import {
 } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import ViewCarouselRoundedIcon from "@mui/icons-material/ViewCarouselRounded";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 const NAV_ITEMS = [
   { label: "홈", href: "/dashboard", icon: <HomeRoundedIcon /> },
   { label: "정보", href: "/dashboard/info", icon: <ViewCarouselRoundedIcon /> },
-  { label: "계약 추가", href: "/dashboard/contracts/new", icon: <AddCircleRoundedIcon /> },
+  { label: "계약 추가", href: "/dashboard/contracts/new", icon: <AddCircleIcon /> },
   { label: "프로필", href: "/dashboard/profile", icon: <PersonRoundedIcon /> },
   { label: "설정", href: "/dashboard/settings", icon: <SettingsRoundedIcon /> },
 ] as const;
@@ -84,7 +84,7 @@ export function DashboardBottomNav() {
             sx={
               index === 2
                 ? {
-                    "& .MuiSvgIcon-root": { fontSize: 30 },
+                    "& .MuiSvgIcon-root": { fontSize: 28 },
                     "&.Mui-selected .MuiSvgIcon-root": {
                       color: "primary.main",
                       filter: "drop-shadow(0 3px 8px rgba(0,0,0,0.16))",

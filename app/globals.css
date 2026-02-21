@@ -4,47 +4,49 @@
 
 @layer base {
   :root {
-    --background: 34 34% 98%;
-    --foreground: 24 16% 16%;
-    --gradient-end: 34 30% 95%;
+    /* M3 baseline-inspired neutral surface */
+    --background: 210 20% 98%;
+    --foreground: 210 25% 14%;
+    --gradient-end: 210 18% 95%;
 
     --surface: 0 0% 100%;
-    --surface-foreground: 22 18% 14%;
-    --surface-container-low: 34 33% 97%;
-    --surface-container: 32 27% 95%;
-    --surface-container-high: 30 22% 92%;
+    --surface-foreground: 210 25% 14%;
+    --surface-container-low: 210 25% 97%;
+    --surface-container: 210 22% 95%;
+    --surface-container-high: 210 18% 92%;
 
-    --outline: 22 8% 50%;
-    --outline-variant: 25 16% 85%;
+    --outline: 210 12% 48%;
+    --outline-variant: 210 18% 86%;
 
-    --primary: 24 84% 50%;
+    /* M3 baseline Secondary color style (blue accent) - https://m3.material.io/styles/color/static/baseline */
+    --primary: 210 55% 38%;
     --primary-foreground: 0 0% 100%;
-    --primary-container: 27 90% 94%;
-    --primary-container-foreground: 23 61% 30%;
+    --primary-container: 210 55% 93%;
+    --primary-container-foreground: 210 45% 22%;
 
-    --secondary: 215 24% 44%;
+    --secondary: 210 35% 42%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-container: 214 35% 93%;
-    --secondary-container-foreground: 214 30% 28%;
+    --secondary-container: 210 45% 92%;
+    --secondary-container-foreground: 210 40% 26%;
 
     --card: 0 0% 100%;
-    --card-foreground: 22 18% 14%;
+    --card-foreground: 210 25% 14%;
     --popover: 0 0% 100%;
-    --popover-foreground: 22 18% 14%;
+    --popover-foreground: 210 25% 14%;
 
-    --muted: 32 24% 94%;
-    --muted-foreground: 24 8% 41%;
-    --accent: 28 70% 93%;
-    --accent-foreground: 23 61% 30%;
+    --muted: 210 22% 94%;
+    --muted-foreground: 210 10% 42%;
+    --accent: 210 50% 93%;
+    --accent-foreground: 210 45% 26%;
 
     --destructive: 2 73% 52%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 25 16% 85%;
-    --input: 0 0% 100%;
-    --ring: 24 84% 50%;
+    --border: 210 18% 86%;
+    --input: 210 25% 96%;
+    --ring: 210 55% 38%;
 
-    --auth-header: 246 32% 14%;
+    --auth-header: 210 35% 14%;
 
     --leading-body: 1.68;
     --leading-heading: 1.32;
@@ -54,57 +56,65 @@
     --space-sections: 1.5rem;
     --space-blocks: 1rem;
 
-    --chart-1: 12 76% 61%;
+    --chart-1: 210 60% 50%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 1.125rem;
+
+    /* M3 shape - https://m3.material.io/styles/shape (균형 있는 라운드) */
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.75rem;
+    --radius-full: 9999px;
+    --radius: var(--radius-md);
   }
 
   .dark {
-    --background: 246 18% 8%;
-    --foreground: 36 20% 92%;
-    --gradient-end: 246 18% 5%;
+    --background: 210 25% 8%;
+    --foreground: 210 15% 92%;
+    --gradient-end: 210 25% 5%;
 
-    --surface: 246 17% 12%;
-    --surface-foreground: 38 24% 94%;
-    --surface-container-low: 247 15% 14%;
-    --surface-container: 247 14% 17%;
-    --surface-container-high: 247 13% 20%;
+    --surface: 210 22% 12%;
+    --surface-foreground: 210 15% 94%;
+    --surface-container-low: 210 20% 14%;
+    --surface-container: 210 18% 17%;
+    --surface-container-high: 210 16% 20%;
 
-    --outline: 23 8% 66%;
-    --outline-variant: 245 10% 26%;
+    --outline: 210 12% 58%;
+    --outline-variant: 210 14% 26%;
 
-    --primary: 26 86% 64%;
-    --primary-foreground: 22 100% 10%;
-    --primary-container: 26 42% 27%;
-    --primary-container-foreground: 29 84% 90%;
+    --primary: 210 55% 62%;
+    --primary-foreground: 210 45% 12%;
+    --primary-container: 210 40% 26%;
+    --primary-container-foreground: 210 55% 88%;
 
-    --secondary: 210 30% 74%;
-    --secondary-foreground: 221 42% 12%;
-    --secondary-container: 218 22% 25%;
-    --secondary-container-foreground: 214 40% 86%;
+    --secondary: 210 35% 68%;
+    --secondary-foreground: 210 40% 12%;
+    --secondary-container: 210 30% 24%;
+    --secondary-container-foreground: 210 45% 88%;
 
-    --card: 247 14% 17%;
-    --card-foreground: 38 24% 94%;
-    --popover: 247 14% 17%;
-    --popover-foreground: 38 24% 94%;
+    --card: 210 18% 17%;
+    --card-foreground: 210 15% 94%;
+    --popover: 210 18% 17%;
+    --popover-foreground: 210 15% 94%;
 
-    --muted: 247 11% 20%;
-    --muted-foreground: 26 9% 74%;
-    --accent: 247 12% 22%;
-    --accent-foreground: 28 90% 90%;
+    --muted: 210 14% 20%;
+    --muted-foreground: 210 12% 72%;
+    --accent: 210 18% 22%;
+    --accent-foreground: 210 55% 88%;
 
     --destructive: 2 61% 42%;
     --destructive-foreground: 0 0% 98%;
-    --border: 245 10% 26%;
-    --input: 247 15% 14%;
-    --ring: 26 86% 64%;
+    --border: 210 14% 26%;
+    --input: 210 20% 14%;
+    --ring: 210 55% 62%;
 
-    --auth-header: 246 28% 10%;
+    --auth-header: 210 30% 10%;
 
-    --chart-1: 220 70% 50%;
+    --chart-1: 210 65% 55%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
