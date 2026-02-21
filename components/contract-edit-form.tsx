@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
@@ -11,11 +10,21 @@ import {
   type ContractCategory,
   type NotifyDaysBefore,
 } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 
 type ContractRow = {
   id: string;
@@ -92,117 +101,158 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="space-y-6 border-t border-outline-variant/70 bg-surface-container-low/35 pt-6">
-        <div className="rounded-2xl border border-outline-variant/70 bg-surface p-4">
-          <p className="text-xs font-semibold tracking-[0.14em] text-primary">EDIT MODE</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            필수 항목(계약명, 시작일, 만료일)을 확인한 뒤 저장해 주세요.
-          </p>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid gap-2">
-            <Label htmlFor="title">계약명 *</Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>카테고리</Label>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {CONTRACT_CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setCategory(c)}
-                  className={cn(
-                    "rounded-xl border px-3 py-2.5 text-left text-sm transition-colors",
-                    category === c
-                      ? "border-primary bg-primary/10"
-                      : "border-outline-variant bg-surface hover:bg-surface-container-low",
-                  )}
-                >
-                  {CATEGORY_LABELS[c]}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="grid gap-2">
-              <Label htmlFor="start_date">시작일 *</Label>
-              <Input
-                id="start_date"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+    <Card variant="outlined" sx={{ borderRadius: 3.2 }}>
+      <CardContent sx={{ p: 2.4 }}>
+        <Stack spacing={2.1}>
+          <Box
+            sx={{
+              p: 1.7,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 3,
+              bgcolor: "background.default",
+            }}
+          >
+            <Stack direction="row" spacing={0.8} alignItems="center">
+              <EditNoteRoundedIcon color="primary" fontSize="small" />
+              <Typography
+                variant="caption"
+                sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
+              >
+                EDIT MODE
+              </Typography>
+            </Stack>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.6 }}>
+              필수 항목(계약명, 시작일, 만료일)을 확인한 뒤 저장해 주세요.
+            </Typography>
+          </Box>
+
+          <Box component="form" onSubmit={handleSubmit}>
+            <Stack spacing={1.7}>
+              <TextField
+                label="계약명 *"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
                 required
+                fullWidth
               />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="end_date">만료일 *</Label>
-              <Input
-                id="end_date"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="amount">금액 (선택)</Label>
-            <Input
-              id="amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/[^0-9,]/g, ""))}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="memo">메모 (선택)</Label>
-            <textarea
-              id="memo"
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              className="min-h-[96px] w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 text-sm leading-relaxed shadow-sm transition-[border-color,box-shadow] focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>알림 (추가 설정 시 선택)</Label>
-            <div className="flex flex-wrap gap-2">
-              {NOTIFY_DAYS_OPTIONS.map((d) => (
-                <button
-                  key={d}
-                  type="button"
-                  onClick={() => toggleNotify(d)}
-                  className={cn(
-                    "rounded-xl border px-3 py-1.5 text-sm transition-colors",
-                    notifyDays.includes(d)
-                      ? "border-primary bg-primary/10"
-                      : "border-outline-variant bg-surface hover:bg-surface-container-low",
-                  )}
+
+              <Stack spacing={0.9}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                  카테고리
+                </Typography>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "repeat(2, minmax(0,1fr))" },
+                    gap: 0.9,
+                  }}
                 >
-                  D-{d}
-                </button>
-              ))}
-            </div>
-          </div>
-          {error && (
-            <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error}
-            </p>
-          )}
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? "저장 중…" : "저장"}
-            </Button>
-            <Button type="button" variant="outline" asChild className="w-full sm:w-auto">
-              <Link href={`/dashboard/contracts/${contract.id}`}>취소</Link>
-            </Button>
-          </div>
-        </form>
+                  {CONTRACT_CATEGORIES.map((targetCategory) => (
+                    <Button
+                      key={targetCategory}
+                      type="button"
+                      variant={category === targetCategory ? "contained" : "outlined"}
+                      color={category === targetCategory ? "primary" : "inherit"}
+                      onClick={() => setCategory(targetCategory)}
+                      sx={{ justifyContent: "flex-start", py: 1.1 }}
+                    >
+                      {CATEGORY_LABELS[targetCategory]}
+                    </Button>
+                  ))}
+                </Box>
+              </Stack>
+
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 1.1,
+                }}
+              >
+                <TextField
+                  label="시작일 *"
+                  type="date"
+                  value={startDate}
+                  onChange={(event) => setStartDate(event.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+                <TextField
+                  label="만료일 *"
+                  type="date"
+                  value={endDate}
+                  onChange={(event) => setEndDate(event.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  required
+                  fullWidth
+                />
+              </Box>
+
+              <TextField
+                label="금액 (선택)"
+                value={amount}
+                onChange={(event) =>
+                  setAmount(event.target.value.replace(/[^0-9,]/g, ""))
+                }
+                fullWidth
+              />
+
+              <TextField
+                label="메모 (선택)"
+                value={memo}
+                onChange={(event) => setMemo(event.target.value)}
+                multiline
+                minRows={3}
+                fullWidth
+              />
+
+              <Stack spacing={0.8}>
+                <Stack direction="row" spacing={0.7} alignItems="center">
+                  <NotificationsActiveRoundedIcon fontSize="small" color="primary" />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    알림 (추가 설정)
+                  </Typography>
+                </Stack>
+                <Stack direction="row" spacing={0.8} flexWrap="wrap" useFlexGap>
+                  {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
+                    <Chip
+                      key={targetDay}
+                      label={`D-${targetDay}`}
+                      onClick={() => toggleNotify(targetDay)}
+                      color={notifyDays.includes(targetDay) ? "primary" : "default"}
+                      variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
+                    />
+                  ))}
+                </Stack>
+              </Stack>
+
+              {error && <Alert severity="error">{error}</Alert>}
+
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  startIcon={<SaveRoundedIcon />}
+                  disabled={isSubmitting}
+                  sx={{ width: { xs: "100%", sm: "auto" } }}
+                >
+                  {isSubmitting ? "저장 중…" : "저장"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  startIcon={<CloseRoundedIcon />}
+                  onClick={() => router.push(`/dashboard/contracts/${contract.id}`)}
+                  sx={{ width: { xs: "100%", sm: "auto" } }}
+                >
+                  취소
+                </Button>
+              </Stack>
+            </Stack>
+          </Box>
+        </Stack>
       </CardContent>
     </Card>
   );

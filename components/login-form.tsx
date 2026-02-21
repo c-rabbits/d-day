@@ -1,15 +1,22 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AuthScreen } from "@/components/auth-screen";
+import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LockKeyhole, Mail } from "lucide-react";
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
+import LockOutlineRoundedIcon from "@mui/icons-material/LockOutlineRounded";
 
 export function LoginForm({
   className,
@@ -43,91 +50,99 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("w-full max-w-[430px]", className)} {...props}>
-      <AuthScreen
+    <Box className={className} {...props}>
+      <AuthShellMui
         title="로그인"
         subtitle="등록해 둔 계약과 알림 내역을 계속 관리하려면 로그인하세요."
         backHref="/"
         badge="WELCOME BACK"
       >
-        <form onSubmit={handleLogin} className="flex flex-col gap-6">
-          <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-low/70 p-5">
-            <p className="text-sm font-medium text-foreground">빠르게 시작하기</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              기존에 등록한 이메일과 비밀번호를 입력하면 바로 대시보드로 이동합니다.
-            </p>
-          </div>
+        <Box component="form" onSubmit={handleLogin}>
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 3,
+                bgcolor: "background.default",
+                p: 1.8,
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                빠르게 시작하기
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                기존에 등록한 이메일과 비밀번호를 입력하면 바로 대시보드로 이동합니다.
+              </Typography>
+            </Box>
 
-          <div className="grid gap-3">
-            <Label htmlFor="email" className="text-sm font-medium text-foreground">
-              이메일
-            </Label>
-            <div className="relative">
-              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+            <TextField
                 id="email"
                 type="email"
+                label="이메일"
                 placeholder="example@gmail.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 text-[0.95rem]"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-          </div>
 
-          <div className="grid gap-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-sm font-medium text-foreground">
-                비밀번호
-              </Label>
+            <Stack spacing={0.6}>
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                  비밀번호
+                </Typography>
               <Link
                 href="/auth/forgot-password"
-                className="text-sm font-medium text-primary hover:underline"
+                style={{ fontSize: 13, fontWeight: 600 }}
               >
                 비밀번호 찾기
               </Link>
-            </div>
-            <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+              </Box>
+
+              <TextField
                 id="password"
                 type="password"
+                label="비밀번호"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 text-[0.95rem]"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-          </div>
+            </Stack>
 
-          {error && (
-            <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error}
-            </p>
-          )}
+            {error && <Alert severity="error">{error}</Alert>}
 
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full font-semibold"
-            disabled={isLoading}
-          >
-            {isLoading ? "로그인 중…" : "로그인"}
-          </Button>
+            <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+              {isLoading ? "로그인 중…" : "로그인"}
+            </Button>
 
-          <div className="relative my-2">
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-2 text-xs text-muted-foreground">
-              처음 방문하셨나요?
-            </span>
-            <hr className="border-outline-variant" />
-          </div>
+            <Divider sx={{ my: 0.2 }}>
+              <Typography variant="caption" color="text.secondary">
+                처음 방문하셨나요?
+              </Typography>
+            </Divider>
 
-          <Button asChild size="lg" variant="outline" className="w-full">
-            <Link href="/auth/sign-up">회원가입</Link>
-          </Button>
-        </form>
-      </AuthScreen>
-    </div>
+            <Button component={Link} href="/auth/sign-up" variant="outlined" size="large">
+              회원가입
+            </Button>
+          </Stack>
+        </Box>
+      </AuthShellMui>
+    </Box>
   );
 }

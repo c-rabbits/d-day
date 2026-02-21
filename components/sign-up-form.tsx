@@ -1,15 +1,23 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AuthScreen } from "@/components/auth-screen";
+import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import {
+  Alert,
+  Box,
+  Button,
+  Divider,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
+import LockOutlineRoundedIcon from "@mui/icons-material/LockOutlineRounded";
+import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
 
 export function SignUpForm({
   className,
@@ -52,103 +60,105 @@ export function SignUpForm({
   };
 
   return (
-    <div className={cn("w-full max-w-[430px]", className)} {...props}>
-      <AuthScreen
+    <Box className={className} {...props}>
+      <AuthShellMui
         title="회원가입"
         subtitle="계약 만료 알림을 받기 위한 개인 계정을 생성하세요."
         backHref="/"
         badge="CREATE ACCOUNT"
       >
-        <form onSubmit={handleSignUp} className="flex flex-col gap-6">
-          <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-low/70 p-5">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              안전한 계정 생성
-            </div>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-              인증 메일 확인 후 바로 로그인할 수 있습니다.
-            </p>
-          </div>
+        <Box component="form" onSubmit={handleSignUp}>
+          <Stack spacing={2}>
+            <Box
+              sx={{
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 3,
+                bgcolor: "background.default",
+                p: 1.8,
+              }}
+            >
+              <Stack direction="row" spacing={0.8} alignItems="center">
+                <ShieldRoundedIcon fontSize="small" color="primary" />
+                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                  안전한 계정 생성
+                </Typography>
+              </Stack>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                인증 메일 확인 후 바로 로그인할 수 있습니다.
+              </Typography>
+            </Box>
 
-          <div className="grid gap-3">
-            <Label htmlFor="email" className="text-sm font-medium text-foreground">
-              이메일
-            </Label>
-            <div className="relative">
-              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+            <TextField
                 id="email"
                 type="email"
+                label="이메일"
                 placeholder="example@gmail.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 text-[0.95rem]"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-          </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="password" className="text-sm font-medium text-foreground">
-              비밀번호
-            </Label>
-            <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+            <TextField
                 id="password"
                 type="password"
+                label="비밀번호"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 text-[0.95rem]"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-          </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="repeat-password" className="text-sm font-medium text-foreground">
-              비밀번호 확인
-            </Label>
-            <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
+            <TextField
                 id="repeat-password"
                 type="password"
+                label="비밀번호 확인"
                 required
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}
-                className="pl-10 text-[0.95rem]"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-          </div>
 
-          {error && (
-            <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-              {error}
-            </p>
-          )}
+            {error && <Alert severity="error">{error}</Alert>}
 
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full font-semibold"
-            disabled={isLoading}
-          >
-            {isLoading ? "가입 중…" : "회원가입"}
-          </Button>
+            <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+              {isLoading ? "가입 중…" : "회원가입"}
+            </Button>
 
-          <div className="relative my-2">
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-2 text-xs text-muted-foreground">
-              이미 계정이 있으신가요?
-            </span>
-            <hr className="border-outline-variant" />
-          </div>
+            <Divider sx={{ my: 0.2 }}>
+              <Typography variant="caption" color="text.secondary">
+                이미 계정이 있으신가요?
+              </Typography>
+            </Divider>
 
-          <Button asChild size="lg" variant="outline" className="w-full">
-            <Link href="/auth/login">로그인</Link>
-          </Button>
-        </form>
-      </AuthScreen>
-    </div>
+            <Button component={Link} href="/auth/login" variant="outlined" size="large">
+              로그인
+            </Button>
+          </Stack>
+        </Box>
+      </AuthShellMui>
+    </Box>
   );
 }

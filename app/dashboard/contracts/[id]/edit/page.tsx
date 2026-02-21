@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { ContractEditForm } from "@/components/contract-edit-form";
 import { Suspense } from "react";
+import { Box, Stack, Typography } from "@mui/material";
 
 async function EditContent({ id }: { id: string }) {
   const supabase = await createClient();
@@ -18,13 +19,25 @@ async function EditContent({ id }: { id: string }) {
     .single();
   if (error || !contract) notFound();
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6">
-      <h1 className="mb-2 text-2xl font-semibold">계약 수정</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        필요한 정보만 수정하고 저장하면 만료 알림 일정도 함께 갱신됩니다.
-      </p>
-      <ContractEditForm contract={contract} />
-    </div>
+    <Box sx={{ px: 2, py: 3.5 }}>
+      <Stack spacing={1.7}>
+        <Box>
+          <Typography
+            variant="caption"
+            sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
+          >
+            EDIT CONTRACT
+          </Typography>
+          <Typography variant="h5" sx={{ mt: 0.3, fontWeight: 700 }}>
+            계약 수정
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.7 }}>
+            필요한 정보만 수정하고 저장하면 만료 알림 일정도 함께 갱신됩니다.
+          </Typography>
+        </Box>
+        <ContractEditForm contract={contract} />
+      </Stack>
+    </Box>
   );
 }
 

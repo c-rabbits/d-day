@@ -1,14 +1,29 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { getDdayLabel, getDdayColorClass } from "@/lib/dday";
+import { getDday, getDdayLabel } from "@/lib/dday";
 import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Chip,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
+import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
+import NotesRoundedIcon from "@mui/icons-material/NotesRounded";
 
 type ContractRow = {
   id: string;
@@ -22,6 +37,8 @@ type ContractRow = {
 
 export function ContractDetail({ contract }: { contract: ContractRow }) {
   const router = useRouter();
+  const dday = getDday(contract.end_date);
+  const ddayColor = dday <= 7 ? "error" : dday <= 30 ? "warning" : "default";
 
   const handleDelete = async () => {
     if (!confirm("이 계약을 삭제할까요?")) return;
@@ -39,69 +56,140 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6">
-      <Link
-        href="/dashboard"
-        className="mb-4 inline-flex items-center gap-1 rounded-full border border-outline-variant bg-surface px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> 목록으로
-      </Link>
+    <Box sx={{ px: 2, py: 3.5 }}>
+      <Stack spacing={1.5}>
+        <Button
+          variant="text"
+          startIcon={<ArrowBackRoundedIcon />}
+          onClick={() => router.push("/dashboard")}
+          sx={{ alignSelf: "flex-start" }}
+        >
+          목록으로
+        </Button>
 
-      <Card className="overflow-hidden">
-        <CardHeader className="flex flex-row items-start justify-between gap-4 border-b border-outline-variant/70 bg-surface-container-low/70">
-          <div>
-            <h1 className="text-2xl font-semibold">{contract.title}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {CATEGORY_LABELS[contract.category]}
-            </p>
-          </div>
-          <span
-            className={cn(
-              "rounded-full px-3 py-1 text-sm tabular-nums",
-              getDdayColorClass(contract.end_date),
-            )}
-          >
-            {getDdayLabel(contract.end_date)}
-          </span>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <dl className="grid gap-3 text-sm sm:grid-cols-2">
-            <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
-              <dt className="text-xs text-muted-foreground">시작일</dt>
-              <dd className="mt-1 font-medium">{contract.start_date}</dd>
-            </div>
-            <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
-              <dt className="text-xs text-muted-foreground">만료일</dt>
-              <dd className="mt-1 font-medium">{contract.end_date}</dd>
-            </div>
-            {contract.amount != null && (
-              <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
-                <dt className="text-xs text-muted-foreground">금액</dt>
-                <dd className="mt-1 font-medium">{contract.amount.toLocaleString()}원</dd>
-              </div>
-            )}
-            {contract.memo && (
-              <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3 sm:col-span-2">
-                <dt className="text-xs text-muted-foreground">메모</dt>
-                <dd className="mt-1 whitespace-pre-wrap font-medium">{contract.memo}</dd>
-              </div>
-            )}
-          </dl>
+        <Card variant="outlined" sx={{ borderRadius: 3.2 }}>
+          <CardHeader
+            title={contract.title}
+            subheader={
+              <Stack direction="row" spacing={0.8} alignItems="center" sx={{ mt: 0.7 }}>
+                <CategoryRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />
+                <Typography variant="body2" color="text.secondary">
+                  {CATEGORY_LABELS[contract.category]}
+                </Typography>
+              </Stack>
+            }
+            action={
+              <Chip
+                label={getDdayLabel(contract.end_date)}
+                color={ddayColor}
+                sx={{ fontWeight: 700 }}
+              />
+            }
+            sx={{ pb: 1.4 }}
+          />
+          <Divider />
 
-          <div className="flex flex-col gap-2 pt-1 sm:flex-row">
-            <Button variant="outline" asChild className="w-full sm:w-auto">
-              <Link href={`/dashboard/contracts/${contract.id}/edit`}>수정</Link>
+          <CardContent sx={{ p: 2.2 }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "repeat(2,minmax(0,1fr))" },
+                gap: 1.2,
+              }}
+            >
+              <InfoCard
+                icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
+                label="시작일"
+                value={contract.start_date}
+              />
+              <InfoCard
+                icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
+                label="만료일"
+                value={contract.end_date}
+              />
+              {contract.amount != null && (
+                <InfoCard
+                  icon={<PaymentsRoundedIcon sx={{ fontSize: 16 }} />}
+                  label="금액"
+                  value={`${contract.amount.toLocaleString()}원`}
+                />
+              )}
+              {contract.memo && (
+                <InfoCard
+                  wide
+                  icon={<NotesRoundedIcon sx={{ fontSize: 16 }} />}
+                  label="메모"
+                  value={contract.memo}
+                />
+              )}
+            </Box>
+          </CardContent>
+
+          <Divider />
+          <CardActions sx={{ p: 2, gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
+            <Button
+              variant="outlined"
+              startIcon={<EditRoundedIcon />}
+              onClick={() => router.push(`/dashboard/contracts/${contract.id}/edit`)}
+              sx={{ width: { xs: "100%", sm: "auto" } }}
+            >
+              수정
             </Button>
             <Button
-              variant="destructive"
+              variant="contained"
+              color="error"
+              startIcon={<DeleteOutlineRoundedIcon />}
               onClick={handleDelete}
-              className="w-full sm:w-auto"
+              sx={{ width: { xs: "100%", sm: "auto" } }}
             >
-              <Trash2 className="h-4 w-4" /> 삭제
+              삭제
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardActions>
+        </Card>
+      </Stack>
+    </Box>
+  );
+}
+
+function InfoCard({
+  label,
+  value,
+  icon,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  icon: ReactNode;
+  wide?: boolean;
+}) {
+  return (
+    <Box
+      sx={{
+        p: 1.6,
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 2.4,
+        bgcolor: "background.default",
+        gridColumn: wide ? { xs: "1 / -1", sm: "1 / -1" } : undefined,
+      }}
+    >
+      <Stack direction="row" spacing={0.7} alignItems="center">
+        <Box sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}>{icon}</Box>
+        <Typography variant="caption" color="text.secondary">
+          {label}
+        </Typography>
+      </Stack>
+      <Typography
+        variant="body2"
+        sx={{
+          mt: 0.7,
+          fontWeight: 600,
+          whiteSpace: wide ? "pre-wrap" : "normal",
+          wordBreak: "break-word",
+        }}
+      >
+        {value}
+      </Typography>
+    </Box>
   );
 }
