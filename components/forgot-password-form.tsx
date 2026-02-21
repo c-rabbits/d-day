@@ -1,14 +1,20 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { AuthScreen } from "@/components/auth-screen";
+import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import {
+  Alert,
+  Box,
+  Button,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 
 export function ForgotPasswordForm({
   className,
@@ -39,68 +45,82 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className={cn("w-full max-w-[430px]", className)} {...props}>
-      <AuthScreen
+    <Box className={className} {...props}>
+      <AuthShellMui
         title="비밀번호 찾기"
         subtitle="가입한 이메일로 재설정 링크를 보내드립니다"
         backHref="/auth/login"
         badge="RECOVERY"
       >
         {success ? (
-          <div className="flex flex-col items-center gap-6 py-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <CheckCircle2 className="h-10 w-10 text-primary" />
-            </div>
-            <div className="text-center">
-              <h2 className="font-semibold text-foreground">이메일을 확인하세요</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+          <Stack spacing={2.2} alignItems="center" sx={{ py: 1.5 }}>
+            <Box
+              sx={{
+                width: 68,
+                height: 68,
+                borderRadius: "999px",
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CheckCircleRoundedIcon sx={{ fontSize: 36 }} />
+            </Box>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: "1.15rem" }}>
+                이메일을 확인하세요
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
                 비밀번호 재설정 링크를 보냈습니다. 이메일을 확인해 주세요.
-              </p>
-            </div>
-            <Button asChild className="w-full font-semibold uppercase">
-              <Link href="/auth/login">로그인으로 돌아가기</Link>
+              </Typography>
+            </Box>
+            <Button component={Link} href="/auth/login" variant="contained" size="large" fullWidth>
+              로그인으로 돌아가기
             </Button>
-          </div>
+          </Stack>
         ) : (
-          <form onSubmit={handleForgotPassword} className="flex flex-col gap-5">
-            <div className="grid gap-2">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground">
-                이메일
-              </Label>
-              <Input
+          <Box component="form" onSubmit={handleForgotPassword}>
+            <Stack spacing={2}>
+              <Typography variant="body2" color="text.secondary">
+                가입한 이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.
+              </Typography>
+
+              <TextField
                 id="email"
                 type="email"
+                label="이메일"
                 placeholder="example@gmail.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineRoundedIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-            {error && (
-              <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {error}
-              </p>
-            )}
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full font-semibold"
-              disabled={isLoading}
-            >
-              {isLoading ? "전송 중…" : "재설정 링크 보내기"}
-            </Button>
-            <p className="text-center text-sm text-muted-foreground">
-              계정이 있으신가요?{" "}
-              <Link
-                href="/auth/login"
-                className="font-medium text-primary hover:underline"
-              >
-                로그인
-              </Link>
-            </p>
-          </form>
+
+              {error && <Alert severity="error">{error}</Alert>}
+
+              <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+                {isLoading ? "전송 중…" : "재설정 링크 보내기"}
+              </Button>
+
+              <Typography variant="body2" color="text.secondary" textAlign="center">
+                계정이 있으신가요?{" "}
+                <Link href="/auth/login" style={{ fontWeight: 700 }}>
+                  로그인
+                </Link>
+              </Typography>
+            </Stack>
+          </Box>
         )}
-      </AuthScreen>
-    </div>
+      </AuthShellMui>
+    </Box>
   );
 }

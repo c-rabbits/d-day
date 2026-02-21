@@ -1,30 +1,70 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { Box, Button, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
+import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 export default function Page() {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-background to-[hsl(var(--gradient-end))] px-6">
-      <div className="flex w-full max-w-[360px] flex-col items-center">
-        <div className="relative">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary">
-            <CheckCircle2 className="h-10 w-10 text-primary-foreground" />
-          </div>
-          <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-primary/60" />
-          <span className="absolute -bottom-1 -left-2 h-2 w-2 rounded-full bg-primary/40" />
-        </div>
-        <h1 className="mt-6 text-xl font-bold text-foreground">
-          가입 완료!
-        </h1>
-        <p className="mt-2 text-center text-sm leading-relaxed text-muted-foreground">
-          이메일을 확인해 계정을 인증해 주세요.
-          <br />
-          인증 후 로그인할 수 있습니다.
-        </p>
-        <Button asChild size="lg" className="mt-8 w-full font-semibold uppercase">
-          <Link href="/auth/login">로그인하기</Link>
-        </Button>
-      </div>
-    </main>
+    <Box
+      sx={{
+        minHeight: "100svh",
+        px: 2.2,
+        py: 3.2,
+        background:
+          "radial-gradient(85% 70% at 0% 0%, rgba(233,120,26,.22), rgba(233,120,26,0) 55%), radial-gradient(75% 60% at 100% 60%, rgba(78,104,152,.2), rgba(78,104,152,0) 52%), linear-gradient(180deg, #222035 0%, #1A1828 42%, #171523 100%)",
+      }}
+    >
+      <Box sx={{ mx: "auto", width: "100%", maxWidth: 430 }}>
+        <Card variant="outlined" sx={{ borderRadius: 4 }}>
+          <CardContent sx={{ p: 2.6 }}>
+            <Stack spacing={2.1} alignItems="center" textAlign="center">
+              <Chip
+                icon={<MarkEmailReadRoundedIcon />}
+                label="SIGN UP SUCCESS"
+                color="primary"
+                variant="outlined"
+                sx={{ fontWeight: 700 }}
+              />
+
+              <Box
+                sx={{
+                  width: 74,
+                  height: 74,
+                  borderRadius: "999px",
+                  bgcolor: "primary.main",
+                  color: "primary.contrastText",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CheckCircleRoundedIcon sx={{ fontSize: 40 }} />
+              </Box>
+
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                  가입 완료!
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
+                  이메일을 확인해 계정을 인증해 주세요.
+                  <br />
+                  인증 후 로그인할 수 있습니다.
+                </Typography>
+              </Box>
+
+              <Button
+                component={Link}
+                href="/auth/login"
+                variant="contained"
+                size="large"
+                fullWidth
+              >
+                로그인하기
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+      </Box>
+    </Box>
   );
 }
