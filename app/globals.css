@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    /* M3 baseline-inspired neutral surface */
-    --background: 210 20% 98%;
+    /* 앱 배경 흰색 통일 */
+    --background: 0 0% 100%;
     --foreground: 210 25% 14%;
-    --gradient-end: 210 18% 95%;
+    --gradient-end: 0 0% 100%;
 
     --surface: 0 0% 100%;
     --surface-foreground: 210 25% 14%;
@@ -135,11 +135,6 @@
   body {
     @apply text-foreground antialiased;
     background-color: hsl(var(--background));
-    background-image: linear-gradient(
-      180deg,
-      hsl(var(--background)) 0%,
-      hsl(var(--gradient-end)) 100%
-    );
     font-feature-settings: "kern" 1;
     letter-spacing: var(--tracking-body);
     line-height: var(--leading-body);

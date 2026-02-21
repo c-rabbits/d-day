@@ -17,7 +17,9 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
-const CIRCLE_SIZE = 48;
+const GAP = 4;
+const CIRCLE_SIZE = 40;
+const BAR_HEIGHT = CIRCLE_SIZE + GAP * 2;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
@@ -46,9 +48,13 @@ export function DashboardBottomNav() {
       }}
     >
       <div
-        className="relative mx-3 mb-3 flex h-14 items-center overflow-visible rounded-full shadow-lg"
+        className="relative mx-8 mb-3 flex items-center overflow-visible rounded-full shadow-lg"
         style={{
           background: "#1a1a1a",
+          height: BAR_HEIGHT,
+          maxWidth: 320,
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
         {/* 포커스: 흰색 동그라미 */}
@@ -87,7 +93,7 @@ export function DashboardBottomNav() {
                 key={item.href}
                 type="button"
                 onClick={() => router.push(item.href)}
-                className="flex flex-1 flex-col items-center justify-center py-2.5 transition-colors"
+                className="flex flex-1 flex-col items-center justify-center py-2 transition-colors"
                 style={{
                   color: isActive ? "#6b7280" : "#ffffff",
                 }}
