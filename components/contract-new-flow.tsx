@@ -219,15 +219,17 @@ export function ContractNewFlow() {
   };
 
   return (
-    <Card className="overflow-hidden border-outline-variant/70 bg-surface shadow-[0_20px_55px_-38px_rgba(15,23,42,0.55)]">
-      <CardHeader className="space-y-5 border-b border-outline-variant/70 bg-surface-container-low/75 pb-6">
+    <Card className="overflow-hidden border-outline-variant/70 bg-surface shadow-[0_20px_46px_-34px_rgba(15,23,42,0.42)]">
+      <CardHeader className="space-y-6 border-b border-outline-variant/70 bg-surface-container-low/75 pb-7">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
             <p className="text-xs font-semibold tracking-[0.16em] text-primary">
               STEP {step + 1}
             </p>
-            <CardTitle className="text-2xl">{STEPS[step].title}</CardTitle>
-            <p className="max-w-[420px] text-sm leading-relaxed text-muted-foreground">
+            <CardTitle className="text-[1.85rem] leading-tight">
+              {STEPS[step].title}
+            </CardTitle>
+            <p className="max-w-[440px] text-[0.95rem] leading-relaxed text-muted-foreground">
               {STEPS[step].description}
             </p>
           </div>
@@ -236,21 +238,21 @@ export function ContractNewFlow() {
           </span>
         </div>
 
-        <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-container-high">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container-high">
           <div
             className="h-full rounded-full bg-primary transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2.5">
           {STEPS.map((stepItem, i) => {
             const Icon = STEP_ICONS[i];
             return (
               <div
                 key={stepItem.title}
                 className={cn(
-                  "flex items-center gap-2 rounded-xl border px-3 py-2 text-xs transition-colors",
+                  "flex items-center gap-2 rounded-2xl border px-3 py-2.5 text-xs transition-colors",
                   i <= step
                     ? "border-primary/40 bg-primary/10 text-foreground"
                     : "border-outline-variant bg-surface text-muted-foreground",
@@ -264,30 +266,30 @@ export function ContractNewFlow() {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6 pb-7 pt-7">
+      <CardContent className="space-y-7 pb-8 pt-8">
         {step === 0 && (
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+          <div className="space-y-5">
+            <p className="text-[0.95rem] text-muted-foreground">
               자주 쓰는 유형을 기준으로 분류해두면 목록에서 찾기 쉬워집니다.
             </p>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3.5 sm:grid-cols-2">
               {CONTRACT_CATEGORIES.map((c) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setCategory(c)}
                   className={cn(
-                    "flex min-h-[86px] items-start justify-between gap-3 rounded-2xl border px-4 py-4 text-left transition-all",
+                    "flex min-h-[96px] items-start justify-between gap-3 rounded-2xl border px-5 py-4 text-left transition-all",
                     category === c
-                      ? "border-primary bg-primary/10 shadow-[0_12px_24px_-18px_hsl(var(--primary)/0.9)]"
+                      ? "border-primary bg-primary/10 shadow-[0_12px_24px_-20px_hsl(var(--primary)/0.55)]"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
                   )}
                 >
                   <div>
-                    <p className="text-base font-semibold text-foreground">
+                    <p className="text-[1.02rem] font-semibold text-foreground">
                       {CATEGORY_LABELS[c]}
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       {CATEGORY_META[c].hint}
                     </p>
                   </div>
@@ -308,7 +310,7 @@ export function ContractNewFlow() {
         )}
 
         {step === 1 && (
-          <div className="space-y-5">
+          <div className="space-y-6">
             <div className="grid gap-2.5">
               <Label className="text-sm font-medium">입력 방식</Label>
               <div className="grid gap-2.5 sm:grid-cols-2">
@@ -316,7 +318,7 @@ export function ContractNewFlow() {
                   type="button"
                   onClick={() => setInputMode("direct")}
                   className={cn(
-                    "flex min-h-[72px] items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm transition-colors",
+                    "flex min-h-[74px] items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-[0.95rem] transition-colors",
                     inputMode === "direct"
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
@@ -329,7 +331,7 @@ export function ContractNewFlow() {
                   type="button"
                   onClick={() => setInputMode("photo")}
                   className={cn(
-                    "flex min-h-[72px] items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm transition-colors",
+                    "flex min-h-[74px] items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-[0.95rem] transition-colors",
                     inputMode === "photo"
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
@@ -341,7 +343,7 @@ export function ContractNewFlow() {
             </div>
 
             {inputMode === "photo" && (
-              <div className="space-y-3 rounded-2xl border border-outline-variant bg-surface-container-low/70 p-4">
+              <div className="space-y-3.5 rounded-2xl border border-outline-variant bg-surface-container-low/70 p-5">
                 <Label className="text-xs font-medium text-muted-foreground">
                   계약서/영수증 사진 업로드
                 </Label>
@@ -373,7 +375,7 @@ export function ContractNewFlow() {
                     </Button>
                   </div>
                 )}
-                <p className="text-muted-foreground text-xs">
+                <p className="text-sm text-muted-foreground">
                   OCR 결과는 아래 입력칸에 자동 입력됩니다. 저장 전 꼭 확인해 주세요.
                 </p>
               </div>
@@ -389,7 +391,7 @@ export function ContractNewFlow() {
                 required
               />
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4.5 sm:grid-cols-2">
               <div className="grid gap-2.5">
                 <Label htmlFor="start_date">시작일 *</Label>
                 <Input
@@ -413,7 +415,7 @@ export function ContractNewFlow() {
             </div>
 
             {startDate && endDate && (
-              <p className="rounded-xl border border-outline-variant bg-surface-container-low/60 px-3 py-2 text-xs text-muted-foreground">
+              <p className="rounded-xl border border-outline-variant bg-surface-container-low/60 px-4 py-2.5 text-sm text-muted-foreground">
                 계약 기간 {getDurationText(startDate, endDate)}
               </p>
             )}
@@ -437,26 +439,26 @@ export function ContractNewFlow() {
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 placeholder="예: 카드 자동결제일은 매월 3일"
-                className="min-h-[96px] w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 text-sm leading-relaxed shadow-sm transition-[border-color,box-shadow] placeholder:text-muted-foreground/90 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+                className="min-h-[104px] w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 text-[0.95rem] leading-relaxed shadow-sm transition-[border-color,box-shadow] placeholder:text-muted-foreground/90 focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
               />
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-outline-variant bg-surface-container-low/70 p-4">
+          <div className="space-y-5">
+            <div className="rounded-2xl border border-outline-variant bg-surface-container-low/70 p-5">
               <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
                 <Sparkles className="h-4 w-4 text-primary" />
                 추천 설정
               </div>
-              <p className="text-xs leading-relaxed text-muted-foreground">
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 일반적으로 D-7 + D-1 조합이 가장 많이 사용됩니다. 필요하면 D-30도
                 함께 체크해 주세요.
               </p>
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[0.95rem] text-muted-foreground">
               만료 전 언제 알림 받을지 선택하세요 (복수 선택 가능)
             </p>
             <div className="flex flex-wrap gap-2">
@@ -466,7 +468,7 @@ export function ContractNewFlow() {
                   type="button"
                   onClick={() => toggleNotify(d)}
                   className={cn(
-                    "rounded-xl border px-4 py-2.5 text-sm transition-colors",
+                    "rounded-xl border px-4 py-2.5 text-[0.95rem] transition-colors",
                     notifyDays.includes(d)
                       ? "border-primary bg-primary/10 font-semibold text-primary"
                       : "border-outline-variant bg-surface hover:bg-surface-container-low",
@@ -479,11 +481,11 @@ export function ContractNewFlow() {
           </div>
         )}
 
-        <div className="rounded-2xl border border-outline-variant bg-surface-container-low/60 p-4">
+        <div className="rounded-2xl border border-outline-variant bg-surface-container-low/60 p-5">
           <p className="text-xs font-semibold tracking-wide text-muted-foreground">
             현재 입력 요약
           </p>
-          <div className="mt-2 grid gap-1.5 text-sm">
+          <div className="mt-2.5 grid gap-2 text-[0.95rem]">
             <p>
               <span className="text-muted-foreground">카테고리:</span>{" "}
               <span className="font-medium text-foreground">
@@ -523,7 +525,7 @@ export function ContractNewFlow() {
           </p>
         )}
 
-        <div className="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col-reverse gap-3.5 pt-2 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"
             variant="outline"

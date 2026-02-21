@@ -59,18 +59,18 @@ export function SignUpForm({
         backHref="/"
         badge="CREATE ACCOUNT"
       >
-        <form onSubmit={handleSignUp} className="flex flex-col gap-5">
-          <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-low/70 p-4">
+        <form onSubmit={handleSignUp} className="flex flex-col gap-6">
+          <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-low/70 p-5">
             <div className="flex items-center gap-2 text-sm font-medium text-foreground">
               <ShieldCheck className="h-4 w-4 text-primary" />
               안전한 계정 생성
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
               인증 메일 확인 후 바로 로그인할 수 있습니다.
             </p>
           </div>
 
-          <div className="grid gap-2.5">
+          <div className="grid gap-3">
             <Label htmlFor="email" className="text-sm font-medium text-foreground">
               이메일
             </Label>
@@ -83,12 +83,12 @@ export function SignUpForm({
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-[0.95rem]"
               />
             </div>
           </div>
 
-          <div className="grid gap-2.5">
+          <div className="grid gap-3">
             <Label htmlFor="password" className="text-sm font-medium text-foreground">
               비밀번호
             </Label>
@@ -100,12 +100,12 @@ export function SignUpForm({
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-[0.95rem]"
               />
             </div>
           </div>
 
-          <div className="grid gap-2.5">
+          <div className="grid gap-3">
             <Label htmlFor="repeat-password" className="text-sm font-medium text-foreground">
               비밀번호 확인
             </Label>
@@ -117,7 +117,7 @@ export function SignUpForm({
                 required
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-[0.95rem]"
               />
             </div>
           </div>
@@ -137,7 +137,7 @@ export function SignUpForm({
             {isLoading ? "가입 중…" : "회원가입"}
           </Button>
 
-          <div className="relative my-1">
+          <div className="relative my-2">
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-2 text-xs text-muted-foreground">
               이미 계정이 있으신가요?
             </span>

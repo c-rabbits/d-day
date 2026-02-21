@@ -18,10 +18,11 @@ export default {
         sans: ["var(--font-noto-sans-kr)", "system-ui", "sans-serif"],
       },
       fontSize: {
-        base: ["1rem", { lineHeight: "1.6" }],
-        sm: ["0.875rem", { lineHeight: "1.5" }],
-        xs: ["0.8125rem", { lineHeight: "1.5" }],
-        lg: ["1.125rem", { lineHeight: "1.5" }],
+        base: ["1rem", { lineHeight: "1.7" }],
+        sm: ["0.9rem", { lineHeight: "1.6" }],
+        xs: ["0.825rem", { lineHeight: "1.55" }],
+        lg: ["1.125rem", { lineHeight: "1.62" }],
+        xl: ["1.25rem", { lineHeight: "1.45" }],
       },
       letterSpacing: {
         normal: "0",
@@ -29,8 +30,8 @@ export default {
       },
       spacing: {
         "btn": "0.5rem",
-        "section": "1.5rem",
-        "block": "1rem",
+        "section": "1.75rem",
+        "block": "1.125rem",
       },
       colors: {
         background: "hsl(var(--background))",
@@ -96,7 +97,7 @@ export default {
       },
       keyframes: {
         "fade-in-up": {
-          "0%": { opacity: "0", transform: "translateY(12px)" },
+          "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
@@ -104,7 +105,7 @@ export default {
           "100%": { opacity: "1" },
         },
         "scale-in": {
-          "0%": { opacity: "0", transform: "scale(0.96)" },
+          "0%": { opacity: "0", transform: "scale(0.975)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
         "glow-pulse": {
@@ -113,10 +114,10 @@ export default {
         },
       },
       animation: {
-        "fade-in-up": "fade-in-up 0.5s ease-out forwards",
-        "fade-in": "fade-in 0.4s ease-out forwards",
-        "scale-in": "scale-in 0.35s ease-out forwards",
-        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "fade-in-up": "fade-in-up 0.62s ease-out forwards",
+        "fade-in": "fade-in 0.55s ease-out forwards",
+        "scale-in": "scale-in 0.48s ease-out forwards",
+        "glow-pulse": "glow-pulse 2.8s ease-in-out infinite",
       },
     },
   },

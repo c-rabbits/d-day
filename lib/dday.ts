@@ -22,7 +22,7 @@ export function getDdayLabel(endDate: string): string {
 /** D-day에 따른 텍스트 색상 클래스 (Tailwind) */
 export function getDdayColorClass(endDate: string): string {
   const d = getDday(endDate);
-  if (d <= 7) return "text-red-600 dark:text-red-400 font-semibold";
-  if (d <= 30) return "text-orange-600 dark:text-orange-400";
+  if (d <= 7) return "text-rose-600 dark:text-rose-400 font-semibold";
+  if (d <= 30) return "text-amber-600 dark:text-amber-400";
   return "text-foreground";
 }

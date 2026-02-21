@@ -34,40 +34,40 @@ async function DashboardContent() {
   }).length;
 
   return (
-    <div className="mx-auto w-full max-w-mobile px-4 py-6">
-      <section className="mb-6 space-y-4 opacity-0 animate-fade-in-up [animation-fill-mode:forwards]">
+    <div className="mx-auto w-full max-w-mobile px-4 py-7">
+      <section className="mb-7 space-y-5 opacity-0 animate-fade-in-up [animation-fill-mode:forwards]">
         <div>
           <p className="text-xs font-semibold tracking-[0.14em] text-primary">
             DASHBOARD
           </p>
-          <h1 className="mt-1 text-2xl font-bold leading-tight text-foreground">
+          <h1 className="mt-1 text-[1.85rem] font-bold leading-tight text-foreground">
             내 계약 현황
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-2 text-[0.95rem] text-muted-foreground">
             만료 임박 건수를 먼저 확인하고 필요한 계약을 바로 관리하세요.
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-2.5">
-          <article className="rounded-2xl border border-outline-variant/70 bg-surface px-3 py-3.5">
-            <p className="text-[11px] text-muted-foreground">총 계약</p>
-            <p className="mt-1 text-lg font-semibold">{list.length}</p>
+        <div className="grid grid-cols-3 gap-3">
+          <article className="rounded-2xl border border-outline-variant/70 bg-surface px-3.5 py-4">
+            <p className="text-xs text-muted-foreground">총 계약</p>
+            <p className="mt-1 text-xl font-semibold">{list.length}</p>
           </article>
-          <article className="rounded-2xl border border-outline-variant/70 bg-primary-container px-3 py-3.5 text-primary-container-foreground">
-            <p className="text-[11px] opacity-80">30일 내 만료</p>
-            <p className="mt-1 text-lg font-semibold">{soonCount}</p>
+          <article className="rounded-2xl border border-outline-variant/70 bg-primary-container px-3.5 py-4 text-primary-container-foreground">
+            <p className="text-xs opacity-85">30일 내 만료</p>
+            <p className="mt-1 text-xl font-semibold">{soonCount}</p>
           </article>
-          <article className="rounded-2xl border border-outline-variant/70 bg-surface px-3 py-3.5">
-            <p className="text-[11px] text-muted-foreground">만료 지남</p>
-            <p className="mt-1 text-lg font-semibold">{expiredCount}</p>
+          <article className="rounded-2xl border border-outline-variant/70 bg-surface px-3.5 py-4">
+            <p className="text-xs text-muted-foreground">만료 지남</p>
+            <p className="mt-1 text-xl font-semibold">{expiredCount}</p>
           </article>
         </div>
       </section>
 
-      <section className="space-y-3">
+      <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-foreground">계약 목록</h2>
-          <span className="text-xs text-muted-foreground">{list.length}건</span>
+          <h2 className="text-lg font-semibold text-foreground">계약 목록</h2>
+          <span className="text-sm text-muted-foreground">{list.length}건</span>
         </div>
         <ContractList contracts={list} />
       </section>

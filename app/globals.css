@@ -4,50 +4,50 @@
 
 @layer base {
   :root {
-    --background: 30 40% 98%;
-    --foreground: 22 18% 14%;
-    --gradient-end: 32 45% 94%;
+    --background: 34 34% 98%;
+    --foreground: 24 16% 16%;
+    --gradient-end: 34 30% 95%;
 
     --surface: 0 0% 100%;
     --surface-foreground: 22 18% 14%;
-    --surface-container-low: 33 43% 97%;
-    --surface-container: 30 35% 95%;
-    --surface-container-high: 27 28% 91%;
+    --surface-container-low: 34 33% 97%;
+    --surface-container: 32 27% 95%;
+    --surface-container-high: 30 22% 92%;
 
-    --outline: 20 10% 55%;
-    --outline-variant: 24 17% 83%;
+    --outline: 22 8% 50%;
+    --outline-variant: 25 16% 85%;
 
-    --primary: 24 95% 53%;
+    --primary: 24 84% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-container: 27 100% 92%;
-    --primary-container-foreground: 22 74% 25%;
+    --primary-container: 27 90% 94%;
+    --primary-container-foreground: 23 61% 30%;
 
-    --secondary: 214 32% 42%;
+    --secondary: 215 24% 44%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-container: 215 45% 92%;
-    --secondary-container-foreground: 214 42% 22%;
+    --secondary-container: 214 35% 93%;
+    --secondary-container-foreground: 214 30% 28%;
 
     --card: 0 0% 100%;
     --card-foreground: 22 18% 14%;
     --popover: 0 0% 100%;
     --popover-foreground: 22 18% 14%;
 
-    --muted: 28 28% 93%;
-    --muted-foreground: 20 9% 39%;
-    --accent: 27 100% 92%;
-    --accent-foreground: 22 74% 25%;
+    --muted: 32 24% 94%;
+    --muted-foreground: 24 8% 41%;
+    --accent: 28 70% 93%;
+    --accent-foreground: 23 61% 30%;
 
     --destructive: 2 73% 52%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 24 17% 83%;
+    --border: 25 16% 85%;
     --input: 0 0% 100%;
-    --ring: 24 95% 53%;
+    --ring: 24 84% 50%;
 
     --auth-header: 246 32% 14%;
 
-    --leading-body: 1.6;
-    --leading-heading: 1.35;
+    --leading-body: 1.68;
+    --leading-heading: 1.32;
     --tracking-body: 0;
     --tracking-heading: -0.01em;
     --space-buttons: 0.5rem;
@@ -59,12 +59,12 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 1rem;
+    --radius: 1.125rem;
   }
 
   .dark {
     --background: 246 18% 8%;
-    --foreground: 38 24% 94%;
+    --foreground: 36 20% 92%;
     --gradient-end: 246 18% 5%;
 
     --surface: 246 17% 12%;
@@ -73,18 +73,18 @@
     --surface-container: 247 14% 17%;
     --surface-container-high: 247 13% 20%;
 
-    --outline: 24 10% 65%;
+    --outline: 23 8% 66%;
     --outline-variant: 245 10% 26%;
 
-    --primary: 26 98% 62%;
+    --primary: 26 86% 64%;
     --primary-foreground: 22 100% 10%;
-    --primary-container: 26 65% 25%;
-    --primary-container-foreground: 29 94% 88%;
+    --primary-container: 26 42% 27%;
+    --primary-container-foreground: 29 84% 90%;
 
-    --secondary: 210 35% 72%;
+    --secondary: 210 30% 74%;
     --secondary-foreground: 221 42% 12%;
-    --secondary-container: 218 29% 24%;
-    --secondary-container-foreground: 214 50% 86%;
+    --secondary-container: 218 22% 25%;
+    --secondary-container-foreground: 214 40% 86%;
 
     --card: 247 14% 17%;
     --card-foreground: 38 24% 94%;
@@ -92,7 +92,7 @@
     --popover-foreground: 38 24% 94%;
 
     --muted: 247 11% 20%;
-    --muted-foreground: 24 10% 72%;
+    --muted-foreground: 26 9% 74%;
     --accent: 247 12% 22%;
     --accent-foreground: 28 90% 90%;
 
@@ -100,7 +100,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 245 10% 26%;
     --input: 247 15% 14%;
-    --ring: 26 98% 62%;
+    --ring: 26 86% 64%;
 
     --auth-header: 246 28% 10%;
 
@@ -163,34 +163,34 @@
     background-position: center;
   }
 
-  .stagger-1 { animation-delay: 0.05s; }
-  .stagger-2 { animation-delay: 0.1s; }
-  .stagger-3 { animation-delay: 0.15s; }
-  .stagger-4 { animation-delay: 0.2s; }
-  .stagger-5 { animation-delay: 0.25s; }
-  .stagger-6 { animation-delay: 0.3s; }
-  .stagger-7 { animation-delay: 0.35s; }
-  .stagger-8 { animation-delay: 0.4s; }
+  .stagger-1 { animation-delay: 0.08s; }
+  .stagger-2 { animation-delay: 0.14s; }
+  .stagger-3 { animation-delay: 0.2s; }
+  .stagger-4 { animation-delay: 0.26s; }
+  .stagger-5 { animation-delay: 0.32s; }
+  .stagger-6 { animation-delay: 0.38s; }
+  .stagger-7 { animation-delay: 0.44s; }
+  .stagger-8 { animation-delay: 0.5s; }
 
   .animate-float-gentle {
-    animation: float-gentle 7s ease-in-out infinite;
+    animation: float-gentle 10s ease-in-out infinite;
   }
 
   .animate-float-reverse {
-    animation: float-gentle 9s ease-in-out infinite reverse;
+    animation: float-gentle 13s ease-in-out infinite reverse;
   }
 
   .animate-orbit-slow {
-    animation: orbit-slow 14s linear infinite;
+    animation: orbit-slow 24s linear infinite;
     transform-origin: center;
   }
 
   .animate-pulse-soft {
-    animation: pulse-soft 3.2s ease-in-out infinite;
+    animation: pulse-soft 4.8s ease-in-out infinite;
   }
 
   .animate-stroke-loop {
-    animation: stroke-loop 8s ease-in-out infinite;
+    animation: stroke-loop 12s ease-in-out infinite;
   }
 }
 
@@ -199,7 +199,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-7px);
   }
 }
 
@@ -230,5 +230,19 @@
   }
   100% {
     stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
