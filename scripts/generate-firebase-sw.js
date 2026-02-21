@@ -4,6 +4,7 @@
  * - 로컬: .env.local 에서 읽음
  * FCM 웹 푸시는 이 서비스 워커가 있어야 getToken()이 동작합니다.
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 const fs = require("fs");
 const path = require("path");

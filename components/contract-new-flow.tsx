@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
@@ -353,9 +354,12 @@ export function ContractNewFlow() {
                 />
                 {previewUrl && (
                   <div className="flex flex-col gap-2">
-                    <img
+                    <Image
                       src={previewUrl}
                       alt="미리보기"
+                      width={1200}
+                      height={800}
+                      unoptimized
                       className="max-h-48 w-full rounded-xl border border-outline-variant bg-surface object-contain"
                     />
                     <Button
