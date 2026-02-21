@@ -1,7 +1,8 @@
 "use client";
 
-import { alpha, Box, Card, CardContent, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import { ContractList } from "@/components/contract-list";
+import { DashboardBanner } from "@/components/dashboard-banner";
 import type { ContractCategory } from "@/lib/types";
 
 type ContractRow = {
@@ -26,33 +27,34 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 내 계약 현황 — 큰 라운드 카드 */}
-        <Card
-          variant="outlined"
-          sx={{
-            borderRadius: 4,
-            borderColor: "divider",
-            overflow: "hidden",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-          }}
-        >
-          <CardContent sx={{ p: 2.5, "&:last-child": { pb: 2.5 } }}>
-            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-              내 계약 현황
-            </Typography>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0,1fr))",
-                gap: 1.5,
-              }}
-            >
-              <SummaryCard label="총 계약" value={contracts.length} variant="default" />
-              <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
-              <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
-            </Box>
-          </CardContent>
-        </Card>
+        {/* 2:1 라운드 배너 3개, 5초 로테이션 */}
+        <DashboardBanner />
+
+        {/* 내 계약 현황 — 작은 라운드 네모 3개, 파스텔톤 */}
+        <Box>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontWeight: 700,
+              fontSize: "0.875rem",
+              mb: 1.5,
+              color: "text.primary",
+            }}
+          >
+            내 계약 현황
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, minmax(0,1fr))",
+              gap: 1.5,
+            }}
+          >
+            <SummaryCard label="총 계약" value={contracts.length} variant="default" />
+            <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
+            <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
+          </Box>
+        </Box>
 
         <Stack spacing={1.2}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -70,6 +72,13 @@ export function DashboardHome({
   );
 }
 
+/** 파스텔톤 배색 */
+const PASTEL = {
+  default: { bg: "#e3f2fd", text: "#1565c0" },
+  soon: { bg: "#bbdefb", text: "#0d47a1" },
+  expired: { bg: "#ffe0b2", text: "#e65100" },
+};
+
 function SummaryCard({
   label,
   value,
@@ -81,22 +90,16 @@ function SummaryCard({
   highlight?: boolean;
   variant?: "default" | "soon" | "expired";
 }) {
-  const theme = useTheme();
-  const primary = theme.palette.primary.main;
-  const bgColor =
-    highlight
-      ? primary
-      : variant === "expired"
-        ? alpha("#ff9800", 0.1)
-        : alpha(primary, 0.08);
-  const textColor = highlight ? theme.palette.primary.contrastText : theme.palette.text.primary;
+  const { bg, text } = PASTEL[variant];
+  const textColor = highlight ? "#fff" : text;
+  const bgColor = highlight ? "#64b5f6" : bg;
 
   return (
     <Card
       variant="outlined"
       sx={{
         borderRadius: 2,
-        borderColor: "divider",
+        border: "none",
         bgcolor: bgColor,
         color: textColor,
       }}
@@ -106,8 +109,8 @@ function SummaryCard({
           variant="body2"
           sx={{
             fontWeight: 600,
-            fontSize: "0.9375rem",
-            opacity: highlight ? 0.92 : 0.9,
+            fontSize: "0.8125rem",
+            opacity: highlight ? 0.95 : 0.9,
           }}
         >
           {label}
