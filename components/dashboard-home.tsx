@@ -26,23 +26,33 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            내 계약 현황
-          </Typography>
-        </Box>
-
-        <Box
+        {/* 내 계약 현황 — 큰 라운드 카드 */}
+        <Card
+          variant="outlined"
           sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0,1fr))",
-            gap: 1.5,
+            borderRadius: 4,
+            borderColor: "divider",
+            overflow: "hidden",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
           }}
         >
-          <SummaryCard label="총 계약" value={contracts.length} variant="default" />
-          <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
-          <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
-        </Box>
+          <CardContent sx={{ p: 2.5, "&:last-child": { pb: 2.5 } }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+              내 계약 현황
+            </Typography>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0,1fr))",
+                gap: 1.5,
+              }}
+            >
+              <SummaryCard label="총 계약" value={contracts.length} variant="default" />
+              <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
+              <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
+            </Box>
+          </CardContent>
+        </Card>
 
         <Stack spacing={1.2}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -85,13 +95,13 @@ function SummaryCard({
     <Card
       variant="outlined"
       sx={{
-        borderRadius: 2.5,
+        borderRadius: 2,
         borderColor: "divider",
         bgcolor: bgColor,
         color: textColor,
       }}
     >
-      <CardContent sx={{ p: 1.75, "&:last-child": { pb: 1.75 } }}>
+      <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Typography
           variant="body2"
           sx={{

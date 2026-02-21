@@ -10,19 +10,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import DescriptionIcon from "@mui/icons-material/Description";
+import HomeIcon from "@mui/icons-material/Home";
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { getDday, getDdayLabel } from "@/lib/dday";
 import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
 
-const CATEGORY_ICONS: Record<ContractCategory, React.ReactNode> = {
-  RENT: "🏠",
-  PHONE: "📱",
-  CAR_INSURANCE: "🚗",
-  GYM: "💪",
-  RENTAL: "📦",
-  STREAMING: "▶️",
-  OTHER: "📄",
+const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
+  RENT: HomeIcon,
+  PHONE: SmartphoneIcon,
+  CAR_INSURANCE: DirectionsCarIcon,
+  GYM: FitnessCenterIcon,
+  RENTAL: InventoryIcon,
+  STREAMING: PlayCircleIcon,
+  OTHER: DescriptionIcon,
 };
 
 type ContractRow = {
@@ -42,12 +48,12 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
         sx={{
           py: 8,
           border: (theme) => `1px dashed ${theme.palette.divider}`,
-          borderRadius: 3,
+          borderRadius: 1.5,
           bgcolor: "background.paper",
           textAlign: "center",
         }}
       >
-        <DescriptionOutlinedIcon sx={{ fontSize: 44, color: "text.secondary", mb: 1 }} />
+        <DescriptionIcon sx={{ fontSize: 44, color: "text.secondary", mb: 1 }} />
         <Typography variant="body1" color="text.secondary">
           등록된 계약이 없어요
         </Typography>
@@ -69,7 +75,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
             key={c.id}
             variant="outlined"
             sx={{
-              borderRadius: 3,
+              borderRadius: 1.5,
               borderColor: "divider",
               transition: "transform .25s ease, box-shadow .25s ease, background-color .25s ease",
               "&:hover": {
@@ -79,20 +85,22 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
             }}
           >
             <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
-              <Stack spacing={1.4} sx={{ p: 2.1 }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1.5}>
+              <Stack spacing={1.2} sx={{ p: 1.5 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1.2}>
                   <Stack direction="row" spacing={1.2} sx={{ minWidth: 0 }}>
                     <Avatar
                       variant="rounded"
                       sx={{
-                        width: 44,
-                        height: 44,
+                        width: 40,
+                        height: 40,
                         bgcolor: "primary.main",
                         color: "primary.contrastText",
-                        fontSize: 22,
                       }}
                     >
-                      {CATEGORY_ICONS[c.category]}
+                      {(() => {
+                        const Icon = CATEGORY_ICONS[c.category];
+                        return <Icon sx={{ fontSize: 22 }} />;
+                      })()}
                     </Avatar>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography noWrap variant="subtitle1" fontWeight={700}>
@@ -112,9 +120,9 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
                   />
                 </Stack>
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
-                  <Stack direction="row" spacing={0.8} alignItems="center">
-                    <CalendarTodayRoundedIcon sx={{ fontSize: 15, color: "text.secondary" }} />
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.2}>
+                  <Stack direction="row" spacing={0.6} alignItems="center">
+                    <CalendarTodayIcon sx={{ fontSize: 14, color: "text.secondary" }} />
                     <Typography variant="body2" color="text.secondary">
                       만료일 {c.end_date}
                     </Typography>

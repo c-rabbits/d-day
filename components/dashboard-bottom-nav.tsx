@@ -17,8 +17,8 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
-const GAP = 4;
-const CIRCLE_SIZE = 40;
+const GAP = 6;
+const CIRCLE_SIZE = 44;
 const BAR_HEIGHT = CIRCLE_SIZE + GAP * 2;
 
 export function DashboardBottomNav() {
