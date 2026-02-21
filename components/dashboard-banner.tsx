@@ -3,11 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Box } from "@mui/material";
 
-const BANNER_COUNT = 3;
+const BANNER_COUNT = 7;
 const ROTATE_INTERVAL_MS = 5000;
-const SLIDE_WIDTH = 78;
-const GAP = 4;
-const PEEK = 6;
+const SLIDE_WIDTH = 76;
+const GAP = 3;
+const PEEK = 12;
 const TRACK_SLIDES = BANNER_COUNT + 1;
 const TRACK_WIDTH = PEEK + SLIDE_WIDTH * TRACK_SLIDES + GAP * (TRACK_SLIDES - 1) + PEEK;
 const SWIPE_THRESHOLD_PX = 50;
@@ -16,6 +16,10 @@ const BANNER_SLIDES: { src: string | null; alt: string }[] = [
   { src: null, alt: "배너 1" },
   { src: null, alt: "배너 2" },
   { src: null, alt: "배너 3" },
+  { src: null, alt: "배너 4" },
+  { src: null, alt: "배너 5" },
+  { src: null, alt: "배너 6" },
+  { src: null, alt: "배너 7" },
 ];
 
 export function DashboardBanner() {
@@ -72,10 +76,11 @@ export function DashboardBanner() {
     touchStartX.current = null;
   };
 
-  const translatePercent =
-    (PEEK + index * (SLIDE_WIDTH + GAP)) / TRACK_WIDTH * 100;
-
   const displayIndex = index === BANNER_COUNT ? 0 : index;
+
+  const centerOffset = (100 - SLIDE_WIDTH) / 2;
+  const translatePercent =
+    (PEEK + index * (SLIDE_WIDTH + GAP) - centerOffset) / TRACK_WIDTH * 100;
 
   return (
     <Box sx={{ width: "100%" }}>

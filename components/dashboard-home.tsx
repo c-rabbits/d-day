@@ -113,8 +113,8 @@ function StatusColumn({
   label: string;
 }) {
   return (
-    <Box sx={{ px: 0.5 }}>
-      <Box sx={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 0.25 }}>
+    <Box sx={{ px: 0.5, textAlign: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", flexWrap: "wrap", gap: 0.25 }}>
         <Typography component="span" sx={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff" }}>
           {value}
         </Typography>
