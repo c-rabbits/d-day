@@ -18,14 +18,14 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
-const BLOB_SIZE = 44;
-const DOT_SIZE = 6;
+const PILL_WIDTH = 72;
+const PILL_HEIGHT = 40;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
   const theme = useTheme();
-  const [blobKey, setBlobKey] = useState(0);
+  const [pillKey, setPillKey] = useState(0);
 
   const activeIndex = useMemo(() => {
     if (pathname.startsWith("/dashboard/info")) return 1;
@@ -36,10 +36,10 @@ export function DashboardBottomNav() {
   }, [pathname]);
 
   useEffect(() => {
-    setBlobKey((k) => k + 1);
+    setPillKey((k) => k + 1);
   }, [activeIndex]);
 
-  const blobLeftPercent = (activeIndex * 100) / ITEM_COUNT + 100 / ITEM_COUNT / 2;
+  const pillLeftPercent = (activeIndex * 100) / ITEM_COUNT + 100 / ITEM_COUNT / 2;
 
   return (
     <nav
@@ -49,56 +49,29 @@ export function DashboardBottomNav() {
       }}
     >
       <div
-        className="relative mx-4 mb-2 flex h-16 items-center overflow-visible rounded-2xl border border-outline-variant/50 shadow-lg"
+        className="relative mx-4 mb-2 flex h-14 items-center overflow-visible rounded-full border border-outline-variant/50 shadow-md"
         style={{
-          background: alpha(theme.palette.background.paper, 0.95),
+          background: alpha(theme.palette.background.paper, 0.98),
           backdropFilter: "blur(14px)",
         }}
       >
-        {/* 아이콘을 감싸는 원형 블롭 — 슬라이드 + 바운스 */}
+        {/* 활성 탭만 감싸는 pill 배경 — 아이콘+라벨 전체 */}
         <div
           className="absolute top-1/2 overflow-visible"
           style={{
-            left: `${blobLeftPercent}%`,
-            width: BLOB_SIZE,
-            height: BLOB_SIZE,
-            marginTop: -BLOB_SIZE / 2,
+            left: `${pillLeftPercent}%`,
+            width: PILL_WIDTH,
+            height: PILL_HEIGHT,
+            marginTop: -PILL_HEIGHT / 2,
             transform: "translateX(-50%)",
-            transition: "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            transition: "left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
         >
           <div
-            key={blobKey}
-            className="animate-nav-blob absolute rounded-full"
+            key={pillKey}
+            className="animate-nav-blob absolute inset-0 rounded-full"
             style={{
-              left: "50%",
-              top: "50%",
-              width: BLOB_SIZE,
-              height: BLOB_SIZE,
-              marginLeft: -BLOB_SIZE / 2,
-              marginTop: -BLOB_SIZE / 2,
-              background: alpha(theme.palette.background.paper, 1),
-              boxShadow: "0 2px 12px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.04)",
-            }}
-          />
-        </div>
-
-        {/* 활성 탭 위 작은 점 인디케이터 — 슬라이드 + 팝 */}
-        <div
-          className="absolute top-3 overflow-visible"
-          style={{
-            left: `${blobLeftPercent}%`,
-            width: DOT_SIZE,
-            height: DOT_SIZE,
-            transform: "translateX(-50%)",
-            transition: "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          }}
-        >
-          <span
-            key={blobKey}
-            className="animate-nav-dot absolute inset-0 rounded-full"
-            style={{
-              background: theme.palette.primary.main,
+              background: alpha(theme.palette.primary.main, 0.12),
             }}
           />
         </div>
@@ -122,8 +95,8 @@ export function DashboardBottomNav() {
               >
                 <Icon
                   sx={{
-                    fontSize: index === 2 ? 28 : 24,
-                    filter: isActive && index === 2 ? "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" : undefined,
+                    fontSize: index === 2 ? 26 : 22,
+                    filter: isActive && index === 2 ? "drop-shadow(0 1px 4px rgba(0,0,0,0.12))" : undefined,
                   }}
                 />
                 <span
