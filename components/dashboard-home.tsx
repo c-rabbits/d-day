@@ -33,10 +33,10 @@ export function DashboardHome({
         {/* 내 계약 현황 — 작은 라운드 네모 3개, 파스텔톤 */}
         <Box>
           <Typography
-            variant="subtitle1"
+            variant="h6"
             sx={{
               fontWeight: 700,
-              fontSize: "0.875rem",
+              fontSize: "1.02rem",
               mb: 1.5,
               color: "text.primary",
             }}
