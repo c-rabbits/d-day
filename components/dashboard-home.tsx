@@ -27,8 +27,10 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 2:1 라운드 배너 3개, 5초 로테이션 */}
-        <DashboardBanner />
+        {/* 풀폭 배너: 화면 가득, 가로 2.5:1, 가운데 정렬, 무한 오른쪽 흐름 */}
+        <Box sx={{ mx: -2, width: "calc(100% + 32px)" }}>
+          <DashboardBanner />
+        </Box>
 
         {/* 내 계약 현황 — 다크 카드 3열 + 프로그레스 바 */}
         <Box>
@@ -66,7 +68,7 @@ export function DashboardHome({
   );
 }
 
-/** 다크 카드 3열: 값 + 단위, 라벨, 프로그레스 바 (첨부 참고) */
+/** 다크 카드 3열: 값 + 단위, 라벨 (프로그레스 바 없음) */
 function ContractStatusCard({
   total,
   soonCount,
@@ -76,10 +78,6 @@ function ContractStatusCard({
   soonCount: number;
   expiredCount: number;
 }) {
-  const max = Math.max(total, 1);
-  const soonPct = Math.min(100, (soonCount / max) * 100);
-  const expiredPct = Math.min(100, (expiredCount / max) * 100);
-
   return (
     <Card
       sx={{
@@ -97,24 +95,9 @@ function ContractStatusCard({
           p: 2,
         }}
       >
-        <StatusColumn
-          value={total}
-          unit="건"
-          label="총 계약"
-          progress={100}
-        />
-        <StatusColumn
-          value={soonCount}
-          unit="건"
-          label="30일 내 만료"
-          progress={soonPct}
-        />
-        <StatusColumn
-          value={expiredCount}
-          unit="건"
-          label="만료 지남"
-          progress={expiredPct}
-        />
+        <StatusColumn value={total} unit="건" label="총 계약" />
+        <StatusColumn value={soonCount} unit="건" label="30일 내 만료" />
+        <StatusColumn value={expiredCount} unit="건" label="만료 지남" />
       </Box>
     </Card>
   );
@@ -124,12 +107,10 @@ function StatusColumn({
   value,
   unit,
   label,
-  progress,
 }: {
   value: number;
   unit: string;
   label: string;
-  progress: number;
 }) {
   return (
     <Box sx={{ px: 0.5 }}>
@@ -144,25 +125,6 @@ function StatusColumn({
       <Typography sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.6)", mt: 0.25 }}>
         {label}
       </Typography>
-      <Box
-        sx={{
-          mt: 1,
-          height: 4,
-          borderRadius: 2,
-          bgcolor: "rgba(255,255,255,0.2)",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          sx={{
-            width: `${progress}%`,
-            height: "100%",
-            borderRadius: 2,
-            bgcolor: "#fff",
-            transition: "width 0.4s ease",
-          }}
-        />
-      </Box>
     </Box>
   );
 }
