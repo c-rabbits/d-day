@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { alpha, Box, Card, CardContent, Stack, Typography, useTheme } from "@mui/material";
 import { ContractList } from "@/components/contract-list";
 import type { ContractCategory } from "@/lib/types";
 
@@ -30,9 +30,6 @@ export function DashboardHome({
           <Typography variant="h5" sx={{ fontWeight: 700 }}>
             내 계약 현황
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-            만료 임박 건수를 먼저 확인하고 필요한 계약을 바로 관리하세요.
-          </Typography>
         </Box>
 
         <Box
@@ -42,9 +39,9 @@ export function DashboardHome({
             gap: 1.5,
           }}
         >
-          <SummaryCard label="총 계약" value={contracts.length} />
-          <SummaryCard label="30일 내 만료" value={soonCount} highlight />
-          <SummaryCard label="만료 지남" value={expiredCount} />
+          <SummaryCard label="총 계약" value={contracts.length} variant="default" />
+          <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
+          <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
         </Box>
 
         <Stack spacing={1.2}>
@@ -67,19 +64,31 @@ function SummaryCard({
   label,
   value,
   highlight = false,
+  variant = "default",
 }: {
   label: string;
   value: number;
   highlight?: boolean;
+  variant?: "default" | "soon" | "expired";
 }) {
+  const theme = useTheme();
+  const primary = theme.palette.primary.main;
+  const bgColor =
+    highlight
+      ? primary
+      : variant === "expired"
+        ? alpha("#ff9800", 0.1)
+        : alpha(primary, 0.08);
+  const textColor = highlight ? theme.palette.primary.contrastText : theme.palette.text.primary;
+
   return (
     <Card
       variant="outlined"
       sx={{
-        borderRadius: 2,
+        borderRadius: 2.5,
         borderColor: "divider",
-        bgcolor: highlight ? "primary.main" : "background.paper",
-        color: highlight ? "primary.contrastText" : "text.primary",
+        bgcolor: bgColor,
+        color: textColor,
       }}
     >
       <CardContent sx={{ p: 1.75, "&:last-child": { pb: 1.75 } }}>

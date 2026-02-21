@@ -18,8 +18,8 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
-const PILL_WIDTH = 72;
-const PILL_HEIGHT = 40;
+const PILL_WIDTH = 76;
+const PILL_HEIGHT = 44;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
@@ -49,7 +49,7 @@ export function DashboardBottomNav() {
       }}
     >
       <div
-        className="relative mx-4 mb-2 flex h-14 items-center overflow-visible rounded-full border border-outline-variant/50 shadow-md"
+        className="relative mx-3 mb-3 flex h-16 items-center overflow-visible rounded-full border border-outline-variant/50 shadow-lg"
         style={{
           background: alpha(theme.palette.background.paper, 0.98),
           backdropFilter: "blur(14px)",
@@ -86,7 +86,7 @@ export function DashboardBottomNav() {
                 key={item.href}
                 type="button"
                 onClick={() => router.push(item.href)}
-                className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-colors"
+                className="flex flex-1 flex-col items-center justify-center gap-1 py-2.5 transition-colors"
                 style={{
                   color: isActive
                     ? theme.palette.primary.main
@@ -95,12 +95,12 @@ export function DashboardBottomNav() {
               >
                 <Icon
                   sx={{
-                    fontSize: index === 2 ? 26 : 22,
+                    fontSize: index === 2 ? 28 : 24,
                     filter: isActive && index === 2 ? "drop-shadow(0 1px 4px rgba(0,0,0,0.12))" : undefined,
                   }}
                 />
                 <span
-                  className="text-[11px] font-medium"
+                  className="text-[11.5px] font-medium"
                   style={{
                     fontWeight: isActive ? 700 : 500,
                   }}
