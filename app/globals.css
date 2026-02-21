@@ -18,16 +18,16 @@
     --outline: 210 12% 48%;
     --outline-variant: 210 18% 86%;
 
-    /* M3 baseline Secondary color style (blue accent) - https://m3.material.io/styles/color/static/baseline */
-    --primary: 210 55% 38%;
+    /* M3 baseline: primary/on-primary, primary-container/on-primary-container 조합 - https://m3.material.io/styles/color */
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-container: 210 55% 93%;
-    --primary-container-foreground: 210 45% 22%;
+    --primary-container: 214 100% 97%;
+    --primary-container-foreground: 217 91% 25%;
 
-    --secondary: 210 35% 42%;
+    --secondary: 217 33% 45%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-container: 210 45% 92%;
-    --secondary-container-foreground: 210 40% 26%;
+    --secondary-container: 214 60% 94%;
+    --secondary-container-foreground: 217 45% 22%;
 
     --card: 0 0% 100%;
     --card-foreground: 210 25% 14%;
@@ -36,15 +36,15 @@
 
     --muted: 210 22% 94%;
     --muted-foreground: 210 10% 42%;
-    --accent: 210 50% 93%;
-    --accent-foreground: 210 45% 26%;
+    --accent: 214 100% 97%;
+    --accent-foreground: 217 91% 25%;
 
     --destructive: 2 73% 52%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 210 18% 86%;
     --input: 210 25% 96%;
-    --ring: 210 55% 38%;
+    --ring: 217 91% 60%;
 
     --auth-header: 210 35% 14%;
 
@@ -56,7 +56,7 @@
     --space-sections: 1.5rem;
     --space-blocks: 1rem;
 
-    --chart-1: 210 60% 50%;
+    --chart-1: 217 91% 55%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
@@ -86,15 +86,16 @@
     --outline: 210 12% 58%;
     --outline-variant: 210 14% 26%;
 
-    --primary: 210 55% 62%;
-    --primary-foreground: 210 45% 12%;
-    --primary-container: 210 40% 26%;
-    --primary-container-foreground: 210 55% 88%;
+    /* M3 dark: on-primary = dark on bright primary, on-primary-container = light on dark container */
+    --primary: 217 91% 65%;
+    --primary-foreground: 217 91% 12%;
+    --primary-container: 217 55% 22%;
+    --primary-container-foreground: 217 90% 92%;
 
-    --secondary: 210 35% 68%;
-    --secondary-foreground: 210 40% 12%;
-    --secondary-container: 210 30% 24%;
-    --secondary-container-foreground: 210 45% 88%;
+    --secondary: 217 40% 70%;
+    --secondary-foreground: 217 50% 14%;
+    --secondary-container: 217 35% 22%;
+    --secondary-container-foreground: 217 70% 90%;
 
     --card: 210 18% 17%;
     --card-foreground: 210 15% 94%;
@@ -103,18 +104,18 @@
 
     --muted: 210 14% 20%;
     --muted-foreground: 210 12% 72%;
-    --accent: 210 18% 22%;
-    --accent-foreground: 210 55% 88%;
+    --accent: 217 55% 22%;
+    --accent-foreground: 217 90% 92%;
 
     --destructive: 2 61% 42%;
     --destructive-foreground: 0 0% 98%;
     --border: 210 14% 26%;
     --input: 210 20% 14%;
-    --ring: 210 55% 62%;
+    --ring: 217 91% 65%;
 
     --auth-header: 210 30% 10%;
 
-    --chart-1: 210 65% 55%;
+    --chart-1: 217 91% 60%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;

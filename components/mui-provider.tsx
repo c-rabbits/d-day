@@ -21,11 +21,18 @@ const shape = {
   radiusXl: 28,
 };
 
+/* M3 스타일 조합: primary + on-primary(contrastText), secondary + on-secondary - https://m3.material.io/styles/color */
 const muiTheme = createTheme({
   palette: {
     mode: "light",
-    primary: { main: "hsl(210 55% 38%)" },
-    secondary: { main: "hsl(210 35% 42%)" },
+    primary: {
+      main: "hsl(var(--primary))",
+      contrastText: "hsl(var(--primary-foreground))",
+    },
+    secondary: {
+      main: "hsl(var(--secondary))",
+      contrastText: "hsl(var(--secondary-foreground))",
+    },
     background: {
       default: "hsl(var(--background))",
       paper: "hsl(var(--surface))",
