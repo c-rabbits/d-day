@@ -1,10 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { getDdayLabel, getDdayColorClass } from "@/lib/dday";
+import { useRouter } from "next/navigation";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActionArea,
+  Chip,
+  Stack,
+  Typography,
+} from "@mui/material";
+import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { getDday, getDdayLabel } from "@/lib/dday";
 import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { Calendar, FileText } from "lucide-react";
 
 const CATEGORY_ICONS: Record<ContractCategory, React.ReactNode> = {
   RENT: "🏠",
@@ -25,71 +34,102 @@ type ContractRow = {
 };
 
 export function ContractList({ contracts }: { contracts: ContractRow[] }) {
+  const router = useRouter();
+
   if (contracts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-outline-variant bg-surface-container-low/70 py-16 text-center opacity-0 animate-scale-in [animation-fill-mode:forwards]">
-        <FileText className="mb-3 h-12 w-12 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">등록된 계약이 없어요</p>
-        <p className="mt-1 text-xs text-muted-foreground">
+      <Box
+        sx={{
+          py: 8,
+          border: (theme) => `1px dashed ${theme.palette.divider}`,
+          borderRadius: 3,
+          bgcolor: "background.paper",
+          textAlign: "center",
+        }}
+      >
+        <DescriptionOutlinedIcon sx={{ fontSize: 44, color: "text.secondary", mb: 1 }} />
+        <Typography variant="body1" color="text.secondary">
+          등록된 계약이 없어요
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
           아래 + 버튼으로 첫 계약을 추가해 보세요
-        </p>
-      </div>
+        </Typography>
+      </Box>
     );
   }
 
-  const stagger = ["stagger-1", "stagger-2", "stagger-3", "stagger-4", "stagger-5", "stagger-6", "stagger-7", "stagger-8"];
-
   return (
-    <ul className="space-y-3.5">
-      {contracts.map((c, i) => (
-        <li key={c.id} className={cn("opacity-0 animate-fade-in-up [animation-fill-mode:forwards]", stagger[Math.min(i, stagger.length - 1)])}>
-          <Link
-            href={`/dashboard/contracts/${c.id}`}
-            className={cn(
-              "group flex flex-col gap-4 rounded-2xl border border-outline-variant/70 bg-surface p-5 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-surface-container-low hover:shadow-md",
-            )}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <span
-                  className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-container text-xl"
-                  aria-hidden
-                >
-                  {CATEGORY_ICONS[c.category]}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-[1.02rem] font-semibold text-foreground">
-                    {c.title}
-                  </p>
-                  <p className="mt-0.5 text-sm text-muted-foreground">
-                    {CATEGORY_LABELS[c.category]}
-                  </p>
-                </div>
-              </div>
-              <span
-                className={cn(
-                  "rounded-full px-2.5 py-1 text-sm tabular-nums",
-                  getDdayColorClass(c.end_date),
-                )}
-              >
-                {getDdayLabel(c.end_date)}
-              </span>
-            </div>
+    <Stack spacing={1.5}>
+      {contracts.map((c) => {
+        const dday = getDday(c.end_date);
+        const ddayColor = dday <= 7 ? "error" : dday <= 30 ? "warning" : "default";
 
-            <div className="flex items-center justify-between gap-3 text-right">
-              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Calendar className="h-3.5 w-3.5" />
-                만료일 {c.end_date}
-              </span>
-              {c.amount != null && (
-                <span className="text-[0.95rem] font-semibold text-foreground">
-                  {c.amount.toLocaleString()}원
-                </span>
-              )}
-            </div>
-          </Link>
-        </li>
-      ))}
-    </ul>
+        return (
+          <Card
+            key={c.id}
+            variant="outlined"
+            sx={{
+              borderRadius: 3,
+              borderColor: "divider",
+              transition: "transform .25s ease, box-shadow .25s ease, background-color .25s ease",
+              "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow: 2,
+              },
+            }}
+          >
+            <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
+              <Stack spacing={1.4} sx={{ p: 2.1 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1.5}>
+                  <Stack direction="row" spacing={1.2} sx={{ minWidth: 0 }}>
+                    <Avatar
+                      variant="rounded"
+                      sx={{
+                        width: 44,
+                        height: 44,
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                        fontSize: 22,
+                      }}
+                    >
+                      {CATEGORY_ICONS[c.category]}
+                    </Avatar>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography noWrap variant="subtitle1" fontWeight={700}>
+                        {c.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {CATEGORY_LABELS[c.category]}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Chip
+                    label={getDdayLabel(c.end_date)}
+                    color={ddayColor}
+                    size="small"
+                    sx={{ fontWeight: 700 }}
+                  />
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.5}>
+                  <Stack direction="row" spacing={0.8} alignItems="center">
+                    <CalendarTodayRoundedIcon sx={{ fontSize: 15, color: "text.secondary" }} />
+                    <Typography variant="body2" color="text.secondary">
+                      만료일 {c.end_date}
+                    </Typography>
+                  </Stack>
+                  {c.amount != null && (
+                    <Typography variant="subtitle2" fontWeight={700}>
+                      {c.amount.toLocaleString()}원
+                    </Typography>
+                  )}
+                </Stack>
+              </Stack>
+            </CardActionArea>
+          </Card>
+        );
+      })}
+    </Stack>
   );
 }

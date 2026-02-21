@@ -1,23 +1,38 @@
-import { ContractNewFlow } from "@/components/contract-new-flow";
-import { Sparkles } from "lucide-react";
+import { ContractNewFlowMui } from "@/components/contract-new-flow-mui";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { Box, Chip, Stack, Typography } from "@mui/material";
+import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 
-export default function NewContractPage() {
+export default async function NewContractPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/auth/login");
+
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-7">
-      <section className="mb-7 rounded-2xl border border-outline-variant/70 bg-surface/80 p-6 backdrop-blur">
-        <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-primary">
-          <Sparkles className="h-3.5 w-3.5" />
-          NEW CONTRACT
-        </p>
-        <h1 className="mt-2.5 text-[2rem] font-bold leading-tight text-foreground">
-          계약을 단계별로 등록해보세요
-        </h1>
-        <p className="mt-2.5 text-[0.95rem] leading-relaxed text-muted-foreground">
-          카테고리 선택 → 정보 입력 → 알림 설정 순서로 진행됩니다. 필요한 정보만
-          큼직하게 보여드려서 빠르게 등록할 수 있어요.
-        </p>
-      </section>
-      <ContractNewFlow />
-    </div>
+    <Box sx={{ px: 2, py: 3.5 }}>
+      <Stack spacing={2}>
+        <Box>
+          <Chip
+            icon={<AutoAwesomeRoundedIcon />}
+            label="NEW CONTRACT"
+            color="primary"
+            variant="outlined"
+            size="small"
+            sx={{ fontWeight: 700, mb: 1.2 }}
+          />
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            계약을 단계별로 등록해보세요
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
+            카테고리 선택 → 정보 입력 → 알림 설정 순서로 진행됩니다.
+          </Typography>
+        </Box>
+        <ContractNewFlowMui />
+      </Stack>
+    </Box>
   );
 }

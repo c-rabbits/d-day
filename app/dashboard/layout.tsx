@@ -1,9 +1,9 @@
 import { AuthButton } from "@/components/auth-button";
+import { DashboardBottomNav } from "@/components/dashboard-bottom-nav";
 import { PushEnable } from "@/components/push-enable";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Plus } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -34,16 +34,8 @@ export default function DashboardLayout({
         </div>
       </header>
 
-      <div className="relative flex-1 pb-28">{children}</div>
-
-      <Link
-        href="/dashboard/contracts/new"
-        className="fixed bottom-6 right-4 z-20 inline-flex h-14 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[0_14px_32px_-20px_hsl(var(--primary)/0.72)] transition-transform duration-300 hover:scale-[1.02] active:scale-[0.99]"
-        aria-label="계약 추가"
-      >
-        <Plus className="h-4 w-4" />
-        계약 추가
-      </Link>
+      <div className="relative flex-1 pb-24">{children}</div>
+      <DashboardBottomNav />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { MuiProvider } from "@/components/mui-provider";
 import { PwaRegister } from "@/components/pwa-register";
 import "./globals.css";
 
@@ -46,9 +47,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="mx-auto min-h-screen w-full max-w-mobile bg-background">
-            {children}
-          </div>
+          <MuiProvider>
+            <div className="mx-auto min-h-screen w-full max-w-mobile bg-background">
+              {children}
+            </div>
+          </MuiProvider>
         </ThemeProvider>
       </body>
     </html>
