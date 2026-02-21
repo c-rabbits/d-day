@@ -34,6 +34,13 @@ export default {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: "hsl(var(--surface))",
+        "surface-foreground": "hsl(var(--surface-foreground))",
+        "surface-container-low": "hsl(var(--surface-container-low))",
+        "surface-container": "hsl(var(--surface-container))",
+        "surface-container-high": "hsl(var(--surface-container-high))",
+        outline: "hsl(var(--outline))",
+        "outline-variant": "hsl(var(--outline-variant))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -46,9 +53,17 @@ export default {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
+        "primary-container": {
+          DEFAULT: "hsl(var(--primary-container))",
+          foreground: "hsl(var(--primary-container-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+        },
+        "secondary-container": {
+          DEFAULT: "hsl(var(--secondary-container))",
+          foreground: "hsl(var(--secondary-container-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",

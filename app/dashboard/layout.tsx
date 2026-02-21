@@ -3,6 +3,7 @@ import { PushEnable } from "@/components/push-enable";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Plus } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -10,12 +11,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-[hsl(var(--gradient-end))]">
-      <header className="sticky top-0 z-10 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 w-full max-w-mobile items-center justify-between px-4">
-          <Link href="/dashboard" className="font-semibold text-lg text-foreground">
-            디데이
+    <main className="relative flex min-h-screen flex-col overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,hsl(var(--primary)/0.12),transparent_40%),radial-gradient(circle_at_100%_100%,hsl(var(--secondary)/0.1),transparent_36%)]" />
+
+      <header className="sticky top-0 z-10 border-b border-outline-variant/70 bg-surface/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 w-full max-w-mobile items-center justify-between px-4">
+          <Link href="/dashboard" className="flex flex-col leading-none">
+            <span className="text-[10px] font-semibold tracking-[0.14em] text-primary">
+              D-DAY
+            </span>
+            <span className="mt-1 text-lg font-semibold text-foreground">디데이</span>
           </Link>
+
           <div className="flex items-center gap-2">
             <PushEnable />
             {hasEnvVars && (
@@ -26,13 +33,16 @@ export default function DashboardLayout({
           </div>
         </div>
       </header>
-      <div className="flex-1 pb-24">{children}</div>
+
+      <div className="relative flex-1 pb-24">{children}</div>
+
       <Link
         href="/dashboard/contracts/new"
-        className="fixed bottom-6 right-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-200 hover:scale-110 hover:shadow-xl active:scale-95"
+        className="fixed bottom-6 right-4 z-20 inline-flex h-14 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-[0_16px_36px_-18px_hsl(var(--primary)/0.95)] transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98]"
         aria-label="계약 추가"
       >
-        <span className="text-2xl leading-none">+</span>
+        <Plus className="h-4 w-4" />
+        계약 추가
       </Link>
     </main>
   );

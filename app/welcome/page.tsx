@@ -1,29 +1,54 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { CalendarClock } from "lucide-react";
+import { CalendarClock, CheckCircle2, Sparkles } from "lucide-react";
+import { VectorHero } from "@/components/vector-hero";
 
 export default function WelcomePage() {
   return (
-    <main className="flex min-h-svh flex-col bg-gradient-to-b from-background to-[hsl(var(--gradient-end))]">
-      <div className="flex flex-1 flex-col items-center justify-center px-8 py-12">
-        <div className="mb-8 flex h-32 w-32 items-center justify-center rounded-full bg-primary/10">
-          <CalendarClock className="h-16 w-16 text-primary" />
+    <main className="relative min-h-svh overflow-hidden px-6 py-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_20%,hsl(var(--primary)/0.16),transparent_42%),radial-gradient(circle_at_100%_100%,hsl(var(--secondary)/0.13),transparent_35%)]" />
+      <div className="relative mx-auto flex w-full max-w-mobile flex-col gap-6">
+        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-outline-variant bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          한 번 등록하면 끝까지 챙겨주는 디데이
         </div>
-        <h1 className="text-center text-2xl font-bold tracking-tight text-foreground">
-          계약 만료를 한곳에서
-        </h1>
-        <p className="mt-3 max-w-[280px] text-center text-sm leading-relaxed text-muted-foreground">
-          넷플릭스, 보험, gym까지. 만료일을 등록하고 알림 받으세요.
-        </p>
-        <div className="mt-10 flex w-full max-w-[320px] flex-col gap-3">
-          <Button asChild size="lg" className="w-full font-semibold uppercase">
-            <Link href="/auth/login">시작하기</Link>
+
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            계약 만료를,
+            <br />
+            한곳에서 보기 쉽게
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            넷플릭스, 보험, 헬스장 멤버십까지. 만료일을 모아보고 필요한 시점에
+            알림을 받아보세요.
+          </p>
+        </div>
+
+        <VectorHero />
+
+        <div className="grid gap-2.5 rounded-2xl border border-outline-variant/70 bg-surface/80 p-4">
+          {[
+            "카테고리별로 계약을 정리해 한눈에 확인",
+            "D-day 중심으로 만료 임박 계약 자동 정렬",
+            "원하는 시점(D-30, D-7, D-1) 알림 설정",
+          ].map((item) => (
+            <div key={item} className="flex items-start gap-2.5">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 text-primary" />
+              <p className="text-sm text-muted-foreground">{item}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-1 flex flex-col gap-3 pb-4">
+          <Button asChild size="lg" className="w-full">
+            <Link href="/auth/login">
+              <CalendarClock className="h-4 w-4" />
+              시작하기
+            </Link>
           </Button>
-          <Link
-            href="/auth/login"
-            className="text-center text-sm text-muted-foreground hover:text-foreground"
-          >
-            건너뛰기
+          <Link href="/" className="text-center text-sm text-muted-foreground hover:text-foreground">
+            홈으로 돌아가기
           </Link>
         </div>
       </div>

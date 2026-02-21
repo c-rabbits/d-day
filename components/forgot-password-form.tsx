@@ -44,6 +44,7 @@ export function ForgotPasswordForm({
         title="비밀번호 찾기"
         subtitle="가입한 이메일로 재설정 링크를 보내드립니다"
         backHref="/auth/login"
+        badge="RECOVERY"
       >
         {success ? (
           <div className="flex flex-col items-center gap-6 py-4">
@@ -63,10 +64,7 @@ export function ForgotPasswordForm({
         ) : (
           <form onSubmit={handleForgotPassword} className="flex flex-col gap-5">
             <div className="grid gap-2">
-              <Label
-                htmlFor="email"
-                className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
-              >
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
                 이메일
               </Label>
               <Input
@@ -76,15 +74,17 @@ export function ForgotPasswordForm({
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-[hsl(var(--input))] border-0"
               />
             </div>
             {error && (
-              <p className="text-sm text-destructive">{error}</p>
+              <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {error}
+              </p>
             )}
             <Button
               type="submit"
-              className="w-full font-semibold uppercase tracking-wide"
+              size="lg"
+              className="w-full font-semibold"
               disabled={isLoading}
             >
               {isLoading ? "전송 중…" : "재설정 링크 보내기"}

@@ -92,8 +92,14 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
+    <Card className="overflow-hidden">
+      <CardContent className="space-y-6 border-t border-outline-variant/70 bg-surface-container-low/35 pt-6">
+        <div className="rounded-2xl border border-outline-variant/70 bg-surface p-4">
+          <p className="text-xs font-semibold tracking-[0.14em] text-primary">EDIT MODE</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            필수 항목(계약명, 시작일, 만료일)을 확인한 뒤 저장해 주세요.
+          </p>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-2">
             <Label htmlFor="title">계약명 *</Label>
@@ -106,15 +112,17 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
           </div>
           <div className="grid gap-2">
             <Label>카테고리</Label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {CONTRACT_CATEGORIES.map((c) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setCategory(c)}
                   className={cn(
-                    "rounded-lg border px-3 py-2 text-left text-sm",
-                    category === c ? "border-primary bg-primary/10" : "border-border",
+                    "rounded-xl border px-3 py-2.5 text-left text-sm transition-colors",
+                    category === c
+                      ? "border-primary bg-primary/10"
+                      : "border-outline-variant bg-surface hover:bg-surface-container-low",
                   )}
                 >
                   {CATEGORY_LABELS[c]}
@@ -122,7 +130,7 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="start_date">시작일 *</Label>
               <Input
@@ -154,10 +162,11 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="memo">메모 (선택)</Label>
-            <Input
+            <textarea
               id="memo"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
+              className="min-h-[96px] w-full rounded-xl border border-outline-variant bg-surface px-4 py-3 text-sm leading-relaxed shadow-sm transition-[border-color,box-shadow] focus-visible:border-primary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
             />
           </div>
           <div className="grid gap-2">
@@ -169,8 +178,10 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                   type="button"
                   onClick={() => toggleNotify(d)}
                   className={cn(
-                    "rounded-lg border px-3 py-1.5 text-sm",
-                    notifyDays.includes(d) ? "border-primary bg-primary/10" : "border-border",
+                    "rounded-xl border px-3 py-1.5 text-sm transition-colors",
+                    notifyDays.includes(d)
+                      ? "border-primary bg-primary/10"
+                      : "border-outline-variant bg-surface hover:bg-surface-container-low",
                   )}
                 >
                   D-{d}
@@ -178,12 +189,16 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
               ))}
             </div>
           </div>
-          {error && <p className="text-destructive text-sm">{error}</p>}
-          <div className="flex gap-2">
-            <Button type="submit" disabled={isSubmitting}>
+          {error && (
+            <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {error}
+            </p>
+          )}
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? "저장 중…" : "저장"}
             </Button>
-            <Button type="button" variant="outline" asChild>
+            <Button type="button" variant="outline" asChild className="w-full sm:w-auto">
               <Link href={`/dashboard/contracts/${contract.id}`}>취소</Link>
             </Button>
           </div>

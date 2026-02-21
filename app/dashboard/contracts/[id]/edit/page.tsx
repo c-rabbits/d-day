@@ -18,8 +18,11 @@ async function EditContent({ id }: { id: string }) {
     .single();
   if (error || !contract) notFound();
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6">
-      <h1 className="mb-6 text-xl font-semibold">계약 수정</h1>
+    <div className="mx-auto max-w-3xl px-4 py-6">
+      <h1 className="mb-2 text-2xl font-semibold">계약 수정</h1>
+      <p className="mb-6 text-sm text-muted-foreground">
+        필요한 정보만 수정하고 저장하면 만료 알림 일정도 함께 갱신됩니다.
+      </p>
       <ContractEditForm contract={contract} />
     </div>
   );

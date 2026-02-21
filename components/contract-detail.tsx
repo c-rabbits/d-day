@@ -39,53 +39,64 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6">
+    <div className="mx-auto max-w-3xl px-4 py-6">
       <Link
         href="/dashboard"
-        className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-1 text-sm"
+        className="mb-4 inline-flex items-center gap-1 rounded-full border border-outline-variant bg-surface px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" /> 목록으로
       </Link>
-      <Card>
-        <CardHeader className="flex flex-row items-start justify-between gap-4">
+
+      <Card className="overflow-hidden">
+        <CardHeader className="flex flex-row items-start justify-between gap-4 border-b border-outline-variant/70 bg-surface-container-low/70">
           <div>
-            <h1 className="text-xl font-semibold">{contract.title}</h1>
-            <p className="text-muted-foreground text-sm">
+            <h1 className="text-2xl font-semibold">{contract.title}</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
               {CATEGORY_LABELS[contract.category]}
             </p>
           </div>
-          <span className={cn("text-lg tabular-nums", getDdayColorClass(contract.end_date))}>
+          <span
+            className={cn(
+              "rounded-full px-3 py-1 text-sm tabular-nums",
+              getDdayColorClass(contract.end_date),
+            )}
+          >
             {getDdayLabel(contract.end_date)}
           </span>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <dl className="grid gap-2 text-sm">
-            <div>
-              <dt className="text-muted-foreground">시작일</dt>
-              <dd>{contract.start_date}</dd>
+        <CardContent className="space-y-6">
+          <dl className="grid gap-3 text-sm sm:grid-cols-2">
+            <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
+              <dt className="text-xs text-muted-foreground">시작일</dt>
+              <dd className="mt-1 font-medium">{contract.start_date}</dd>
             </div>
-            <div>
-              <dt className="text-muted-foreground">만료일</dt>
-              <dd>{contract.end_date}</dd>
+            <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
+              <dt className="text-xs text-muted-foreground">만료일</dt>
+              <dd className="mt-1 font-medium">{contract.end_date}</dd>
             </div>
             {contract.amount != null && (
-              <div>
-                <dt className="text-muted-foreground">금액</dt>
-                <dd>{contract.amount.toLocaleString()}원</dd>
+              <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3">
+                <dt className="text-xs text-muted-foreground">금액</dt>
+                <dd className="mt-1 font-medium">{contract.amount.toLocaleString()}원</dd>
               </div>
             )}
             {contract.memo && (
-              <div>
-                <dt className="text-muted-foreground">메모</dt>
-                <dd className="whitespace-pre-wrap">{contract.memo}</dd>
+              <div className="rounded-xl border border-outline-variant/70 bg-surface-container-low/60 p-3 sm:col-span-2">
+                <dt className="text-xs text-muted-foreground">메모</dt>
+                <dd className="mt-1 whitespace-pre-wrap font-medium">{contract.memo}</dd>
               </div>
             )}
           </dl>
-          <div className="flex gap-2 pt-4">
-            <Button variant="outline" asChild size="sm">
+
+          <div className="flex flex-col gap-2 pt-1 sm:flex-row">
+            <Button variant="outline" asChild className="w-full sm:w-auto">
               <Link href={`/dashboard/contracts/${contract.id}/edit`}>수정</Link>
             </Button>
-            <Button variant="destructive" size="sm" onClick={handleDelete}>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              className="w-full sm:w-auto"
+            >
               <Trash2 className="h-4 w-4" /> 삭제
             </Button>
           </div>

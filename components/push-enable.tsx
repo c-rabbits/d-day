@@ -77,7 +77,13 @@ export function PushEnable() {
         {status === "loading" ? "설정 중…" : status === "ok" ? "알림 켜짐" : "알림 켜기"}
       </Button>
       {message && (
-        <span className={status === "error" ? "text-destructive text-xs" : "text-muted-foreground text-xs"}>
+        <span
+          className={
+            status === "error"
+              ? "hidden text-xs text-destructive sm:inline"
+              : "hidden text-xs text-muted-foreground sm:inline"
+          }
+        >
           {message}
         </span>
       )}

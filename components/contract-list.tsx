@@ -27,10 +27,10 @@ type ContractRow = {
 export function ContractList({ contracts }: { contracts: ContractRow[] }) {
   if (contracts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center opacity-0 animate-scale-in [animation-fill-mode:forwards]">
-        <FileText className="text-muted-foreground mb-3 h-12 w-12" />
-        <p className="text-muted-foreground text-sm">등록된 계약이 없어요</p>
-        <p className="text-muted-foreground mt-1 text-xs">
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-outline-variant bg-surface-container-low/70 py-16 text-center opacity-0 animate-scale-in [animation-fill-mode:forwards]">
+        <FileText className="mb-3 h-12 w-12 text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">등록된 계약이 없어요</p>
+        <p className="mt-1 text-xs text-muted-foreground">
           아래 + 버튼으로 첫 계약을 추가해 보세요
         </p>
       </div>
@@ -40,34 +40,52 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
   const stagger = ["stagger-1", "stagger-2", "stagger-3", "stagger-4", "stagger-5", "stagger-6", "stagger-7", "stagger-8"];
 
   return (
-    <ul className="space-y-2">
+    <ul className="space-y-3">
       {contracts.map((c, i) => (
         <li key={c.id} className={cn("opacity-0 animate-fade-in-up [animation-fill-mode:forwards]", stagger[Math.min(i, stagger.length - 1)])}>
           <Link
             href={`/dashboard/contracts/${c.id}`}
             className={cn(
-              "flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:bg-accent/50 hover:shadow-md hover:-translate-y-0.5",
+              "group flex flex-col gap-3 rounded-2xl border border-outline-variant/70 bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-container-low hover:shadow-md",
             )}
           >
-            <span className="text-2xl" aria-hidden>
-              {CATEGORY_ICONS[c.category]}
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="font-medium text-foreground truncate">{c.title}</p>
-              <p className="text-muted-foreground text-xs">
-                {CATEGORY_LABELS[c.category]}
-              </p>
-            </div>
-            <div className="flex shrink-0 items-center gap-3 text-right">
-              <span className={cn("text-sm tabular-nums", getDdayColorClass(c.end_date))}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-container text-xl"
+                  aria-hidden
+                >
+                  {CATEGORY_ICONS[c.category]}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-base font-semibold text-foreground">
+                    {c.title}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {CATEGORY_LABELS[c.category]}
+                  </p>
+                </div>
+              </div>
+              <span
+                className={cn(
+                  "rounded-full px-2.5 py-1 text-xs tabular-nums",
+                  getDdayColorClass(c.end_date),
+                )}
+              >
                 {getDdayLabel(c.end_date)}
               </span>
+            </div>
+
+            <div className="flex items-center justify-between gap-3 text-right">
+              <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Calendar className="h-3.5 w-3.5" />
+                만료일 {c.end_date}
+              </span>
               {c.amount != null && (
-                <span className="text-muted-foreground text-sm">
+                <span className="text-sm font-medium text-foreground">
                   {c.amount.toLocaleString()}원
                 </span>
               )}
-              <Calendar className="text-muted-foreground h-4 w-4" />
             </div>
           </Link>
         </li>

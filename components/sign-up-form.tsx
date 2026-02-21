@@ -9,6 +9,7 @@ import { AuthScreen } from "@/components/auth-screen";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 
 export function SignUpForm({
   className,
@@ -54,84 +55,98 @@ export function SignUpForm({
     <div className={cn("w-full max-w-[430px]", className)} {...props}>
       <AuthScreen
         title="회원가입"
-        subtitle="새 계정을 만드세요"
+        subtitle="계약 만료 알림을 받기 위한 개인 계정을 생성하세요."
         backHref="/"
+        badge="CREATE ACCOUNT"
       >
         <form onSubmit={handleSignUp} className="flex flex-col gap-5">
-          <div className="grid gap-2">
-            <Label
-              htmlFor="email"
-              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
-            >
+          <div className="rounded-2xl border border-outline-variant/70 bg-surface-container-low/70 p-4">
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              안전한 계정 생성
+            </div>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              인증 메일 확인 후 바로 로그인할 수 있습니다.
+            </p>
+          </div>
+
+          <div className="grid gap-2.5">
+            <Label htmlFor="email" className="text-sm font-medium text-foreground">
               이메일
             </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="example@gmail.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-[hsl(var(--input))] border-0"
-            />
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="example@gmail.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label
-              htmlFor="password"
-              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
-            >
+
+          <div className="grid gap-2.5">
+            <Label htmlFor="password" className="text-sm font-medium text-foreground">
               비밀번호
             </Label>
-            <Input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-[hsl(var(--input))] border-0"
-            />
+            <div className="relative">
+              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
-          <div className="grid gap-2">
-            <Label
-              htmlFor="repeat-password"
-              className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
-            >
+
+          <div className="grid gap-2.5">
+            <Label htmlFor="repeat-password" className="text-sm font-medium text-foreground">
               비밀번호 확인
             </Label>
-            <Input
-              id="repeat-password"
-              type="password"
-              required
-              value={repeatPassword}
-              onChange={(e) => setRepeatPassword(e.target.value)}
-              className="bg-[hsl(var(--input))] border-0"
-            />
+            <div className="relative">
+              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="repeat-password"
+                type="password"
+                required
+                value={repeatPassword}
+                onChange={(e) => setRepeatPassword(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
+
           {error && (
-            <p className="text-sm text-destructive">{error}</p>
+            <p className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              {error}
+            </p>
           )}
+
           <Button
             type="submit"
-            className="w-full font-semibold uppercase tracking-wide"
+            size="lg"
+            className="w-full font-semibold"
             disabled={isLoading}
           >
             {isLoading ? "가입 중…" : "회원가입"}
           </Button>
-          <div className="relative my-2">
-            <span className="bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground">
-              또는
+
+          <div className="relative my-1">
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-2 text-xs text-muted-foreground">
+              이미 계정이 있으신가요?
             </span>
-            <hr className="border-border" />
+            <hr className="border-outline-variant" />
           </div>
-          <p className="text-center text-sm text-muted-foreground">
-            이미 계정이 있으신가요?{" "}
-            <Link
-              href="/auth/login"
-              className="font-medium text-primary hover:underline"
-            >
-              로그인
-            </Link>
-          </p>
+
+          <Button asChild size="lg" variant="outline" className="w-full">
+            <Link href="/auth/login">로그인</Link>
+          </Button>
         </form>
       </AuthScreen>
     </div>
