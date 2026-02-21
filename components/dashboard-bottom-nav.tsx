@@ -2,7 +2,6 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { alpha, useTheme } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -18,13 +17,11 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
-const PILL_WIDTH = 76;
-const PILL_HEIGHT = 44;
+const CIRCLE_SIZE = 48;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const theme = useTheme();
   const [pillKey, setPillKey] = useState(0);
 
   const activeIndex = useMemo(() => {
@@ -39,7 +36,7 @@ export function DashboardBottomNav() {
     setPillKey((k) => k + 1);
   }, [activeIndex]);
 
-  const pillLeftPercent = (activeIndex * 100) / ITEM_COUNT + 100 / ITEM_COUNT / 2;
+  const circleLeftPercent = (activeIndex * 100) / ITEM_COUNT + 100 / ITEM_COUNT / 2;
 
   return (
     <nav
@@ -49,34 +46,38 @@ export function DashboardBottomNav() {
       }}
     >
       <div
-        className="relative mx-3 mb-3 flex h-16 items-center overflow-visible rounded-full border border-outline-variant/50 shadow-lg"
+        className="relative mx-3 mb-3 flex h-14 items-center overflow-visible rounded-full shadow-lg"
         style={{
-          background: alpha(theme.palette.background.paper, 0.98),
-          backdropFilter: "blur(14px)",
+          background: "#1a1a1a",
         }}
       >
-        {/* 활성 탭만 감싸는 pill 배경 — 아이콘+라벨 전체 */}
+        {/* 포커스: 흰색 동그라미 */}
         <div
           className="absolute top-1/2 overflow-visible"
           style={{
-            left: `${pillLeftPercent}%`,
-            width: PILL_WIDTH,
-            height: PILL_HEIGHT,
-            marginTop: -PILL_HEIGHT / 2,
+            left: `${circleLeftPercent}%`,
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            marginTop: -CIRCLE_SIZE / 2,
             transform: "translateX(-50%)",
             transition: "left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
         >
           <div
             key={pillKey}
-            className="animate-nav-blob absolute inset-0 rounded-full"
+            className="animate-nav-blob absolute rounded-full bg-white"
             style={{
-              background: alpha(theme.palette.primary.main, 0.12),
+              left: "50%",
+              top: "50%",
+              width: CIRCLE_SIZE,
+              height: CIRCLE_SIZE,
+              marginLeft: -CIRCLE_SIZE / 2,
+              marginTop: -CIRCLE_SIZE / 2,
             }}
           />
         </div>
 
-        {/* 아이템들 */}
+        {/* 아이템들 — 기본 흰 아이콘, 포커스 시 회색 */}
         <div className="relative z-10 flex w-full">
           {NAV_ITEMS.map((item, index) => {
             const isActive = index === activeIndex;
@@ -86,27 +87,16 @@ export function DashboardBottomNav() {
                 key={item.href}
                 type="button"
                 onClick={() => router.push(item.href)}
-                className="flex flex-1 flex-col items-center justify-center gap-1 py-2.5 transition-colors"
+                className="flex flex-1 flex-col items-center justify-center py-2.5 transition-colors"
                 style={{
-                  color: isActive
-                    ? theme.palette.primary.main
-                    : theme.palette.text.secondary,
+                  color: isActive ? "#6b7280" : "#ffffff",
                 }}
               >
                 <Icon
                   sx={{
-                    fontSize: index === 2 ? 28 : 24,
-                    filter: isActive && index === 2 ? "drop-shadow(0 1px 4px rgba(0,0,0,0.12))" : undefined,
+                    fontSize: index === 2 ? 26 : 24,
                   }}
                 />
-                <span
-                  className="text-[11.5px] font-medium"
-                  style={{
-                    fontWeight: isActive ? 700 : 500,
-                  }}
-                >
-                  {item.label}
-                </span>
               </button>
             );
           })}

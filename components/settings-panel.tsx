@@ -3,23 +3,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { useTheme } from "next-themes";
 import {
   Alert,
   Box,
   Button,
   Card,
   CardContent,
-  FormControlLabel,
   Stack,
-  Switch,
   Typography,
 } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 
 export function SettingsPanel() {
-  const { resolvedTheme, setTheme } = useTheme();
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationError, setNotificationError] = useState(false);
   const [isLoadingPush, setIsLoadingPush] = useState(false);
@@ -66,18 +62,6 @@ export function SettingsPanel() {
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
           <CardContent sx={{ p: 2.3 }}>
             <Stack spacing={1.6}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={resolvedTheme === "dark"}
-                    onChange={(event) =>
-                      setTheme(event.target.checked ? "dark" : "light")
-                    }
-                  />
-                }
-                label="다크 모드"
-              />
-
               <Button
                 variant="outlined"
                 startIcon={<NotificationsRoundedIcon />}
