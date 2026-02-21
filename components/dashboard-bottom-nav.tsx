@@ -1,32 +1,29 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
-  alpha,
-  useTheme,
-} from "@mui/material";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import ViewCarouselRoundedIcon from "@mui/icons-material/ViewCarouselRounded";
+import { alpha, useTheme } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const NAV_ITEMS = [
-  { label: "홈", href: "/dashboard", icon: <HomeRoundedIcon /> },
-  { label: "정보", href: "/dashboard/info", icon: <ViewCarouselRoundedIcon /> },
-  { label: "계약 추가", href: "/dashboard/contracts/new", icon: <AddCircleIcon /> },
-  { label: "프로필", href: "/dashboard/profile", icon: <PersonRoundedIcon /> },
-  { label: "설정", href: "/dashboard/settings", icon: <SettingsRoundedIcon /> },
+  { label: "홈", href: "/dashboard", icon: HomeIcon },
+  { label: "정보", href: "/dashboard/info", icon: ViewCarouselIcon },
+  { label: "계약 추가", href: "/dashboard/contracts/new", icon: AddCircleIcon },
+  { label: "프로필", href: "/dashboard/profile", icon: PersonIcon },
+  { label: "설정", href: "/dashboard/settings", icon: SettingsIcon },
 ] as const;
+
+const ITEM_COUNT = NAV_ITEMS.length;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
   const theme = useTheme();
+  const [blobKey, setBlobKey] = useState(0);
 
   const activeIndex = useMemo(() => {
     if (pathname.startsWith("/dashboard/info")) return 1;
@@ -36,65 +33,82 @@ export function DashboardBottomNav() {
     return 0;
   }, [pathname]);
 
+  useEffect(() => {
+    setBlobKey((k) => k + 1);
+  }, [activeIndex]);
+
+  const blobLeftPercent = (activeIndex * 100) / ITEM_COUNT + 100 / ITEM_COUNT / 2;
+
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        position: "fixed",
-        left: "50%",
-        transform: "translateX(-50%)",
-        bottom: 0,
-        zIndex: 30,
-        width: "100%",
-        maxWidth: 430,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        bgcolor: alpha(theme.palette.background.paper, 0.9),
-        backdropFilter: "blur(14px)",
+    <nav
+      className="fixed left-1/2 bottom-0 z-30 w-full max-w-[430px] -translate-x-1/2"
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      <BottomNavigation
-        showLabels
-        value={activeIndex}
-        onChange={(_event, nextValue: number) => router.push(NAV_ITEMS[nextValue].href)}
-        sx={{
-          height: 76,
-          pb: "env(safe-area-inset-bottom)",
-          "& .MuiBottomNavigationAction-root": {
-            minWidth: 0,
-            color: "text.secondary",
-          },
-          "& .MuiBottomNavigationAction-root.Mui-selected": {
-            color: "primary.main",
-          },
-          "& .MuiBottomNavigationAction-label": {
-            fontSize: 11,
-            mt: 0.2,
-          },
-          "& .MuiBottomNavigationAction-root.Mui-selected .MuiBottomNavigationAction-label": {
-            fontSize: 11,
-            fontWeight: 700,
-          },
+      <div
+        className="relative mx-4 mb-2 flex h-14 items-end overflow-visible rounded-2xl border border-outline-variant/50 shadow-lg"
+        style={{
+          background: alpha(theme.palette.background.paper, 0.92),
+          backdropFilter: "blur(14px)",
         }}
       >
-        {NAV_ITEMS.map((item, index) => (
-          <BottomNavigationAction
-            key={item.href}
-            label={item.label}
-            icon={item.icon}
-            sx={
-              index === 2
-                ? {
-                    "& .MuiSvgIcon-root": { fontSize: 28 },
-                    "&.Mui-selected .MuiSvgIcon-root": {
-                      color: "primary.main",
-                      filter: "drop-shadow(0 3px 8px rgba(0,0,0,0.16))",
-                    },
-                  }
-                : undefined
-            }
+        {/* 볼록 블롭 인디케이터 — 슬라이드 transition + 선택 시 바운스 */}
+        <div
+          className="absolute bottom-0 h-10 w-16 overflow-visible"
+          style={{
+            left: `${blobLeftPercent}%`,
+            transform: "translateX(-50%)",
+            transition: "left 0.38s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}
+        >
+          <div
+            key={blobKey}
+            className="animate-nav-blob absolute inset-x-0 bottom-0 h-10 w-16 rounded-t-2xl"
+            style={{
+              background: alpha(theme.palette.background.paper, 0.98),
+              borderRadius: "20px 20px 0 0",
+              boxShadow: "0 -4px 14px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04)",
+            }}
           />
-        ))}
-      </BottomNavigation>
-    </Paper>
+        </div>
+
+        {/* 아이템들 */}
+        <div className="relative flex w-full flex-1">
+          {NAV_ITEMS.map((item, index) => {
+            const isActive = index === activeIndex;
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.href}
+                type="button"
+                onClick={() => router.push(item.href)}
+                className="flex flex-1 flex-col items-center justify-center gap-0.5 pb-1.5 pt-2 transition-colors"
+                style={{
+                  color: isActive
+                    ? theme.palette.primary.main
+                    : theme.palette.text.secondary,
+                }}
+              >
+                <Icon
+                  sx={{
+                    fontSize: index === 2 ? 28 : 24,
+                    filter: isActive && index === 2 ? "drop-shadow(0 2px 6px rgba(0,0,0,0.2))" : undefined,
+                  }}
+                />
+                <span
+                  className="text-[11px] font-medium"
+                  style={{
+                    fontWeight: isActive ? 700 : 500,
+                  }}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </nav>
   );
 }
