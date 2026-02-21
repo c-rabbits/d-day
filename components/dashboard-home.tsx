@@ -27,13 +27,7 @@ export function DashboardHome({
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
         <Box>
-          <Typography
-            variant="caption"
-            sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
-          >
-            DASHBOARD
-          </Typography>
-          <Typography variant="h5" sx={{ mt: 0.4, fontWeight: 700 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             내 계약 현황
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
@@ -45,7 +39,7 @@ export function DashboardHome({
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(3, minmax(0,1fr))",
-            gap: 1.2,
+            gap: 1.5,
           }}
         >
           <SummaryCard label="총 계약" value={contracts.length} />
@@ -82,17 +76,24 @@ function SummaryCard({
     <Card
       variant="outlined"
       sx={{
-        borderRadius: 3,
+        borderRadius: 2,
         borderColor: "divider",
         bgcolor: highlight ? "primary.main" : "background.paper",
         color: highlight ? "primary.contrastText" : "text.primary",
       }}
     >
-      <CardContent sx={{ p: 1.4, "&:last-child": { pb: 1.4 } }}>
-        <Typography variant="caption" sx={{ opacity: highlight ? 0.86 : 0.8 }}>
+      <CardContent sx={{ p: 1.75, "&:last-child": { pb: 1.75 } }}>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 600,
+            fontSize: "0.9375rem",
+            opacity: highlight ? 0.92 : 0.9,
+          }}
+        >
           {label}
         </Typography>
-        <Typography variant="h6" sx={{ mt: 0.2, fontWeight: 700 }}>
+        <Typography variant="h5" sx={{ mt: 0.4, fontWeight: 700, lineHeight: 1.2 }}>
           {value}
         </Typography>
       </CardContent>

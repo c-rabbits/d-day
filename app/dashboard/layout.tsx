@@ -11,7 +11,7 @@ export default function DashboardLayout({
     <main className="relative flex min-h-screen flex-col overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,hsl(var(--primary)/0.09),transparent_42%),radial-gradient(circle_at_100%_100%,hsl(var(--secondary)/0.08),transparent_38%)]" />
 
-      <Suspense fallback={<div className="h-[4.35rem] border-b border-outline-variant/70 bg-surface/85" />}>
+      <Suspense fallback={<div className="h-12 border-b border-outline-variant/70 bg-surface/85" />}>
         <DashboardHeader />
       </Suspense>
 
