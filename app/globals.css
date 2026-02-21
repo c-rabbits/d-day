@@ -184,7 +184,11 @@
   .stagger-8 { animation-delay: 0.5s; }
 
   .animate-nav-blob {
-    animation: nav-blob-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: nav-blob-bounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-nav-dot {
+    animation: nav-dot-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
   .animate-float-gentle {
@@ -210,9 +214,15 @@
 }
 
 @keyframes nav-blob-bounce {
-  0% { transform: translateX(-50%) scale(0.92); opacity: 0.85; }
-  60% { transform: translateX(-50%) scale(1.04); opacity: 1; }
-  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  0% { transform: scale(0.7); opacity: 0.6; }
+  55% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes nav-dot-pop {
+  0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, 0) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
 }
 
 @keyframes float-gentle {

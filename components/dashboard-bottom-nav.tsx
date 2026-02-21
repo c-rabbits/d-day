@@ -18,6 +18,8 @@ const NAV_ITEMS = [
 ] as const;
 
 const ITEM_COUNT = NAV_ITEMS.length;
+const BLOB_SIZE = 44;
+const DOT_SIZE = 6;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
@@ -47,36 +49,62 @@ export function DashboardBottomNav() {
       }}
     >
       <div
-        className="relative mx-4 mb-2 flex h-14 items-end overflow-visible rounded-2xl border border-outline-variant/50 shadow-lg"
+        className="relative mx-4 mb-2 flex h-16 items-center overflow-visible rounded-2xl border border-outline-variant/50 shadow-lg"
         style={{
-          background: alpha(theme.palette.background.paper, 0.92),
+          background: alpha(theme.palette.background.paper, 0.95),
           backdropFilter: "blur(14px)",
         }}
       >
-        {/* 볼록 블롭 인디케이터 — 좌우 대칭 돔, 슬라이드 + 바운스 */}
+        {/* 아이콘을 감싸는 원형 블롭 — 슬라이드 + 바운스 */}
         <div
-          className="absolute bottom-0 overflow-visible"
+          className="absolute top-1/2 overflow-visible"
           style={{
             left: `${blobLeftPercent}%`,
-            width: 56,
-            height: 32,
+            width: BLOB_SIZE,
+            height: BLOB_SIZE,
+            marginTop: -BLOB_SIZE / 2,
             transform: "translateX(-50%)",
-            transition: "left 0.38s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            transition: "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
         >
           <div
             key={blobKey}
-            className="animate-nav-blob absolute inset-0"
+            className="animate-nav-blob absolute rounded-full"
             style={{
-              background: alpha(theme.palette.background.paper, 0.98),
-              borderRadius: "28px 28px 0 0",
-              boxShadow: "0 -3px 12px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04)",
+              left: "50%",
+              top: "50%",
+              width: BLOB_SIZE,
+              height: BLOB_SIZE,
+              marginLeft: -BLOB_SIZE / 2,
+              marginTop: -BLOB_SIZE / 2,
+              background: alpha(theme.palette.background.paper, 1),
+              boxShadow: "0 2px 12px rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.04)",
+            }}
+          />
+        </div>
+
+        {/* 활성 탭 위 작은 점 인디케이터 — 슬라이드 + 팝 */}
+        <div
+          className="absolute top-3 overflow-visible"
+          style={{
+            left: `${blobLeftPercent}%`,
+            width: DOT_SIZE,
+            height: DOT_SIZE,
+            transform: "translateX(-50%)",
+            transition: "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}
+        >
+          <span
+            key={blobKey}
+            className="animate-nav-dot absolute inset-0 rounded-full"
+            style={{
+              background: theme.palette.primary.main,
             }}
           />
         </div>
 
         {/* 아이템들 */}
-        <div className="relative flex w-full flex-1">
+        <div className="relative z-10 flex w-full">
           {NAV_ITEMS.map((item, index) => {
             const isActive = index === activeIndex;
             const Icon = item.icon;
@@ -85,7 +113,7 @@ export function DashboardBottomNav() {
                 key={item.href}
                 type="button"
                 onClick={() => router.push(item.href)}
-                className="flex flex-1 flex-col items-center justify-center gap-0.5 pb-1.5 pt-2 transition-colors"
+                className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition-colors"
                 style={{
                   color: isActive
                     ? theme.palette.primary.main
@@ -95,7 +123,7 @@ export function DashboardBottomNav() {
                 <Icon
                   sx={{
                     fontSize: index === 2 ? 28 : 24,
-                    filter: isActive && index === 2 ? "drop-shadow(0 2px 6px rgba(0,0,0,0.2))" : undefined,
+                    filter: isActive && index === 2 ? "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" : undefined,
                   }}
                 />
                 <span
