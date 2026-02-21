@@ -53,22 +53,24 @@ export function DashboardBottomNav() {
           backdropFilter: "blur(14px)",
         }}
       >
-        {/* 볼록 블롭 인디케이터 — 슬라이드 transition + 선택 시 바운스 */}
+        {/* 볼록 블롭 인디케이터 — 좌우 대칭 돔, 슬라이드 + 바운스 */}
         <div
-          className="absolute bottom-0 h-10 w-16 overflow-visible"
+          className="absolute bottom-0 overflow-visible"
           style={{
             left: `${blobLeftPercent}%`,
+            width: 56,
+            height: 32,
             transform: "translateX(-50%)",
             transition: "left 0.38s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
         >
           <div
             key={blobKey}
-            className="animate-nav-blob absolute inset-x-0 bottom-0 h-10 w-16 rounded-t-2xl"
+            className="animate-nav-blob absolute inset-0"
             style={{
               background: alpha(theme.palette.background.paper, 0.98),
-              borderRadius: "20px 20px 0 0",
-              boxShadow: "0 -4px 14px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04)",
+              borderRadius: "28px 28px 0 0",
+              boxShadow: "0 -3px 12px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04)",
             }}
           />
         </div>
