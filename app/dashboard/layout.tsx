@@ -35,7 +35,9 @@ export default function DashboardLayout({
       </header>
 
       <div className="relative flex-1 pb-24">{children}</div>
-      <DashboardBottomNav />
+      <Suspense fallback={<div className="fixed bottom-0 left-1/2 z-30 h-[76px] w-full max-w-mobile -translate-x-1/2" />}>
+        <DashboardBottomNav />
+      </Suspense>
     </main>
   );
 }
