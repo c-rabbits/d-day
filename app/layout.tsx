@@ -50,9 +50,7 @@ export default function RootLayout({
         >
           <Suspense
             fallback={
-              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background">
-                {children}
-              </div>
+              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background" />
             }
           >
             <MuiProvider>
