@@ -5,9 +5,10 @@ import { Box } from "@mui/material";
 
 const BANNER_COUNT = 3;
 const ROTATE_INTERVAL_MS = 5000;
-const SLIDE_WIDTH = 90; // % of container
-const PEEK = 5; // % of container each side
-const TRACK_WIDTH = PEEK + SLIDE_WIDTH * BANNER_COUNT + PEEK; // 280
+const SLIDE_WIDTH = 82; // % of container per card
+const GAP = 3; // % 간격 (카드와 카드 사이)
+const PEEK = 5;
+const TRACK_WIDTH = PEEK + SLIDE_WIDTH * BANNER_COUNT + GAP * (BANNER_COUNT - 1) + PEEK;
 const SWIPE_THRESHOLD_PX = 50;
 
 /** 2:1 비율 라운드 배너 3개, 5초 간격 로테이션. 이미지 src는 나중에 교체 */
@@ -48,8 +49,8 @@ export function DashboardBanner() {
     touchStartX.current = null;
   };
 
-  // 오른쪽→왼쪽 흐르듯 전환: 트랙을 왼쪽으로 이동 (단위: 트랙 너비 대비 %)
-  const translatePercent = ((PEEK + index * SLIDE_WIDTH) / TRACK_WIDTH) * 100;
+  const translatePercent =
+    (PEEK + index * (SLIDE_WIDTH + GAP)) / TRACK_WIDTH * 100;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -58,9 +59,7 @@ export function DashboardBanner() {
           position: "relative",
           width: "100%",
           aspectRatio: "2 / 1",
-          borderRadius: 2.5,
           overflow: "hidden",
-          bgcolor: "grey.200",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -81,9 +80,10 @@ export function DashboardBanner() {
               sx={{
                 flex: `0 0 ${(SLIDE_WIDTH / TRACK_WIDTH) * 100}%`,
                 minWidth: 0,
+                marginRight: i < BANNER_COUNT - 1 ? `${(GAP / TRACK_WIDTH) * 100}%` : 0,
                 borderRadius: 2.5,
                 overflow: "hidden",
-                mx: 0,
+                boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
               }}
             >
               <Box

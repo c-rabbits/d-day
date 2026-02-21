@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Box, Card, Stack, Typography } from "@mui/material";
 import { ContractList } from "@/components/contract-list";
 import { DashboardBanner } from "@/components/dashboard-banner";
 import type { ContractCategory } from "@/lib/types";
@@ -30,7 +30,7 @@ export function DashboardHome({
         {/* 2:1 라운드 배너 3개, 5초 로테이션 */}
         <DashboardBanner />
 
-        {/* 내 계약 현황 — 작은 라운드 네모 3개, 파스텔톤 */}
+        {/* 내 계약 현황 — 다크 카드 3열 + 프로그레스 바 */}
         <Box>
           <Typography
             variant="h6"
@@ -43,17 +43,11 @@ export function DashboardHome({
           >
             내 계약 현황
           </Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, minmax(0,1fr))",
-              gap: 1.5,
-            }}
-          >
-            <SummaryCard label="총 계약" value={contracts.length} variant="default" />
-            <SummaryCard label="30일 내 만료" value={soonCount} highlight variant="soon" />
-            <SummaryCard label="만료 지남" value={expiredCount} variant="expired" />
-          </Box>
+          <ContractStatusCard
+            total={contracts.length}
+            soonCount={soonCount}
+            expiredCount={expiredCount}
+          />
         </Box>
 
         <Stack spacing={1.2}>
@@ -72,53 +66,103 @@ export function DashboardHome({
   );
 }
 
-/** 파스텔톤 배색 */
-const PASTEL = {
-  default: { bg: "#e3f2fd", text: "#1565c0" },
-  soon: { bg: "#bbdefb", text: "#0d47a1" },
-  expired: { bg: "#ffe0b2", text: "#e65100" },
-};
-
-function SummaryCard({
-  label,
-  value,
-  highlight = false,
-  variant = "default",
+/** 다크 카드 3열: 값 + 단위, 라벨, 프로그레스 바 (첨부 참고) */
+function ContractStatusCard({
+  total,
+  soonCount,
+  expiredCount,
 }: {
-  label: string;
-  value: number;
-  highlight?: boolean;
-  variant?: "default" | "soon" | "expired";
+  total: number;
+  soonCount: number;
+  expiredCount: number;
 }) {
-  const { bg, text } = PASTEL[variant];
-  const textColor = highlight ? "#fff" : text;
-  const bgColor = highlight ? "#64b5f6" : bg;
+  const max = Math.max(total, 1);
+  const soonPct = Math.min(100, (soonCount / max) * 100);
+  const expiredPct = Math.min(100, (expiredCount / max) * 100);
 
   return (
     <Card
-      variant="outlined"
       sx={{
-        borderRadius: 2,
-        border: "none",
-        bgcolor: bgColor,
-        color: textColor,
+        borderRadius: 2.5,
+        bgcolor: "#2d2d2d",
+        color: "#fff",
+        overflow: "hidden",
       }}
     >
-      <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
-        <Typography
-          variant="body2"
-          sx={{
-            fontWeight: 600,
-            fontSize: "0.8125rem",
-            opacity: highlight ? 0.95 : 0.9,
-          }}
-        >
-          {label}
-        </Typography>
-        <Typography variant="h5" sx={{ mt: 0.4, fontWeight: 700, lineHeight: 1.2 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 0,
+          p: 2,
+        }}
+      >
+        <StatusColumn
+          value={total}
+          unit="건"
+          label="총 계약"
+          progress={100}
+        />
+        <StatusColumn
+          value={soonCount}
+          unit="건"
+          label="30일 내 만료"
+          progress={soonPct}
+        />
+        <StatusColumn
+          value={expiredCount}
+          unit="건"
+          label="만료 지남"
+          progress={expiredPct}
+        />
+      </Box>
+    </Card>
+  );
+}
+
+function StatusColumn({
+  value,
+  unit,
+  label,
+  progress,
+}: {
+  value: number;
+  unit: string;
+  label: string;
+  progress: number;
+}) {
+  return (
+    <Box sx={{ px: 0.5 }}>
+      <Box sx={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: 0.25 }}>
+        <Typography component="span" sx={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff" }}>
           {value}
         </Typography>
-      </CardContent>
-    </Card>
+        <Typography component="span" sx={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.9)" }}>
+          {unit}
+        </Typography>
+      </Box>
+      <Typography sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.6)", mt: 0.25 }}>
+        {label}
+      </Typography>
+      <Box
+        sx={{
+          mt: 1,
+          height: 4,
+          borderRadius: 2,
+          bgcolor: "rgba(255,255,255,0.2)",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          sx={{
+            width: `${progress}%`,
+            height: "100%",
+            borderRadius: 2,
+            bgcolor: "#fff",
+            transition: "width 0.4s ease",
+          }}
+        />
+      </Box>
+    </Box>
   );
 }
