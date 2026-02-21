@@ -71,9 +71,11 @@ export default function Page({
               >
                 <ErrorContent searchParams={searchParams} />
               </Suspense>
-              <Button component={Link} href="/auth/login" variant="contained" size="large">
-                로그인 화면으로 이동
-              </Button>
+              <Link href="/auth/login" style={{ width: "100%" }}>
+                <Button variant="contained" size="large" fullWidth>
+                  로그인 화면으로 이동
+                </Button>
+              </Link>
             </Stack>
           </CardContent>
         </Card>

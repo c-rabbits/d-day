@@ -52,15 +52,11 @@ export default function Page() {
                 </Typography>
               </Box>
 
-              <Button
-                component={Link}
-                href="/auth/login"
-                variant="contained"
-                size="large"
-                fullWidth
-              >
-                로그인하기
-              </Button>
+              <Link href="/auth/login" style={{ width: "100%" }}>
+                <Button variant="contained" size="large" fullWidth>
+                  로그인하기
+                </Button>
+              </Link>
             </Stack>
           </CardContent>
         </Card>
