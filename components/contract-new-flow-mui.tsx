@@ -26,6 +26,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
@@ -237,7 +238,14 @@ export function ContractNewFlowMui() {
   };
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 3.2, borderColor: "divider" }}>
+    <Card
+      variant="outlined"
+      sx={{
+        borderRadius: 3.2,
+        borderColor: "divider",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+      }}
+    >
       <CardContent sx={{ p: 2.4 }}>
         <Stack spacing={2.3}>
           <Box>
@@ -271,8 +279,7 @@ export function ContractNewFlowMui() {
                     sx={{
                       height: 118,
                       borderRadius: 1.2,
-                      border: (theme) =>
-                        `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
+                      border: "2px solid transparent",
                       backgroundColor: bg,
                       cursor: "pointer",
                       display: "flex",
@@ -281,12 +288,20 @@ export function ContractNewFlowMui() {
                       justifyContent: "flex-start",
                       textAlign: "left",
                       font: "inherit",
-                      boxShadow: selected ? 2 : 0,
                       p: 1.2,
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                      transform: selected ? "scale(1.04)" : "scale(1)",
+                      boxShadow: selected
+                        ? (theme) =>
+                            `0 0 0 2px ${theme.palette.primary.main}, 0 0 16px ${alpha(theme.palette.primary.main, 0.35)}, 0 4px 12px rgba(0,0,0,0.15)`
+                        : "0 1px 4px rgba(0,0,0,0.06)",
                     }}
                   >
                     <Icon sx={{ fontSize: 26, color: "#fff", mb: 0.5, alignSelf: "flex-start" }} />
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333", pl: 0 }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontWeight: 700, color: "#333", pl: 0, fontSize: "0.95rem" }}
+                    >
                       {CATEGORY_LABELS[targetCategory]}
                     </Typography>
                     <Typography
