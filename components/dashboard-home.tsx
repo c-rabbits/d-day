@@ -66,7 +66,7 @@ export function DashboardHome({
   );
 }
 
-/** 다크 카드 3열: 계약목록과 동일 라운드(1.5), 어두운 배경/글씨 */
+/** 내 계약 현황 카드: 밝은 회색 배경, 짙은 회색 글씨, 슬림한 높이 */
 function ContractStatusCard({
   total,
   soonCount,
@@ -81,9 +81,9 @@ function ContractStatusCard({
       variant="outlined"
       sx={{
         borderRadius: 1.5,
-        borderColor: "transparent",
-        bgcolor: "#1a1a1a",
-        color: "#e0e0e0",
+        borderColor: "divider",
+        bgcolor: "#e8e8e8",
+        color: "#333",
         overflow: "hidden",
       }}
     >
@@ -92,7 +92,8 @@ function ContractStatusCard({
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: 0,
-          p: 2,
+          py: 1.25,
+          px: 1.5,
         }}
       >
         <StatusColumn value={total} unit="건" label="총 계약" />
@@ -113,16 +114,16 @@ function StatusColumn({
   label: string;
 }) {
   return (
-    <Box sx={{ px: 0.5, textAlign: "center" }}>
-      <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", flexWrap: "wrap", gap: 0.25 }}>
-        <Typography component="span" sx={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff" }}>
+    <Box sx={{ px: 0.25, textAlign: "center" }}>
+      <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", flexWrap: "wrap", gap: 0.2 }}>
+        <Typography component="span" sx={{ fontSize: "1.1rem", fontWeight: 700, color: "#333" }}>
           {value}
         </Typography>
-        <Typography component="span" sx={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.85)" }}>
+        <Typography component="span" sx={{ fontSize: "0.7rem", color: "#555" }}>
           {unit}
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.55)", mt: 0.25 }}>
+      <Typography sx={{ fontSize: "0.65rem", color: "#666", mt: 0.2 }}>
         {label}
       </Typography>
     </Box>
