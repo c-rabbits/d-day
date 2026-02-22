@@ -85,51 +85,69 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
             }}
           >
             <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
-              <Stack spacing={1.2} sx={{ p: 1.5 }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1.2}>
-                  <Stack direction="row" spacing={1.2} sx={{ minWidth: 0 }}>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        bgcolor: "primary.main",
-                        color: "primary.contrastText",
-                      }}
-                    >
-                      {(() => {
-                        const Icon = CATEGORY_ICONS[c.category];
-                        return <Icon sx={{ fontSize: 22 }} />;
-                      })()}
-                    </Avatar>
-                    <Box sx={{ minWidth: 0 }}>
-                      <Typography noWrap variant="subtitle1" fontWeight={700}>
-                        {c.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {CATEGORY_LABELS[c.category]}
-                      </Typography>
-                    </Box>
-                  </Stack>
-
+              <Stack spacing={1.5} sx={{ p: 2 }}>
+                {/* 상단: 아이콘 + 제목/카테고리 + D-day */}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={1.25}
+                  sx={{ minWidth: 0 }}
+                >
+                  <Avatar
+                    variant="rounded"
+                    sx={{
+                      width: 44,
+                      height: 44,
+                      flexShrink: 0,
+                      bgcolor: "primary.main",
+                      color: "primary.contrastText",
+                    }}
+                  >
+                    {(() => {
+                      const Icon = CATEGORY_ICONS[c.category];
+                      return <Icon sx={{ fontSize: 24 }} />;
+                    })()}
+                  </Avatar>
+                  <Box sx={{ minWidth: 0, flex: 1 }}>
+                    <Typography noWrap variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.3 }}>
+                      {c.title}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.25 }}>
+                      {CATEGORY_LABELS[c.category]}
+                    </Typography>
+                  </Box>
                   <Chip
                     label={getDdayLabel(c.end_date)}
                     color={ddayColor}
                     size="small"
-                    sx={{ fontWeight: 700 }}
+                    sx={{ flexShrink: 0, fontWeight: 700 }}
                   />
                 </Stack>
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1.2}>
-                  <Stack direction="row" spacing={0.6} alignItems="center">
-                    <CalendarTodayIcon sx={{ fontSize: 14, color: "text.secondary" }} />
+                {/* 하단: 만료일 / 금액 한 줄 정렬 */}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    pt: 0.5,
+                    borderTop: 1,
+                    borderColor: "divider",
+                  }}
+                >
+                  <Stack direction="row" spacing={0.5} alignItems="center" sx={{ minWidth: 0 }}>
+                    <CalendarTodayIcon sx={{ fontSize: 16, color: "text.secondary", flexShrink: 0 }} />
                     <Typography variant="body2" color="text.secondary">
-                      만료일 {c.end_date}
+                      만료 {c.end_date}
                     </Typography>
                   </Stack>
-                  {c.amount != null && (
-                    <Typography variant="subtitle2" fontWeight={700}>
+                  {c.amount != null ? (
+                    <Typography variant="body2" fontWeight={600} sx={{ flexShrink: 0 }}>
                       {c.amount.toLocaleString()}원
+                    </Typography>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary" sx={{ flexShrink: 0 }}>
+                      금액 없음
                     </Typography>
                   )}
                 </Stack>
