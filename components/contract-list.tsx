@@ -27,7 +27,14 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import SchoolIcon from "@mui/icons-material/School";
-import { getDday, getDdayLabel } from "@/lib/dday";
+import {
+  getDday,
+  getDdayLabel,
+  getDdayForPaymentDay,
+  getDdayLabelForPaymentDay,
+  isSubscriptionContract,
+} from "@/lib/dday";
+import { parsePaymentDayFromMemo } from "@/lib/contract-memo";
 import { CATEGORY_LABELS, CATEGORY_PASTEL, type ContractCategory } from "@/lib/types";
 import { softDeleteContract } from "@/app/dashboard/actions";
 
@@ -49,6 +56,7 @@ type ContractRow = {
   category: ContractCategory;
   end_date: string;
   amount: number | null;
+  memo: string | null;
 };
 
 export function ContractList({ contracts }: { contracts: ContractRow[] }) {
@@ -97,9 +105,19 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
     <>
       <Stack spacing={1.5}>
         {contracts.map((c) => {
-          const dday = getDday(c.end_date);
+          const isSubscription = isSubscriptionContract(c.end_date);
+          const paymentDay = parsePaymentDayFromMemo(c.memo);
+          const dday = isSubscription && paymentDay != null
+            ? getDdayForPaymentDay(paymentDay)
+            : getDday(c.end_date);
           const ddayColor = dday <= 7 ? "error" : dday <= 30 ? "warning" : "default";
-          const isExpired = dday < 0;
+          const isExpired = !isSubscription && dday < 0;
+          const dateLabel = isSubscription && paymentDay != null
+            ? `매월 ${paymentDay}일`
+            : `만료 ${c.end_date}`;
+          const ddayLabel = isSubscription && paymentDay != null
+            ? getDdayLabelForPaymentDay(paymentDay)
+            : getDdayLabel(c.end_date);
 
           return (
             <Card
@@ -116,7 +134,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
             >
               <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
                 <Stack spacing={1.5} sx={{ p: 2.5 }}>
-                  {/* 상단: 아이콘 + 제목/카테고리 + D-day */}
+                  {/* 상단: 아이콘 + 제목/카테고리·유형 + D-day */}
                   <Stack
                     direction="row"
                     alignItems="center"
@@ -142,19 +160,27 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
                       <Typography noWrap variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.3 }}>
                         {c.title}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.25 }}>
-                        {CATEGORY_LABELS[c.category]}
-                      </Typography>
+                      <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="wrap" sx={{ mt: 0.25 }}>
+                        <Typography variant="caption" color="text.secondary">
+                          {CATEGORY_LABELS[c.category]}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          ·
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {isSubscription ? "월구독" : "장기계약"}
+                        </Typography>
+                      </Stack>
                     </Box>
                     <Chip
-                      label={getDdayLabel(c.end_date)}
+                      label={ddayLabel}
                       color={ddayColor}
                       size="small"
                       sx={{ flexShrink: 0, fontWeight: 700 }}
                     />
                   </Stack>
 
-                  {/* 하단: 만료일 / 금액 / 만료 시 삭제 버튼 */}
+                  {/* 하단: 월 지출일 또는 만료일 / 금액 / 만료 시 삭제 버튼 */}
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -170,7 +196,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
                     <Stack direction="row" spacing={0.5} alignItems="center" sx={{ minWidth: 0 }}>
                       <CalendarTodayIcon sx={{ fontSize: 16, color: "text.secondary", flexShrink: 0 }} />
                       <Typography variant="body2" color="text.secondary">
-                        만료 {c.end_date}
+                        {dateLabel}
                       </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={0.75}>

@@ -14,6 +14,7 @@ type ContractRow = {
   category: ContractCategory;
   end_date: string;
   amount: number | null;
+  memo: string | null;
 };
 
 type DashboardHomeProps = {

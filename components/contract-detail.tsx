@@ -2,7 +2,14 @@
 
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { getDday, getDdayLabel } from "@/lib/dday";
+import {
+  getDday,
+  getDdayLabel,
+  getDdayForPaymentDay,
+  getDdayLabelForPaymentDay,
+  isSubscriptionContract,
+} from "@/lib/dday";
+import { parsePaymentDayFromMemo, getDisplayMemo } from "@/lib/contract-memo";
 import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
 import { softDeleteContract } from "@/app/dashboard/actions";
 import {
@@ -41,8 +48,18 @@ type ContractRow = {
 
 export function ContractDetail({ contract }: { contract: ContractRow }) {
   const router = useRouter();
-  const dday = getDday(contract.end_date);
+  const isSubscription = isSubscriptionContract(contract.end_date);
+  const paymentDay = parsePaymentDayFromMemo(contract.memo);
+  const dday =
+    isSubscription && paymentDay != null
+      ? getDdayForPaymentDay(paymentDay)
+      : getDday(contract.end_date);
   const ddayColor = dday <= 7 ? "error" : dday <= 30 ? "warning" : "default";
+  const ddayLabel =
+    isSubscription && paymentDay != null
+      ? getDdayLabelForPaymentDay(paymentDay)
+      : getDdayLabel(contract.end_date);
+  const displayMemo = getDisplayMemo(contract.memo);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -81,12 +98,13 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
                 <CategoryRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />
                 <Typography variant="body2" color="text.secondary">
                   {CATEGORY_LABELS[contract.category]}
+                  {isSubscription ? " · 월구독" : " · 장기계약"}
                 </Typography>
               </Stack>
             }
             action={
               <Chip
-                label={getDdayLabel(contract.end_date)}
+                label={ddayLabel}
                 color={ddayColor}
                 sx={{ fontWeight: 700 }}
               />
@@ -103,16 +121,26 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
                 gap: 1.2,
               }}
             >
-              <InfoCard
-                icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
-                label="시작일"
-                value={contract.start_date}
-              />
-              <InfoCard
-                icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
-                label="만료일"
-                value={contract.end_date}
-              />
+              {isSubscription && paymentDay != null ? (
+                <InfoCard
+                  icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
+                  label="월 지출일"
+                  value={`매월 ${paymentDay}일`}
+                />
+              ) : (
+                <>
+                  <InfoCard
+                    icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
+                    label="시작일"
+                    value={contract.start_date}
+                  />
+                  <InfoCard
+                    icon={<CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />}
+                    label="만료일"
+                    value={contract.end_date}
+                  />
+                </>
+              )}
               {contract.amount != null && (
                 <InfoCard
                   icon={<PaymentsRoundedIcon sx={{ fontSize: 16 }} />}
@@ -120,12 +148,12 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
                   value={`${contract.amount.toLocaleString()}원`}
                 />
               )}
-              {contract.memo && (
+              {displayMemo && (
                 <InfoCard
                   wide
                   icon={<NotesRoundedIcon sx={{ fontSize: 16 }} />}
                   label="메모"
-                  value={contract.memo}
+                  value={displayMemo}
                 />
               )}
             </Box>

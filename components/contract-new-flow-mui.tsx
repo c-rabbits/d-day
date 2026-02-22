@@ -30,8 +30,29 @@ import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
+import HomeIcon from "@mui/icons-material/Home";
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import SchoolIcon from "@mui/icons-material/School";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 type ContractType = "subscription" | "longterm";
+
+const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
+  RENT: HomeIcon,
+  PHONE: SmartphoneIcon,
+  CAR_INSURANCE: DirectionsCarIcon,
+  GYM: FitnessCenterIcon,
+  RENTAL: InventoryIcon,
+  STREAMING: PlayCircleIcon,
+  FINANCE: AccountBalanceIcon,
+  EDUCATION: SchoolIcon,
+  OTHER: DescriptionIcon,
+};
 
 const STEPS = [
   { title: "카테고리 선택" },
@@ -235,6 +256,7 @@ export function ContractNewFlowMui() {
               }}
             >
               {CONTRACT_CATEGORIES.map((targetCategory) => {
+                const Icon = CATEGORY_ICONS[targetCategory];
                 const bg = CATEGORY_PASTEL[targetCategory];
                 const selected = category === targetCategory;
                 return (
@@ -244,7 +266,7 @@ export function ContractNewFlowMui() {
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      aspectRatio: "1",
+                      minHeight: 104,
                       borderRadius: 1.2,
                       border: (theme) =>
                         `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
@@ -252,15 +274,16 @@ export function ContractNewFlowMui() {
                       cursor: "pointer",
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "stretch",
+                      alignItems: "flex-start",
                       justifyContent: "flex-start",
                       textAlign: "left",
                       font: "inherit",
                       boxShadow: selected ? 2 : 0,
-                      p: 1,
+                      p: 1.2,
                     }}
                   >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333", pl: 0.5 }}>
+                    <Icon sx={{ fontSize: 26, color: "#fff", mb: 0.5, alignSelf: "flex-start" }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333", pl: 0 }}>
                       {CATEGORY_LABELS[targetCategory]}
                     </Typography>
                     <Typography
@@ -270,7 +293,7 @@ export function ContractNewFlowMui() {
                         mt: 0.25,
                         lineHeight: 1.35,
                         whiteSpace: "pre-line",
-                        pl: 0.5,
+                        pl: 0,
                       }}
                     >
                       {CATEGORY_SUBTITLES[targetCategory]}
