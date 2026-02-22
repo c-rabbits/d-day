@@ -25,9 +25,9 @@ export function DashboardHome({
   expiredCount,
 }: DashboardHomeProps) {
   return (
-    <Box sx={{ px: 2, py: 3.5 }}>
+    <Box sx={{ px: 2, pt: 0, pb: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 풀폭 배너: 슬라이더만 100vw, 점 네비는 콘텐츠 가운데 */}
+        {/* 풀폭 배너: 슬라이더만 100vw, 위 빈공간 없음 */}
         <DashboardBanner />
 
         {/* 내 계약 현황 — 다크 카드 3열 + 프로그레스 바 */}

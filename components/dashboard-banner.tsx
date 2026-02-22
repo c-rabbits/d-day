@@ -94,7 +94,7 @@ export function DashboardBanner() {
           sx={{
             position: "relative",
             width: "100%",
-            aspectRatio: "2.5 / 1",
+            aspectRatio: "16 / 9",
             overflow: "hidden",
           }}
           onTouchStart={handleTouchStart}
