@@ -20,9 +20,6 @@ import {
   Chip,
   LinearProgress,
   Stack,
-  Step,
-  StepLabel,
-  Stepper,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -31,32 +28,40 @@ import {
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
-import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import HomeIcon from "@mui/icons-material/Home";
 import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
-import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
 
 const STEPS = [
-  { title: "카테고리 선택", description: "계약 종류를 먼저 고르면 입력이 더 쉬워집니다." },
-  { title: "세부 정보 입력", description: "필수 항목과 선택 항목을 한 번에 정리하세요." },
-  { title: "알림 시점 설정", description: "원하는 시점에 만료 알림을 받도록 구성합니다." },
+  { title: "카테고리 선택" },
+  { title: "세부정보 입력" },
+  { title: "알림 시점 설정" },
 ] as const;
 
-const STEP_ICONS = [
-  <CategoryRoundedIcon key="c" fontSize="small" />,
-  <EditRoundedIcon key="e" fontSize="small" />,
-  <NotificationsActiveRoundedIcon key="n" fontSize="small" />,
-] as const;
+const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
+  RENT: HomeIcon,
+  PHONE: SmartphoneIcon,
+  CAR_INSURANCE: DirectionsCarIcon,
+  GYM: FitnessCenterIcon,
+  RENTAL: InventoryIcon,
+  STREAMING: PlayCircleIcon,
+  OTHER: DescriptionIcon,
+};
 
-const CATEGORY_META: Record<ContractCategory, { emoji: string; hint: string }> = {
-  RENT: { emoji: "🏠", hint: "월세·전세, 관리비 계약" },
-  PHONE: { emoji: "📱", hint: "휴대폰 약정, 통신 요금제" },
-  CAR_INSURANCE: { emoji: "🚗", hint: "자동차 보험, 특약 갱신" },
-  GYM: { emoji: "💪", hint: "헬스장·필라테스·수강권" },
-  RENTAL: { emoji: "📦", hint: "정수기·가전 렌탈 계약" },
-  STREAMING: { emoji: "▶️", hint: "OTT·음악·콘텐츠 구독" },
-  OTHER: { emoji: "📄", hint: "기타 정기 결제/계약" },
+const CATEGORY_PASTEL: Record<ContractCategory, string> = {
+  RENT: "#B8D4E3",
+  PHONE: "#B5EAD7",
+  CAR_INSURANCE: "#FFDAC1",
+  GYM: "#E2BEF1",
+  RENTAL: "#C7CEEA",
+  STREAMING: "#ACE7FF",
+  OTHER: "#D4C5B9",
 };
 
 type InputMode = "direct" | "photo";
@@ -229,74 +234,51 @@ export function ContractNewFlowMui() {
             <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700 }}>
               {STEPS[step].title}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.6 }}>
-              {STEPS[step].description}
-            </Typography>
           </Box>
 
           <LinearProgress variant="determinate" value={progress} sx={{ height: 7, borderRadius: 999 }} />
 
-          <Stepper activeStep={step} alternativeLabel>
-            {STEPS.map((stepItem, index) => (
-              <Step key={stepItem.title}>
-                <StepLabel icon={STEP_ICONS[index]}>{stepItem.title}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
           {step === 0 && (
-            <Stack spacing={1.4}>
-              <Typography variant="body2" color="text.secondary">
-                자주 쓰는 유형을 기준으로 카테고리를 선택해 주세요.
-              </Typography>
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "1fr", sm: "repeat(2, minmax(0, 1fr))" },
-                  gap: 1.2,
-                }}
-              >
-                {CONTRACT_CATEGORIES.map((targetCategory) => (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 1.2,
+              }}
+            >
+              {CONTRACT_CATEGORIES.map((targetCategory) => {
+                const Icon = CATEGORY_ICONS[targetCategory];
+                const bg = CATEGORY_PASTEL[targetCategory];
+                const selected = category === targetCategory;
+                return (
                   <Box
                     key={targetCategory}
                     component="button"
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      textAlign: "left",
-                      borderRadius: 2.5,
+                      aspectRatio: "1",
+                      borderRadius: 1.5,
                       border: (theme) =>
-                        `1px solid ${
-                          category === targetCategory
-                            ? theme.palette.primary.main
-                            : theme.palette.divider
-                        }`,
-                      backgroundColor:
-                        category === targetCategory
-                          ? "rgba(233,120,26,0.12)"
-                          : "background.paper",
-                      p: 1.6,
-                      minHeight: 90,
+                        `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
+                      backgroundColor: bg,
                       cursor: "pointer",
                       display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
                       font: "inherit",
+                      boxShadow: selected ? 2 : 0,
                     }}
                   >
-                    <Box>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                        {CATEGORY_LABELS[targetCategory]}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ mt: 0.6, display: "block" }}>
-                        {CATEGORY_META[targetCategory].hint}
-                      </Typography>
-                    </Box>
-                    <Typography sx={{ fontSize: 23 }}>{CATEGORY_META[targetCategory].emoji}</Typography>
+                    <Icon sx={{ fontSize: 32, color: "#fff", mb: 0.5 }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333" }}>
+                      {CATEGORY_LABELS[targetCategory]}
+                    </Typography>
                   </Box>
-                ))}
-              </Box>
-            </Stack>
+                );
+              })}
+            </Box>
           )}
 
           {step === 1 && (
@@ -437,32 +419,9 @@ export function ContractNewFlowMui() {
             </Stack>
           )}
 
-          <Card variant="outlined" sx={{ borderRadius: 2.6 }}>
-            <CardContent sx={{ p: 1.6 }}>
-              <Typography variant="caption" color="text.secondary">
-                입력 요약
-              </Typography>
-              <Stack spacing={0.5} sx={{ mt: 0.8 }}>
-                <Typography variant="body2">카테고리: {category ? CATEGORY_LABELS[category] : "미선택"}</Typography>
-                <Typography variant="body2">계약명: {title.trim() || "미입력"}</Typography>
-                <Typography variant="body2">만료일: {endDate || "미입력"}</Typography>
-                <Typography variant="body2">
-                  알림:{" "}
-                  {notifyDays.length > 0
-                    ? notifyDays
-                        .slice()
-                        .sort((a, b) => b - a)
-                        .map((day) => `D-${day}`)
-                        .join(", ")
-                    : "미설정"}
-                </Typography>
-              </Stack>
-            </CardContent>
-          </Card>
-
           {error && <Alert severity="error">{error}</Alert>}
 
-          <Stack direction="row" justifyContent="space-between" spacing={1.2}>
+          <Stack direction="row" justifyContent="center" spacing={1.2}>
             <Button
               variant="outlined"
               startIcon={<ChevronLeftRoundedIcon />}
@@ -486,7 +445,13 @@ export function ContractNewFlowMui() {
                 variant="contained"
                 endIcon={<TaskAltRoundedIcon />}
                 onClick={handleSubmit}
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  !category ||
+                  !title.trim() ||
+                  !startDate ||
+                  !endDate
+                }
               >
                 {isSubmitting ? "저장 중..." : "완료하고 저장"}
               </Button>

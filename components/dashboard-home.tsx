@@ -82,7 +82,7 @@ function ContractStatusCard({
       sx={{
         borderRadius: 1.5,
         borderColor: "divider",
-        bgcolor: "#e8e8e8",
+        bgcolor: "#f2f2f2",
         color: "#333",
         overflow: "hidden",
       }}
