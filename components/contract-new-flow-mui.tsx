@@ -18,7 +18,6 @@ import {
   Card,
   CardContent,
   Chip,
-  LinearProgress,
   Stack,
   TextField,
   ToggleButton,
@@ -54,14 +53,25 @@ const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object
   OTHER: DescriptionIcon,
 };
 
+/** 첨부 이미지 Self-care 카드 색상 (오렌지, 연한블루, 라벤더, 연한그린, 연한노랑, 연한핑크 등) */
 const CATEGORY_PASTEL: Record<ContractCategory, string> = {
-  RENT: "#B8D4E3",
-  PHONE: "#B5EAD7",
-  CAR_INSURANCE: "#FFDAC1",
-  GYM: "#E2BEF1",
-  RENTAL: "#C7CEEA",
-  STREAMING: "#ACE7FF",
-  OTHER: "#D4C5B9",
+  RENT: "#F4A261",       // 오렌지
+  PHONE: "#ACE7FF",      // 연한 스카이블루
+  CAR_INSURANCE: "#E2BEF1", // 라벤더
+  GYM: "#B5EAD7",        // 연한 민트/그린
+  RENTAL: "#FFEAA7",     // 연한 노랑
+  STREAMING: "#FFB5E8",  // 연한 핑크
+  OTHER: "#C7CEEA",      // 퍼플/퍼윙클
+};
+
+const CATEGORY_SUBTITLES: Record<ContractCategory, string> = {
+  RENT: "월세·전세, 관리비",
+  PHONE: "휴대폰 약정, 통신",
+  CAR_INSURANCE: "자동차 보험",
+  GYM: "헬스·필라테스",
+  RENTAL: "정수기·가전 렌탈",
+  STREAMING: "OTT·음악 구독",
+  OTHER: "기타 정기 계약",
 };
 
 type InputMode = "direct" | "photo";
@@ -102,7 +112,6 @@ export function ContractNewFlowMui() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isExtracting, setIsExtracting] = useState(false);
 
-  const progress = ((step + 1) / STEPS.length) * 100;
   const canMoveNextStepOne = Boolean(category);
   const canMoveNextStepTwo = Boolean(title.trim() && startDate && endDate);
   const canMoveNext = step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : true;
@@ -228,15 +237,13 @@ export function ContractNewFlowMui() {
       <CardContent sx={{ p: 2.4 }}>
         <Stack spacing={2.3}>
           <Box>
-            <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}>
+            <Typography variant="caption" sx={{ color: "#000", fontWeight: 700, letterSpacing: "0.08em" }}>
               STEP {step + 1}
             </Typography>
-            <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700 }}>
+            <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700, color: "#000" }}>
               {STEPS[step].title}
             </Typography>
           </Box>
-
-          <LinearProgress variant="determinate" value={progress} sx={{ height: 7, borderRadius: 999 }} />
 
           {step === 0 && (
             <Box
@@ -258,22 +265,27 @@ export function ContractNewFlowMui() {
                     onClick={() => setCategory(targetCategory)}
                     sx={{
                       aspectRatio: "1",
-                      borderRadius: 1.5,
+                      borderRadius: 3,
                       border: (theme) =>
                         `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
                       backgroundColor: bg,
                       cursor: "pointer",
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                      textAlign: "left",
                       font: "inherit",
                       boxShadow: selected ? 2 : 0,
+                      p: 1.5,
                     }}
                   >
-                    <Icon sx={{ fontSize: 32, color: "#fff", mb: 0.5 }} />
+                    <Icon sx={{ fontSize: 28, color: "#fff", mb: 0.75 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333" }}>
                       {CATEGORY_LABELS[targetCategory]}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: "#555", mt: 0.25 }}>
+                      {CATEGORY_SUBTITLES[targetCategory]}
                     </Typography>
                   </Box>
                 );
