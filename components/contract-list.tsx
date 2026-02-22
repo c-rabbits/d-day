@@ -111,7 +111,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
                       height: 44,
                       flexShrink: 0,
                       bgcolor: CATEGORY_PASTEL[c.category],
-                      color: "rgba(0,0,0,0.65)",
+                      color: "#fff",
                     }}
                   >
                     {(() => {
