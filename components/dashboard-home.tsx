@@ -66,7 +66,7 @@ export function DashboardHome({
   );
 }
 
-/** 다크 카드 3열: 값 + 단위, 라벨 (프로그레스 바 없음) */
+/** 다크 카드 3열: 계약목록과 동일 라운드(1.5), 어두운 배경/글씨 */
 function ContractStatusCard({
   total,
   soonCount,
@@ -78,10 +78,12 @@ function ContractStatusCard({
 }) {
   return (
     <Card
+      variant="outlined"
       sx={{
-        borderRadius: 2.5,
-        bgcolor: "#2d2d2d",
-        color: "#fff",
+        borderRadius: 1.5,
+        borderColor: "transparent",
+        bgcolor: "#1a1a1a",
+        color: "#e0e0e0",
         overflow: "hidden",
       }}
     >
@@ -116,11 +118,11 @@ function StatusColumn({
         <Typography component="span" sx={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff" }}>
           {value}
         </Typography>
-        <Typography component="span" sx={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.9)" }}>
+        <Typography component="span" sx={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.85)" }}>
           {unit}
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.6)", mt: 0.25 }}>
+      <Typography sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.55)", mt: 0.25 }}>
         {label}
       </Typography>
     </Box>
