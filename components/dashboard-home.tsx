@@ -4,9 +4,10 @@ import { useMemo, useState } from "react";
 import { Box, Card, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { ContractList } from "@/components/contract-list";
 import { DashboardBanner } from "@/components/dashboard-banner";
+import { isSubscriptionContract } from "@/lib/dday";
 import { CONTRACT_CATEGORIES, type ContractCategory } from "@/lib/types";
 
-export type ListSort = "end_date" | "category" | "amount";
+export type ListSort = "end_date" | "category" | "amount" | "contract_type";
 
 type ContractRow = {
   id: string;
@@ -27,6 +28,7 @@ const SORT_OPTIONS: { value: ListSort; label: string }[] = [
   { value: "end_date", label: "만료일" },
   { value: "category", label: "카테고리" },
   { value: "amount", label: "금액" },
+  { value: "contract_type", label: "월/장기" },
 ];
 
 function sortContracts(list: ContractRow[], sortBy: ListSort): ContractRow[] {
@@ -36,11 +38,17 @@ function sortContracts(list: ContractRow[], sortBy: ListSort): ContractRow[] {
   } else if (sortBy === "category") {
     const order = CONTRACT_CATEGORIES as unknown as string[];
     arr.sort((a, b) => order.indexOf(a.category) - order.indexOf(b.category));
-  } else {
+  } else if (sortBy === "amount") {
     arr.sort((a, b) => {
       const va = a.amount ?? -1;
       const vb = b.amount ?? -1;
       return vb - va;
+    });
+  } else {
+    arr.sort((a, b) => {
+      const aSub = isSubscriptionContract(a.end_date) ? 0 : 1;
+      const bSub = isSubscriptionContract(b.end_date) ? 0 : 1;
+      return aSub - bSub;
     });
   }
   return arr;
@@ -75,13 +83,14 @@ export function DashboardHome({
             <Typography variant="h5" fontWeight={700}>
               계약 목록
             </Typography>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
+            <FormControl size="small" sx={{ minWidth: 92 }} variant="outlined">
               <InputLabel id="list-sort-label">필터</InputLabel>
               <Select
                 labelId="list-sort-label"
                 label="필터"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as ListSort)}
+                sx={{ fontSize: "0.875rem", py: 0.5 }}
               >
                 {SORT_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>

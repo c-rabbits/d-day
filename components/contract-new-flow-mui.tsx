@@ -99,7 +99,9 @@ export function ContractNewFlowMui() {
     contractType === "subscription"
       ? Boolean(title.trim() && startDate && paymentDay)
       : Boolean(title.trim() && startDate && endDate);
-  const canMoveNext = step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : true;
+  const canGoBack = step > 0;
+  const canGoNext =
+    step < 2 && (step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : false);
 
   const toggleNotify = (targetDay: NotifyDaysBefore) => {
     setStep2AlertChosen(true);
@@ -253,6 +255,7 @@ export function ContractNewFlowMui() {
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
                 gap: 1,
+                alignItems: "stretch",
               }}
             >
               {CONTRACT_CATEGORIES.map((targetCategory) => {
@@ -266,7 +269,7 @@ export function ContractNewFlowMui() {
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      minHeight: 104,
+                      height: 118,
                       borderRadius: 1.2,
                       border: (theme) =>
                         `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
@@ -475,7 +478,7 @@ export function ContractNewFlowMui() {
               variant="outlined"
               startIcon={<ChevronLeftRoundedIcon />}
               onClick={handleBack}
-              disabled={step === 0}
+              disabled={!canGoBack}
             >
               이전
             </Button>
@@ -485,7 +488,7 @@ export function ContractNewFlowMui() {
                 variant="contained"
                 endIcon={<ChevronRightRoundedIcon />}
                 onClick={handleNext}
-                disabled={!canMoveNext}
+                disabled={!canGoNext}
               >
                 다음
               </Button>

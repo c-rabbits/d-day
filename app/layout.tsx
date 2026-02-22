@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={`${notoSansKR.variable} font-sans antialiased`}>
+      <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`}>
         <PwaRegister />
         <ThemeProvider
           attribute="class"
@@ -54,7 +54,7 @@ export default function RootLayout({
             }
           >
             <MuiProvider>
-              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background">
+              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background overscroll-none">
                 {children}
               </div>
             </MuiProvider>

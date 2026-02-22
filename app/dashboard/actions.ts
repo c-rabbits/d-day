@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 export async function softDeleteContract(contractId: string): Promise<{ error?: string }> {
@@ -19,5 +20,6 @@ export async function softDeleteContract(contractId: string): Promise<{ error?: 
     .eq("user_id", user.id);
 
   if (error) return { error: error.message };
+  revalidatePath("/dashboard");
   return {};
 }

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { DashboardHome } from "@/components/dashboard-home";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { Suspense } from "react";
 
 async function DashboardContent() {
@@ -38,7 +39,7 @@ async function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div className="p-6">로딩 중…</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <DashboardContent />
     </Suspense>
   );

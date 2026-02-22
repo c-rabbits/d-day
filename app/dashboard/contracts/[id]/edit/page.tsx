@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { ContractEditForm } from "@/components/contract-edit-form";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { Suspense } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -52,7 +53,7 @@ export default function ContractEditPage({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <Suspense fallback={<div className="p-6">로딩 중…</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <ParamsAndEdit params={params} />
     </Suspense>
   );

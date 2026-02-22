@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { Suspense } from "react";
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
@@ -119,7 +120,7 @@ export default function HomePage() {
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center p-6">
-          로딩 중…
+          <LoadingSpinner />
         </main>
       }
     >

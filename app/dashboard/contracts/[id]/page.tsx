@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { ContractDetail } from "@/components/contract-detail";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { Suspense } from "react";
 
 async function ContractContent({ id }: { id: string }) {
@@ -31,7 +32,7 @@ export default function ContractPage({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <Suspense fallback={<div className="p-6">로딩 중…</div>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <ParamsAndDetail params={params} />
     </Suspense>
   );
