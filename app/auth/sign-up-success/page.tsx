@@ -1,66 +1,49 @@
 import Link from "next/link";
-import { Box, Button, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
-import MarkEmailReadRoundedIcon from "@mui/icons-material/MarkEmailReadRounded";
+import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 export default function Page() {
   return (
     <Box
       sx={{
-        minHeight: "100svh",
-        px: 2.2,
-        py: 3.2,
-        background:
-          "radial-gradient(85% 70% at 0% 0%, rgba(233,120,26,.22), rgba(233,120,26,0) 55%), radial-gradient(75% 60% at 100% 60%, rgba(78,104,152,.2), rgba(78,104,152,0) 52%), linear-gradient(180deg, #222035 0%, #1A1828 42%, #171523 100%)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100dvh",
+        p: 2.5,
+        bgcolor: "grey.50",
       }}
     >
-      <Box sx={{ mx: "auto", width: "100%", maxWidth: 430 }}>
-        <Card variant="outlined" sx={{ borderRadius: 4 }}>
-          <CardContent sx={{ p: 2.6 }}>
-            <Stack spacing={2.1} alignItems="center" textAlign="center">
-              <Chip
-                icon={<MarkEmailReadRoundedIcon />}
-                label="SIGN UP SUCCESS"
-                color="primary"
-                variant="outlined"
-                sx={{ fontWeight: 700 }}
-              />
-
-              <Box
-                sx={{
-                  width: 74,
-                  height: 74,
-                  borderRadius: "999px",
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <CheckCircleRoundedIcon sx={{ fontSize: 40 }} />
-              </Box>
-
-              <Box>
-                <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                  가입 완료!
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-                  이메일을 확인해 계정을 인증해 주세요.
-                  <br />
-                  인증 후 로그인할 수 있습니다.
-                </Typography>
-              </Box>
-
-              <Link href="/auth/login" style={{ width: "100%" }}>
-                <Button variant="contained" size="large" fullWidth>
-                  로그인하기
-                </Button>
-              </Link>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Box>
+      <Card sx={{ width: "100%", maxWidth: 450 }}>
+        <CardContent sx={{ p: { xs: 2.5, sm: 4 }, textAlign: "center" }}>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mx: "auto",
+              mb: 2,
+            }}
+          >
+            <CheckCircleRoundedIcon sx={{ fontSize: 36 }} />
+          </Box>
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            가입 완료
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            이메일을 확인해 계정을 인증해 주세요. 인증 후 로그인할 수 있습니다.
+          </Typography>
+          <Button component={Link} href="/auth/login" variant="contained" fullWidth>
+            로그인
+          </Button>
+        </CardContent>
+      </Card>
     </Box>
   );
 }

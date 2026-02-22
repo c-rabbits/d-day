@@ -4,17 +4,8 @@ import { createClient } from "@/lib/supabase/client";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Alert, Box, Button, Stack, TextField, Typography } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 
 export function ForgotPasswordForm({
   className,
@@ -48,9 +39,8 @@ export function ForgotPasswordForm({
     <Box className={className} {...props}>
       <AuthShellMui
         title="비밀번호 찾기"
-        subtitle="가입한 이메일로 재설정 링크를 보내드립니다"
+        subtitle="가입한 이메일을 입력하면 재설정 링크를 보내드립니다."
         backHref="/auth/login"
-        badge="RECOVERY"
       >
         {success ? (
           <Stack spacing={2.2} alignItems="center" sx={{ py: 1.5 }}>
@@ -81,41 +71,23 @@ export function ForgotPasswordForm({
             </Button>
           </Stack>
         ) : (
-          <Box component="form" onSubmit={handleForgotPassword}>
-            <Stack spacing={2}>
-              <Typography variant="body2" color="text.secondary">
-                가입한 이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.
-              </Typography>
-
+          <Box component="form" noValidate autoComplete="off" onSubmit={handleForgotPassword}>
+            <Stack spacing={2.5}>
               <TextField
-                id="email"
-                type="email"
+                autoFocus
+                fullWidth
                 label="이메일"
-                placeholder="example@gmail.com"
-                required
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MailOutlineRoundedIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                }}
+                required
               />
-
               {error && <Alert severity="error">{error}</Alert>}
-
-              <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+              <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
                 {isLoading ? "전송 중…" : "재설정 링크 보내기"}
               </Button>
-
-              <Typography variant="body2" color="text.secondary" textAlign="center">
-                계정이 있으신가요?{" "}
-                <Link href="/auth/login" style={{ fontWeight: 700 }}>
-                  로그인
-                </Link>
+              <Typography variant="body2" color="primary" component={Link} href="/auth/login" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                ← 로그인으로 돌아가기
               </Typography>
             </Stack>
           </Box>

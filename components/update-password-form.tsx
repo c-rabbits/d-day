@@ -4,17 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import LockResetRoundedIcon from "@mui/icons-material/LockResetRounded";
-import LockOutlineRoundedIcon from "@mui/icons-material/LockOutlineRounded";
+import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 
 export function UpdatePasswordForm({
   className,
@@ -47,54 +37,23 @@ export function UpdatePasswordForm({
     <Box className={className} {...props}>
       <AuthShellMui
         title="새 비밀번호 설정"
-        subtitle="안전한 비밀번호로 변경한 뒤 바로 서비스를 계속 사용할 수 있어요."
+        subtitle="새 비밀번호를 입력한 뒤 저장하세요."
         backHref="/auth/login"
-        badge="RESET PASSWORD"
       >
-        <Box component="form" onSubmit={handleForgotPassword}>
-          <Stack spacing={2.1}>
-            <Box
-              sx={{
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 3,
-                bgcolor: "background.default",
-                p: 1.8,
-              }}
-            >
-              <Stack direction="row" spacing={0.8} alignItems="center">
-                <LockResetRoundedIcon fontSize="small" color="primary" />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                  비밀번호 재설정
-                </Typography>
-              </Stack>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                새로운 비밀번호를 입력해 계정 보안을 유지하세요.
-              </Typography>
-            </Box>
-
+        <Box component="form" noValidate autoComplete="off" onSubmit={handleForgotPassword}>
+          <Stack spacing={2.5}>
             <TextField
-                  id="password"
-                  type="password"
-                  label="새 비밀번호"
-                  placeholder="새 비밀번호를 입력하세요"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockOutlineRoundedIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-
+              autoFocus
+              fullWidth
+              label="새 비밀번호"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
             {error && <Alert severity="error">{error}</Alert>}
-
-            <Button type="submit" variant="contained" size="large" disabled={isLoading}>
-              {isLoading ? "저장 중…" : "새 비밀번호 저장"}
+            <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
+              {isLoading ? "저장 중…" : "저장"}
             </Button>
           </Stack>
         </Box>

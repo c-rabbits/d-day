@@ -5,19 +5,7 @@ import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Divider,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
-import LockOutlineRoundedIcon from "@mui/icons-material/LockOutlineRounded";
-import ShieldRoundedIcon from "@mui/icons-material/ShieldRounded";
+import { Alert, Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 export function SignUpForm({
   className,
@@ -63,99 +51,51 @@ export function SignUpForm({
     <Box className={className} {...props}>
       <AuthShellMui
         title="회원가입"
-        subtitle="계약 만료 알림을 받기 위한 개인 계정을 생성하세요."
+        subtitle="계약 만료 알림을 받기 위한 계정을 만드세요."
         backHref="/"
-        badge="CREATE ACCOUNT"
       >
-        <Box component="form" onSubmit={handleSignUp}>
-          <Stack spacing={2}>
-            <Box
-              sx={{
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 3,
-                bgcolor: "background.default",
-                p: 1.8,
-              }}
-            >
-              <Stack direction="row" spacing={0.8} alignItems="center">
-                <ShieldRoundedIcon fontSize="small" color="primary" />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                  안전한 계정 생성
-                </Typography>
-              </Stack>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                인증 메일 확인 후 바로 로그인할 수 있습니다.
-              </Typography>
-            </Box>
-
+        <Box component="form" noValidate autoComplete="off" onSubmit={handleSignUp}>
+          <Stack spacing={2.5}>
             <TextField
-                id="email"
-                type="email"
-                label="이메일"
-                placeholder="example@gmail.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MailOutlineRoundedIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
+              autoFocus
+              fullWidth
+              label="이메일"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
             <TextField
-                id="password"
-                type="password"
-                label="비밀번호"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockOutlineRoundedIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
+              fullWidth
+              label="비밀번호"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
             <TextField
-                id="repeat-password"
-                type="password"
-                label="비밀번호 확인"
-                required
-                value={repeatPassword}
-                onChange={(e) => setRepeatPassword(e.target.value)}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockOutlineRoundedIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              fullWidth
+              label="비밀번호 확인"
+              type="password"
+              value={repeatPassword}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              required
+            />
 
             {error && <Alert severity="error">{error}</Alert>}
 
-            <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+            <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
               {isLoading ? "가입 중…" : "회원가입"}
             </Button>
 
-            <Divider sx={{ my: 0.2 }}>
-              <Typography variant="caption" color="text.secondary">
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
+              <Typography variant="body2" color="text.secondary">
                 이미 계정이 있으신가요?
               </Typography>
-            </Divider>
-
-            <Button component={Link} href="/auth/login" variant="outlined" size="large">
-              로그인
-            </Button>
+              <Typography component={Link} href="/auth/login" color="primary" fontWeight={600}>
+                로그인
+              </Typography>
+            </Box>
           </Stack>
         </Box>
       </AuthShellMui>

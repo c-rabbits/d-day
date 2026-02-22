@@ -46,24 +46,18 @@ export function InfoBannerList() {
 
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
-      <Stack spacing={2}>
+      <Stack spacing={2.5}>
         <Box>
-          <Typography
-            variant="caption"
-            sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
-          >
-            INFORMATION
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            정보
           </Typography>
-          <Typography variant="h5" sx={{ mt: 0.4, fontWeight: 700 }}>
-            배너 카드 안내
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-            자주 사용하는 기능을 카드형 정보 페이지로 모아뒀어요.
+          <Typography variant="body2" color="text.secondary">
+            자주 사용하는 기능을 카드로 모아뒀어요.
           </Typography>
         </Box>
 
         {INFO_ITEMS.map((item) => (
-          <Card key={item.title} variant="outlined" sx={{ borderRadius: 3 }}>
+          <Card key={item.title} variant="outlined" sx={{ borderRadius: 2 }}>
             <CardMedia component="img" image={item.image} height="150" alt={item.title} />
             <CardContent sx={{ pb: 1.5 }}>
               <Chip

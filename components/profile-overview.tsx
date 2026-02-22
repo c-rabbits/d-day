@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 type ProfileOverviewProps = {
@@ -19,73 +19,71 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
 
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
-      <Stack spacing={2}>
-        <Typography
-          variant="caption"
-          sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
-        >
-          PROFILE
-        </Typography>
+      <Stack spacing={2.5}>
+        <Box>
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            프로필
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            계정 기본 정보
+          </Typography>
+        </Box>
 
-        <Card variant="outlined" sx={{ borderRadius: 3 }}>
-          <CardContent sx={{ p: 2.4 }}>
-            <Stack direction="row" spacing={1.6} alignItems="center">
-              <Avatar
-                sx={{
-                  width: 56,
-                  height: 56,
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                }}
-              >
-                <PersonRoundedIcon />
-              </Avatar>
-              <Box>
-                <Typography variant="h6" sx={{ fontSize: "1.08rem", fontWeight: 700 }}>
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+          <CardContent sx={{ p: 3 }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item>
+                <Avatar
+                  sx={{
+                    width: 100,
+                    height: 100,
+                    bgcolor: "grey.300",
+                    color: "text.secondary",
+                  }}
+                >
+                  <PersonRoundedIcon sx={{ fontSize: 48 }} />
+                </Avatar>
+              </Grid>
+              <Grid item xs>
+                <Typography variant="h6" fontWeight={700}>
                   내 계정
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  계정 기본 정보와 활동 상태
+                  이메일·가입일·상태
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardContent sx={{ pt: 0 }}>
+            <Stack spacing={2}>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  이메일
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 0.25 }}>
+                  {email || "정보 없음"}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  가입일
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 0.25 }}>
+                  {formattedCreatedAt}
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  사용 상태
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 0.25 }}>
+                  정상
                 </Typography>
               </Box>
             </Stack>
           </CardContent>
         </Card>
-
-        <Card variant="outlined" sx={{ borderRadius: 3 }}>
-          <CardContent sx={{ p: 2.3 }}>
-            <InfoRow label="이메일" value={email || "정보 없음"} />
-            <InfoRow label="가입일" value={formattedCreatedAt} />
-            <InfoRow label="사용 상태" value="정상" isLast />
-          </CardContent>
-        </Card>
       </Stack>
-    </Box>
-  );
-}
-
-function InfoRow({
-  label,
-  value,
-  isLast = false,
-}: {
-  label: string;
-  value: string;
-  isLast?: boolean;
-}) {
-  return (
-    <Box
-      sx={{
-        py: 1.3,
-        borderBottom: isLast ? "none" : (theme) => `1px solid ${theme.palette.divider}`,
-      }}
-    >
-      <Typography variant="caption" color="text.secondary">
-        {label}
-      </Typography>
-      <Typography variant="body1" sx={{ mt: 0.35 }}>
-        {value}
-      </Typography>
     </Box>
   );
 }
