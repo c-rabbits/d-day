@@ -52,7 +52,13 @@ export function UpdatePasswordForm({
               required
             />
             {error && <Alert severity="error">{error}</Alert>}
-            <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={isLoading}
+              sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
+            >
               {isLoading ? "저장 중…" : "저장"}
             </Button>
           </Stack>

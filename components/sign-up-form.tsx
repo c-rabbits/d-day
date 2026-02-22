@@ -84,7 +84,13 @@ export function SignUpForm({
 
             {error && <Alert severity="error">{error}</Alert>}
 
-            <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={isLoading}
+              sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
+            >
               {isLoading ? "가입 중…" : "회원가입"}
             </Button>
 

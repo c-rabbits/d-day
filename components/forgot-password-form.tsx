@@ -66,7 +66,13 @@ export function ForgotPasswordForm({
                 비밀번호 재설정 링크를 보냈습니다. 이메일을 확인해 주세요.
               </Typography>
             </Box>
-            <Button component={Link} href="/auth/login" variant="contained" size="large" fullWidth>
+            <Button
+              component={Link}
+              href="/auth/login"
+              variant="contained"
+              fullWidth
+              sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
+            >
               로그인으로 돌아가기
             </Button>
           </Stack>
@@ -83,7 +89,13 @@ export function ForgotPasswordForm({
                 required
               />
               {error && <Alert severity="error">{error}</Alert>}
-              <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isLoading}
+                sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
+              >
                 {isLoading ? "전송 중…" : "재설정 링크 보내기"}
               </Button>
               <Typography variant="body2" color="primary" component={Link} href="/auth/login" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>

@@ -62,7 +62,7 @@ export function SettingsPanel() {
   };
 
   return (
-    <Box sx={{ px: 2, py: 3.5 }}>
+    <Box sx={{ px: 2, py: 3.5, pb: 14 }}>
       <Stack spacing={2.5}>
         <Typography variant="h5" fontWeight={700}>
           설정

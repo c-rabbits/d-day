@@ -89,19 +89,38 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
               </Typography>
             </Box>
             {error && <Alert severity="error">{error}</Alert>}
-            <Button type="submit" variant="contained" fullWidth disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={isLoading}
+              sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
+            >
               {isLoading ? "로그인 중…" : "로그인"}
             </Button>
             <Divider sx={{ my: 0.5 }}>또는</Divider>
             <Stack direction="row" spacing={1}>
-              <Button variant="outlined" fullWidth disabled sx={{ textTransform: "none" }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled
+                sx={{ textTransform: "none", justifyContent: "center", py: 1.75, minHeight: 48 }}
+              >
                 Google (준비 중)
               </Button>
               <Button
                 variant="outlined"
                 fullWidth
                 disabled
-                sx={{ textTransform: "none", borderColor: "#FEE500", color: "#191919", "&:disabled": { borderColor: "#FEE500", color: "#666" } }}
+                sx={{
+                  textTransform: "none",
+                  borderColor: "#FEE500",
+                  color: "#191919",
+                  "&:disabled": { borderColor: "#FEE500", color: "#666" },
+                  justifyContent: "center",
+                  py: 1.75,
+                  minHeight: 48,
+                }}
               >
                 카카오 (준비 중)
               </Button>
