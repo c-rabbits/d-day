@@ -3,47 +3,45 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Box } from "@mui/material";
 
-const BANNER_COUNT = 7;
+const BANNER_COUNT = 3;
 const ROTATE_INTERVAL_MS = 5000;
-const SLIDE_WIDTH = 76;
-const GAP = 3;
-const PEEK = 12;
-const TRACK_SLIDES = BANNER_COUNT + 1;
-const TRACK_WIDTH = PEEK + SLIDE_WIDTH * TRACK_SLIDES + GAP * (TRACK_SLIDES - 1) + PEEK;
 const SWIPE_THRESHOLD_PX = 50;
 
 const BANNER_SLIDES: { src: string | null; alt: string }[] = [
   { src: null, alt: "배너 1" },
   { src: null, alt: "배너 2" },
   { src: null, alt: "배너 3" },
-  { src: null, alt: "배너 4" },
-  { src: null, alt: "배너 5" },
-  { src: null, alt: "배너 6" },
-  { src: null, alt: "배너 7" },
 ];
+
+const PEEK_PERCENT = 12;
+const TRACK_ORDER = [0, 1, 2, 0, 1, 2, 0];
+const TRACK_SLIDES = TRACK_ORDER.length;
 
 export function DashboardBanner() {
   const [index, setIndex] = useState(0);
   const [noTransition, setNoTransition] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
+  const displayIndex = TRACK_ORDER[index];
+
   const goTo = useCallback((next: number) => {
     if (next < 0) {
-      setIndex(0);
+      setIndex((i) => (i === 0 ? TRACK_SLIDES - 1 : i - 1));
       return;
     }
-    if (next >= BANNER_COUNT) {
-      setIndex(BANNER_COUNT);
+    if (next >= TRACK_SLIDES) {
+      setNoTransition(true);
+      setIndex(0);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setNoTransition(false));
+      });
       return;
     }
     setIndex(next);
   }, []);
 
   const goNext = useCallback(() => {
-    setIndex((i) => {
-      if (i >= BANNER_COUNT - 1) return BANNER_COUNT;
-      return i + 1;
-    });
+    setIndex((i) => (i >= TRACK_SLIDES - 1 ? i : i + 1));
   }, []);
 
   useEffect(() => {
@@ -52,7 +50,7 @@ export function DashboardBanner() {
   }, [goNext]);
 
   useEffect(() => {
-    if (index !== BANNER_COUNT) return;
+    if (index !== TRACK_SLIDES - 1) return;
     const t = setTimeout(() => {
       setNoTransition(true);
       setIndex(0);
@@ -76,11 +74,8 @@ export function DashboardBanner() {
     touchStartX.current = null;
   };
 
-  const displayIndex = index === BANNER_COUNT ? 0 : index;
-
-  const centerOffset = (100 - SLIDE_WIDTH) / 2;
-  const translatePercent =
-    (PEEK + index * (SLIDE_WIDTH + GAP) - centerOffset) / TRACK_WIDTH * 100;
+  const slideWidthPercent = 100 / TRACK_SLIDES;
+  const translatePercent = index * slideWidthPercent;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -90,69 +85,77 @@ export function DashboardBanner() {
           width: "100%",
           aspectRatio: "2.5 / 1",
           overflow: "hidden",
+          paddingLeft: `${PEEK_PERCENT}%`,
+          paddingRight: `${PEEK_PERCENT}%`,
+          boxSizing: "border-box",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <Box
-          sx={{
-            display: "flex",
-            width: `${TRACK_WIDTH}%`,
-            height: "100%",
-            transform: `translateX(-${translatePercent}%)`,
-            transition: noTransition ? "none" : "transform 0.5s ease",
-          }}
-        >
-          <Box sx={{ flex: `0 0 ${(PEEK / TRACK_WIDTH) * 100}%` }} />
-          {[...BANNER_SLIDES, BANNER_SLIDES[0]].map((slide, i) => (
-            <Box
-              key={i}
-              sx={{
-                flex: `0 0 ${(SLIDE_WIDTH / TRACK_WIDTH) * 100}%`,
-                minWidth: 0,
-                marginRight: i < TRACK_SLIDES - 1 ? `${(GAP / TRACK_WIDTH) * 100}%` : 0,
-                borderRadius: 2.5,
-                overflow: "hidden",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-              }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  bgcolor: slide.src ? undefined : "grey.300",
-                }}
-              >
-                {slide.src ? (
+        <Box sx={{ width: "100%", height: "100%", overflow: "hidden" }}>
+          <Box
+            sx={{
+              display: "flex",
+              width: `${TRACK_SLIDES * 100}%`,
+              height: "100%",
+              transform: `translateX(-${translatePercent}%)`,
+              transition: noTransition ? "none" : "transform 0.5s ease",
+            }}
+          >
+            {TRACK_ORDER.map((slideIdx, i) => {
+              const slide = BANNER_SLIDES[slideIdx];
+              return (
+                <Box
+                  key={i}
+                  sx={{
+                    flex: `0 0 ${slideWidthPercent}%`,
+                    minWidth: 0,
+                    borderRadius: 2.5,
+                    overflow: "hidden",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                  }}
+                >
                   <Box
-                    component="img"
-                    src={slide.src}
-                    alt={slide.alt}
                     sx={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      bgcolor: slide.src ? undefined : "grey.300",
                     }}
-                  />
-                ) : (
-                  <Box sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
-                    배너 {(i % BANNER_COUNT) + 1} (이미지 추가 예정)
+                  >
+                    {slide.src ? (
+                      <Box
+                        component="img"
+                        src={slide.src}
+                        alt={slide.alt}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Box sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
+                        배너 {slideIdx + 1} (이미지 추가 예정)
+                      </Box>
+                    )}
                   </Box>
-                )}
-              </Box>
-            </Box>
-          ))}
-          <Box sx={{ flex: `0 0 ${(PEEK / TRACK_WIDTH) * 100}%` }} />
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
       </Box>
 
       <Box
         sx={{
+          width: "100%",
           display: "flex",
+          flexDirection: "row",
           justifyContent: "center",
+          alignItems: "center",
           gap: 0.75,
           mt: 1.25,
         }}
@@ -160,11 +163,11 @@ export function DashboardBanner() {
         {BANNER_SLIDES.map((_, i) => (
           <Box
             key={i}
-            onClick={() => goTo(i)}
+            onClick={() => setIndex(i)}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") goTo(i);
+              if (e.key === "Enter" || e.key === " ") setIndex(i);
             }}
             sx={{
               width: 8,
