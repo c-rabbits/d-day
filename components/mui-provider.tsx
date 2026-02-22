@@ -21,13 +21,15 @@ const shape = {
   radiusXl: 28,
 };
 
-/* M3 스타일 조합: primary + on-primary(contrastText), secondary + on-secondary - https://m3.material.io/styles/color */
+/* 테마: 검정·회색·흰색. primary = 진한 회색, contrastText = 흰색 */
 const muiTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "hsl(var(--primary))",
-      contrastText: "hsl(var(--primary-foreground))",
+      main: "#262626",
+      light: "#404040",
+      dark: "#171717",
+      contrastText: "#fff",
     },
     secondary: {
       main: "hsl(var(--secondary))",
@@ -67,6 +69,23 @@ const muiTheme = createTheme({
           borderRadius: shape.radiusSm,
           textTransform: "none",
           fontWeight: 600,
+        },
+        contained: {
+          backgroundColor: "#262626",
+          color: "#fff",
+          "&:hover": {
+            backgroundColor: "#404040",
+            color: "#fff",
+          },
+        },
+        outlined: {
+          borderColor: "#262626",
+          color: "#262626",
+          "&:hover": {
+            borderColor: "#171717",
+            backgroundColor: "rgba(0,0,0,0.04)",
+            color: "#171717",
+          },
         },
       },
     },
