@@ -39,16 +39,20 @@ const STEPS = [
   { title: "알림 시점 설정" },
 ] as const;
 
-/** 모바일에서 날짜 입력 필드 캘린더(아래방향 화살표) 위치를 왼쪽으로 */
+/** 날짜 입력 필드 캘린더(아래방향 화살표) 위치를 왼쪽으로 */
 const dateInputSx = {
   "& input[type='date']": {
     position: "relative",
-    paddingLeft: { xs: "36px", sm: "16px" },
+    paddingLeft: "36px",
+    paddingRight: "12px",
   },
   "& input[type='date']::-webkit-calendar-picker-indicator": {
     position: "absolute",
-    left: { xs: 6, sm: "auto" },
-    marginLeft: { xs: 0, sm: "auto" },
+    left: "6px",
+    right: "auto",
+    margin: 0,
+    padding: 0,
+    cursor: "pointer",
   },
 };
 
@@ -65,6 +69,7 @@ export function ContractNewFlowMui() {
   const [memo, setMemo] = useState("");
   const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>([]); // 장기계약 만료일 알림
   const [monthlyNotifyDays, setMonthlyNotifyDays] = useState<number[]>([]); // 7, 1 (월구독 또는 장기 월지출 알림)
+  const [step2AlertChosen, setStep2AlertChosen] = useState(false); // step2에서 알림/알림없음 한 번이라도 선택했는지
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -76,6 +81,7 @@ export function ContractNewFlowMui() {
   const canMoveNext = step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : true;
 
   const toggleNotify = (targetDay: NotifyDaysBefore) => {
+    setStep2AlertChosen(true);
     setNotifyDays((prev) =>
       prev.includes(targetDay)
         ? prev.filter((day) => day !== targetDay)
@@ -84,11 +90,21 @@ export function ContractNewFlowMui() {
   };
 
   const toggleMonthlyNotify = (targetDay: number) => {
+    setStep2AlertChosen(true);
     setMonthlyNotifyDays((prev) =>
       prev.includes(targetDay)
         ? prev.filter((d) => d !== targetDay)
         : [...prev, targetDay],
     );
+  };
+
+  const setNoExpiryAlert = () => {
+    setStep2AlertChosen(true);
+    setNotifyDays([]);
+  };
+  const setNoMonthlyAlert = () => {
+    setStep2AlertChosen(true);
+    setMonthlyNotifyDays([]);
   };
 
   const handleNext = () => {
@@ -105,6 +121,11 @@ export function ContractNewFlowMui() {
       return;
     }
     setError(null);
+    if (step === 1) {
+      setStep2AlertChosen(false);
+      setNotifyDays([]);
+      setMonthlyNotifyDays([]);
+    }
     if (step < 2) setStep((prev) => prev + 1);
   };
 
@@ -368,7 +389,7 @@ export function ContractNewFlowMui() {
                     ))}
                     <Chip
                       label="알림 없음"
-                      onClick={() => setMonthlyNotifyDays([])}
+                      onClick={setNoMonthlyAlert}
                       color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
                       variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
                     />
@@ -394,7 +415,7 @@ export function ContractNewFlowMui() {
                     ))}
                     <Chip
                       label="알림 없음"
-                      onClick={() => setNotifyDays([])}
+                      onClick={setNoExpiryAlert}
                       color={notifyDays.length === 0 ? "primary" : "default"}
                       variant={notifyDays.length === 0 ? "filled" : "outlined"}
                     />
@@ -414,7 +435,7 @@ export function ContractNewFlowMui() {
                     ))}
                     <Chip
                       label="알림 없음"
-                      onClick={() => setMonthlyNotifyDays([])}
+                      onClick={setNoMonthlyAlert}
                       color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
                       variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
                     />
@@ -452,6 +473,7 @@ export function ContractNewFlowMui() {
                 onClick={handleSubmit}
                 disabled={
                   isSubmitting ||
+                  !step2AlertChosen ||
                   !category ||
                   !title.trim() ||
                   !startDate ||

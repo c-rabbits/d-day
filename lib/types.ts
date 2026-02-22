@@ -29,15 +29,15 @@ export const CATEGORY_LABELS: Record<ContractCategory, string> = {
 
 /** 카테고리 서브텍스트 (세부 예시, 한 줄에 하나씩) */
 export const CATEGORY_SUBTITLES: Record<ContractCategory, string> = {
-  RENT: "월세·전세\n대출 이자\n아파트 관리비",
-  PHONE: "휴대폰 요금\n인터넷+IPTV",
+  RENT: "월세, 전세\n관리비",
+  PHONE: "휴대폰\n인터넷",
   CAR_INSURANCE: "실손보험\n자동차보험\n종신보험",
-  GYM: "쿠팡 / 네이버 등",
-  RENTAL: "정수기 렌탈\n공기청정기 렌탈\n차량 리스",
-  STREAMING: "Netflix\nYouTube Premium\nDisney+",
-  FINANCE: "신용대출 이자\n주택담보대출 이자",
-  EDUCATION: "학원비\n온라인 강의 구독",
-  OTHER: "소프트웨어 구독\n기부 정기후원",
+  GYM: "쿠팡\n네이버\n배달의민족",
+  RENTAL: "정수기\n공기청정기\n차량 리스",
+  STREAMING: "Netflix\nYouTube\nDisney+",
+  FINANCE: "적금 만기\n대출 이자",
+  EDUCATION: "학원비\n온라인 강의",
+  OTHER: "소프트웨어\n기부 정기후원",
 };
 
 /** 만료일 알림 일수 (장기계약) */
