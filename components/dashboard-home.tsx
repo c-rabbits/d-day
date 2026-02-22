@@ -35,9 +35,6 @@ export function DashboardHome({
           <Typography variant="h5" fontWeight={700} gutterBottom>
             내 계약 현황
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
-            총 계약·만료 예정·만료 지남
-          </Typography>
           <ContractStatusCard
             total={contracts.length}
             soonCount={soonCount}
@@ -46,14 +43,9 @@ export function DashboardHome({
         </Box>
 
         <Stack spacing={1.5}>
-          <Box>
-            <Typography variant="h5" fontWeight={700} gutterBottom>
-              계약 목록
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {contracts.length}건
-            </Typography>
-          </Box>
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            계약 목록
+          </Typography>
           <ContractList contracts={contracts} />
         </Stack>
       </Stack>
