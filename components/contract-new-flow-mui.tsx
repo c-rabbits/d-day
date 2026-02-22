@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
+  CATEGORY_PASTEL,
+  CATEGORY_SUBTITLES,
   CONTRACT_CATEGORIES,
+  MONTHLY_NOTIFY_DAYS_OPTIONS,
   NOTIFY_DAYS_OPTIONS,
   type ContractCategory,
   type NotifyDaysBefore,
@@ -27,15 +29,9 @@ import {
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
-import DescriptionIcon from "@mui/icons-material/Description";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import HomeIcon from "@mui/icons-material/Home";
-import ImageRoundedIcon from "@mui/icons-material/ImageRounded";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
+
+type ContractType = "subscription" | "longterm";
 
 const STEPS = [
   { title: "카테고리 선택" },
@@ -43,84 +39,41 @@ const STEPS = [
   { title: "알림 시점 설정" },
 ] as const;
 
-const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
-  RENT: HomeIcon,
-  PHONE: SmartphoneIcon,
-  CAR_INSURANCE: DirectionsCarIcon,
-  GYM: FitnessCenterIcon,
-  RENTAL: InventoryIcon,
-  STREAMING: PlayCircleIcon,
-  OTHER: DescriptionIcon,
+/** 모바일에서 날짜 입력 필드 캘린더(아래방향 화살표) 위치를 왼쪽으로 */
+const dateInputSx = {
+  "& input[type='date']": {
+    position: "relative",
+    paddingLeft: { xs: "36px", sm: "16px" },
+  },
+  "& input[type='date']::-webkit-calendar-picker-indicator": {
+    position: "absolute",
+    left: { xs: 6, sm: "auto" },
+    marginLeft: { xs: 0, sm: "auto" },
+  },
 };
-
-/** 첨부 이미지 Self-care 카드 색상 (오렌지, 연한블루, 라벤더, 연한그린, 연한노랑, 연한핑크 등) */
-const CATEGORY_PASTEL: Record<ContractCategory, string> = {
-  RENT: "#F4A261",       // 오렌지
-  PHONE: "#ACE7FF",      // 연한 스카이블루
-  CAR_INSURANCE: "#E2BEF1", // 라벤더
-  GYM: "#B5EAD7",        // 연한 민트/그린
-  RENTAL: "#FFEAA7",     // 연한 노랑
-  STREAMING: "#FFB5E8",  // 연한 핑크
-  OTHER: "#C7CEEA",      // 퍼플/퍼윙클
-};
-
-const CATEGORY_SUBTITLES: Record<ContractCategory, string> = {
-  RENT: "월세·전세, 관리비",
-  PHONE: "휴대폰 약정, 통신",
-  CAR_INSURANCE: "자동차 보험",
-  GYM: "헬스·필라테스",
-  RENTAL: "정수기·가전 렌탈",
-  STREAMING: "OTT·음악 구독",
-  OTHER: "기타 정기 계약",
-};
-
-type InputMode = "direct" | "photo";
-
-async function extractFromImage(file: File): Promise<{
-  title: string;
-  start_date: string;
-  end_date: string;
-  amount: string;
-}> {
-  const formData = new FormData();
-  formData.append("image", file);
-  const res = await fetch("/api/ocr", { method: "POST", body: formData });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error ?? "OCR 요청 실패");
-  return {
-    title: data.title ?? "",
-    start_date: data.start_date ?? "",
-    end_date: data.end_date ?? "",
-    amount: data.amount ?? "",
-  };
-}
 
 export function ContractNewFlowMui() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [category, setCategory] = useState<ContractCategory | null>(null);
+  const [contractType, setContractType] = useState<ContractType>("subscription");
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [paymentDay, setPaymentDay] = useState(""); // 1–31, 월 지출일
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
-  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>([]);
+  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>([]); // 장기계약 만료일 알림
+  const [monthlyNotifyDays, setMonthlyNotifyDays] = useState<number[]>([]); // 7, 1 (월구독 또는 장기 월지출 알림)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inputMode, setInputMode] = useState<InputMode>("direct");
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [isExtracting, setIsExtracting] = useState(false);
 
   const canMoveNextStepOne = Boolean(category);
-  const canMoveNextStepTwo = Boolean(title.trim() && startDate && endDate);
+  const canMoveNextStepTwo =
+    contractType === "subscription"
+      ? Boolean(title.trim() && startDate && paymentDay)
+      : Boolean(title.trim() && startDate && endDate);
   const canMoveNext = step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : true;
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
 
   const toggleNotify = (targetDay: NotifyDaysBefore) => {
     setNotifyDays((prev) =>
@@ -130,30 +83,12 @@ export function ContractNewFlowMui() {
     );
   };
 
-  const handlePhotoChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) return;
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    setPhotoFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-    setError(null);
-  };
-
-  const handleExtract = async () => {
-    if (!photoFile) return;
-    setIsExtracting(true);
-    setError(null);
-    try {
-      const result = await extractFromImage(photoFile);
-      setTitle(result.title);
-      setStartDate(result.start_date);
-      setEndDate(result.end_date);
-      setAmount(result.amount);
-    } catch {
-      setError("추출에 실패했습니다. 직접 입력해 주세요.");
-    } finally {
-      setIsExtracting(false);
-    }
+  const toggleMonthlyNotify = (targetDay: number) => {
+    setMonthlyNotifyDays((prev) =>
+      prev.includes(targetDay)
+        ? prev.filter((d) => d !== targetDay)
+        : [...prev, targetDay],
+    );
   };
 
   const handleNext = () => {
@@ -162,7 +97,11 @@ export function ContractNewFlowMui() {
       return;
     }
     if (step === 1 && !canMoveNextStepTwo) {
-      setError("계약명, 시작일, 만료일은 필수입니다.");
+      setError(
+        contractType === "subscription"
+          ? "계약명, 시작일, 월 지출일을 입력해 주세요."
+          : "계약명, 시작일, 만료일을 입력해 주세요.",
+      );
       return;
     }
     setError(null);
@@ -176,11 +115,32 @@ export function ContractNewFlowMui() {
 
   const handleSubmit = async () => {
     setError(null);
-    if (!category || !title.trim() || !startDate || !endDate) {
-      setError("계약명, 시작일, 만료일을 입력해 주세요.");
+    const needEndDate = contractType === "longterm";
+    if (!category || !title.trim() || !startDate) {
+      setError("계약명, 시작일을 입력해 주세요.");
+      return;
+    }
+    if (needEndDate && !endDate) {
+      setError("만료일을 입력해 주세요.");
+      return;
+    }
+    if (contractType === "subscription" && !paymentDay) {
+      setError("월 지출일을 입력해 주세요.");
       return;
     }
     setIsSubmitting(true);
+
+    const effectiveEndDate = contractType === "subscription" ? "9999-12-31" : endDate;
+    const memoParts: string[] = [];
+    if (memo.trim()) memoParts.push(memo.trim());
+    if (contractType === "subscription") {
+      memoParts.push(`월구독|지출일=${paymentDay}`);
+      if (monthlyNotifyDays.length) memoParts.push(`알림=${monthlyNotifyDays.join(",")}일전`);
+    } else {
+      if (paymentDay) memoParts.push(`월지출일=${paymentDay}`);
+      if (monthlyNotifyDays.length) memoParts.push(`월지출알림=${monthlyNotifyDays.join(",")}일전`);
+    }
+    const finalMemo = memoParts.length ? memoParts.join(" / ") : null;
 
     try {
       const supabase = createClient();
@@ -199,9 +159,9 @@ export function ContractNewFlowMui() {
           title: title.trim(),
           category,
           start_date: startDate,
-          end_date: endDate,
+          end_date: effectiveEndDate,
           amount: amount ? parseFloat(amount.replace(/,/g, "")) || null : null,
-          memo: memo.trim() || null,
+          memo: finalMemo,
         })
         .select("id")
         .single();
@@ -209,17 +169,17 @@ export function ContractNewFlowMui() {
       if (insertError) throw insertError;
       if (!contract) throw new Error("계약 생성 실패");
 
-      const end = new Date(endDate);
-      const notificationsToInsert = notifyDays.map((day) => {
-        const targetDate = new Date(end);
-        targetDate.setDate(targetDate.getDate() - day);
-        return {
-          contract_id: contract.id,
-          notify_days_before: day,
-          scheduled_date: targetDate.toISOString().slice(0, 10),
-        };
-      });
-      if (notificationsToInsert.length > 0) {
+      if (contractType === "longterm" && notifyDays.length > 0) {
+        const end = new Date(effectiveEndDate);
+        const notificationsToInsert = notifyDays.map((day) => {
+          const targetDate = new Date(end);
+          targetDate.setDate(targetDate.getDate() - day);
+          return {
+            contract_id: contract.id,
+            notify_days_before: day,
+            scheduled_date: targetDate.toISOString().slice(0, 10),
+          };
+        });
         await supabase.from("notifications").insert(notificationsToInsert);
       }
 
@@ -250,11 +210,10 @@ export function ContractNewFlowMui() {
               sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(2, 1fr)",
-                gap: 1.2,
+                gap: 1,
               }}
             >
               {CONTRACT_CATEGORIES.map((targetCategory) => {
-                const Icon = CATEGORY_ICONS[targetCategory];
                 const bg = CATEGORY_PASTEL[targetCategory];
                 const selected = category === targetCategory;
                 return (
@@ -264,8 +223,8 @@ export function ContractNewFlowMui() {
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      aspectRatio: "1",
-                      borderRadius: 3,
+                      minHeight: 72,
+                      borderRadius: 2.5,
                       border: (theme) =>
                         `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
                       backgroundColor: bg,
@@ -273,18 +232,17 @@ export function ContractNewFlowMui() {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "flex-start",
-                      justifyContent: "flex-start",
+                      justifyContent: "center",
                       textAlign: "left",
                       font: "inherit",
                       boxShadow: selected ? 2 : 0,
-                      p: 1.5,
+                      p: 1.2,
                     }}
                   >
-                    <Icon sx={{ fontSize: 28, color: "#fff", mb: 0.75 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333" }}>
                       {CATEGORY_LABELS[targetCategory]}
                     </Typography>
-                    <Typography variant="caption" sx={{ color: "#555", mt: 0.25 }}>
+                    <Typography variant="caption" sx={{ color: "#555", mt: 0.25, lineHeight: 1.2 }}>
                       {CATEGORY_SUBTITLES[targetCategory]}
                     </Typography>
                   </Box>
@@ -295,64 +253,21 @@ export function ContractNewFlowMui() {
 
           {step === 1 && (
             <Stack spacing={1.7}>
-              <Stack spacing={1}>
-                <Typography variant="subtitle2">입력 방식</Typography>
+              <Stack spacing={0.8}>
+                <Typography variant="subtitle2">계약 유형</Typography>
                 <ToggleButtonGroup
                   exclusive
-                  value={inputMode}
-                  onChange={(_event, nextValue: InputMode | null) => {
-                    if (nextValue) setInputMode(nextValue);
+                  value={contractType}
+                  onChange={(_event, next: ContractType | null) => {
+                    if (next) setContractType(next);
                   }}
                   size="small"
                   fullWidth
                 >
-                  <ToggleButton value="direct">직접 입력</ToggleButton>
-                  <ToggleButton value="photo">사진에서 추출</ToggleButton>
+                  <ToggleButton value="subscription">월구독</ToggleButton>
+                  <ToggleButton value="longterm">장기계약</ToggleButton>
                 </ToggleButtonGroup>
               </Stack>
-
-              {inputMode === "photo" && (
-                <Card variant="outlined" sx={{ p: 1.6, borderRadius: 2.6 }}>
-                  <Stack spacing={1.2}>
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      startIcon={<ImageRoundedIcon />}
-                    >
-                      이미지 선택
-                      <input
-                        hidden
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        onChange={handlePhotoChange}
-                      />
-                    </Button>
-
-                    {previewUrl && (
-                      <Box sx={{ borderRadius: 2.2, overflow: "hidden", border: "1px solid", borderColor: "divider" }}>
-                        <Image
-                          src={previewUrl}
-                          alt="계약 이미지 미리보기"
-                          width={1200}
-                          height={750}
-                          unoptimized
-                          style={{ width: "100%", height: 190, objectFit: "contain", background: "#F5F5F5" }}
-                        />
-                      </Box>
-                    )}
-
-                    {previewUrl && (
-                      <Button onClick={handleExtract} disabled={isExtracting} variant="contained">
-                        {isExtracting ? "텍스트 추출 중..." : "텍스트 자동 추출"}
-                      </Button>
-                    )}
-                    <Typography variant="caption" color="text.secondary">
-                      추출된 결과는 아래 입력칸에 자동 반영됩니다.
-                    </Typography>
-                  </Stack>
-                </Card>
-              )}
 
               <TextField
                 label="계약명 *"
@@ -362,15 +277,17 @@ export function ContractNewFlowMui() {
                 fullWidth
               />
 
-              <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 1.2 }}>
-                <TextField
-                  label="시작일 *"
-                  type="date"
-                  value={startDate}
-                  onChange={(event) => setStartDate(event.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                />
+              <TextField
+                label="시작일 *"
+                type="date"
+                value={startDate}
+                onChange={(event) => setStartDate(event.target.value)}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                sx={dateInputSx}
+              />
+
+              {contractType === "longterm" && (
                 <TextField
                   label="만료일 *"
                   type="date"
@@ -378,10 +295,24 @@ export function ContractNewFlowMui() {
                   onChange={(event) => setEndDate(event.target.value)}
                   InputLabelProps={{ shrink: true }}
                   fullWidth
+                  sx={dateInputSx}
                 />
-              </Box>
+              )}
 
-              {startDate && endDate && (
+              <TextField
+                label={contractType === "subscription" ? "매월 지출일 (일) *" : "월 지출일 (일, 선택)"}
+                type="number"
+                inputProps={{ min: 1, max: 31 }}
+                value={paymentDay}
+                onChange={(event) => {
+                  const v = event.target.value.replace(/\D/g, "");
+                  if (v === "" || (Number(v) >= 1 && Number(v) <= 31)) setPaymentDay(v);
+                }}
+                placeholder="1–31"
+                fullWidth
+              />
+
+              {contractType === "longterm" && startDate && endDate && (
                 <Chip
                   icon={<TaskAltRoundedIcon />}
                   label={`계약 기간 ${getDurationText(startDate, endDate)}`}
@@ -402,7 +333,7 @@ export function ContractNewFlowMui() {
                 value={memo}
                 onChange={(event) => setMemo(event.target.value)}
                 multiline
-                minRows={3}
+                minRows={2}
                 placeholder="예: 카드 자동결제일은 매월 3일"
                 fullWidth
               />
@@ -411,23 +342,76 @@ export function ContractNewFlowMui() {
 
           {step === 2 && (
             <Stack spacing={1.7}>
-              <Alert icon={<AutoAwesomeRoundedIcon />} severity="info">
-                일반적으로 D-7 + D-1 조합이 가장 많이 사용됩니다.
-              </Alert>
-              <Typography variant="body2" color="text.secondary">
-                만료 전에 받고 싶은 알림 시점을 선택하세요.
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
-                  <Chip
-                    key={targetDay}
-                    label={`D-${targetDay}`}
-                    onClick={() => toggleNotify(targetDay)}
-                    color={notifyDays.includes(targetDay) ? "primary" : "default"}
-                    variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
-                  />
-                ))}
-              </Stack>
+              {contractType === "subscription" ? (
+                <>
+                  <Typography variant="body2" color="text.secondary">
+                    매월 지출일 전 알림을 선택하세요.
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {MONTHLY_NOTIFY_DAYS_OPTIONS.map((d) => (
+                      <Chip
+                        key={d}
+                        label={`${d}일 전`}
+                        onClick={() => toggleMonthlyNotify(d)}
+                        color={monthlyNotifyDays.includes(d) ? "primary" : "default"}
+                        variant={monthlyNotifyDays.includes(d) ? "filled" : "outlined"}
+                      />
+                    ))}
+                    <Chip
+                      label="알림 없음"
+                      onClick={() => setMonthlyNotifyDays([])}
+                      color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
+                      variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
+                    />
+                  </Stack>
+                </>
+              ) : (
+                <>
+                  <Alert icon={<AutoAwesomeRoundedIcon />} severity="info">
+                    만료일 알림은 D-30, D-7, D-1 중 선택할 수 있습니다.
+                  </Alert>
+                  <Typography variant="body2" color="text.secondary">
+                    만료일 전 알림
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
+                      <Chip
+                        key={targetDay}
+                        label={`D-${targetDay}`}
+                        onClick={() => toggleNotify(targetDay)}
+                        color={notifyDays.includes(targetDay) ? "primary" : "default"}
+                        variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
+                      />
+                    ))}
+                    <Chip
+                      label="알림 없음"
+                      onClick={() => setNotifyDays([])}
+                      color={notifyDays.length === 0 ? "primary" : "default"}
+                      variant={notifyDays.length === 0 ? "filled" : "outlined"}
+                    />
+                  </Stack>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    월 지출일 알림
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {MONTHLY_NOTIFY_DAYS_OPTIONS.map((d) => (
+                      <Chip
+                        key={d}
+                        label={`${d}일 전`}
+                        onClick={() => toggleMonthlyNotify(d)}
+                        color={monthlyNotifyDays.includes(d) ? "primary" : "default"}
+                        variant={monthlyNotifyDays.includes(d) ? "filled" : "outlined"}
+                      />
+                    ))}
+                    <Chip
+                      label="알림 없음"
+                      onClick={() => setMonthlyNotifyDays([])}
+                      color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
+                      variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
+                    />
+                  </Stack>
+                </>
+              )}
             </Stack>
           )}
 
@@ -462,7 +446,8 @@ export function ContractNewFlowMui() {
                   !category ||
                   !title.trim() ||
                   !startDate ||
-                  !endDate
+                  (contractType === "longterm" && !endDate) ||
+                  (contractType === "subscription" && !paymentDay)
                 }
               >
                 {isSubmitting ? "저장 중..." : "완료하고 저장"}

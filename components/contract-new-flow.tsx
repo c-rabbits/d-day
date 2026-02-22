@@ -42,13 +42,15 @@ const STEPS = [
 const STEP_ICONS = [DashboardRoundedIcon, EditRoundedIcon, NotificationsActiveRoundedIcon] as const;
 
 const CATEGORY_META: Record<ContractCategory, { emoji: string; hint: string }> = {
-  RENT: { emoji: "🏠", hint: "월세·전세, 관리비 계약" },
-  PHONE: { emoji: "📱", hint: "휴대폰 약정, 통신 요금제" },
-  CAR_INSURANCE: { emoji: "🚗", hint: "자동차 보험, 특약 갱신" },
-  GYM: { emoji: "💪", hint: "헬스장·필라테스·수강권" },
-  RENTAL: { emoji: "📦", hint: "정수기·가전 렌탈 계약" },
-  STREAMING: { emoji: "▶️", hint: "OTT·음악·콘텐츠 구독" },
-  OTHER: { emoji: "📄", hint: "기타 정기 결제/계약" },
+  RENT: { emoji: "🏠", hint: "월세·전세, 대출 이자, 아파트 관리비" },
+  PHONE: { emoji: "📱", hint: "휴대폰 요금, 인터넷+IPTV" },
+  CAR_INSURANCE: { emoji: "🛡️", hint: "실손보험, 자동차보험, 종신보험" },
+  GYM: { emoji: "💪", hint: "쿠팡 / 네이버 등" },
+  RENTAL: { emoji: "📦", hint: "정수기·공기청정기·차량 리스" },
+  STREAMING: { emoji: "▶️", hint: "Netflix, YouTube Premium, Disney+" },
+  FINANCE: { emoji: "🏦", hint: "신용대출 이자, 주택담보대출 이자" },
+  EDUCATION: { emoji: "📚", hint: "학원비, 온라인 강의 구독" },
+  OTHER: { emoji: "📄", hint: "소프트웨어 구독, 기부 정기후원" },
 };
 
 type InputMode = "direct" | "photo";

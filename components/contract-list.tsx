@@ -25,9 +25,11 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import SchoolIcon from "@mui/icons-material/School";
 import { createClient } from "@/lib/supabase/client";
 import { getDday, getDdayLabel } from "@/lib/dday";
-import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
+import { CATEGORY_LABELS, CATEGORY_PASTEL, type ContractCategory } from "@/lib/types";
 
 const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
   RENT: HomeIcon,
@@ -36,18 +38,9 @@ const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object
   GYM: FitnessCenterIcon,
   RENTAL: InventoryIcon,
   STREAMING: PlayCircleIcon,
+  FINANCE: AccountBalanceIcon,
+  EDUCATION: SchoolIcon,
   OTHER: DescriptionIcon,
-};
-
-/** 카테고리별 파스텔 배경색 (아이콘 네모 배경) */
-const CATEGORY_PASTEL: Record<ContractCategory, string> = {
-  RENT: "#B8D4E3",      // 연한 하늘
-  PHONE: "#B5EAD7",      // 연한 민트
-  CAR_INSURANCE: "#FFDAC1", // 연한 복숭아
-  GYM: "#E2BEF1",        // 연한 라벤더
-  RENTAL: "#C7CEEA",     // 연한 퍼플
-  STREAMING: "#ACE7FF",  // 연한 스카이
-  OTHER: "#D4C5B9",      // 연한 베이지
 };
 
 type ContractRow = {
