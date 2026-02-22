@@ -209,7 +209,7 @@ export function ContractNewFlowMui() {
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: "repeat(2, 1fr)",
+                gridTemplateColumns: "repeat(3, 1fr)",
                 gap: 1,
               }}
             >
@@ -223,26 +223,35 @@ export function ContractNewFlowMui() {
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      minHeight: 72,
-                      borderRadius: 2.5,
+                      aspectRatio: "1",
+                      borderRadius: 1.2,
                       border: (theme) =>
                         `2px solid ${selected ? theme.palette.primary.main : "transparent"}`,
                       backgroundColor: bg,
                       cursor: "pointer",
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
+                      alignItems: "stretch",
+                      justifyContent: "flex-start",
                       textAlign: "left",
                       font: "inherit",
                       boxShadow: selected ? 2 : 0,
-                      p: 1.2,
+                      p: 1,
                     }}
                   >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333" }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#333", pl: 0.5 }}>
                       {CATEGORY_LABELS[targetCategory]}
                     </Typography>
-                    <Typography variant="caption" sx={{ color: "#555", mt: 0.25, lineHeight: 1.2 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: "#555",
+                        mt: 0.25,
+                        lineHeight: 1.35,
+                        whiteSpace: "pre-line",
+                        pl: 0.5,
+                      }}
+                    >
                       {CATEGORY_SUBTITLES[targetCategory]}
                     </Typography>
                   </Box>
