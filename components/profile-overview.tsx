@@ -20,34 +20,26 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.5}>
-        <Box>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            프로필
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            계정 기본 정보
-          </Typography>
-        </Box>
+        <Typography variant="h5" fontWeight={700}>
+          프로필
+        </Typography>
 
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 3 }}>
             <Stack direction="row" spacing={2} alignItems="center">
               <Avatar
                 sx={{
-                  width: 100,
-                  height: 100,
+                  width: 56,
+                  height: 56,
                   bgcolor: "grey.300",
                   color: "text.secondary",
                 }}
               >
-                <PersonRoundedIcon sx={{ fontSize: 48 }} />
+                <PersonRoundedIcon sx={{ fontSize: 30 }} />
               </Avatar>
               <Box>
                 <Typography variant="h6" fontWeight={700}>
                   내 계정
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  이메일·가입일·상태
                 </Typography>
               </Box>
             </Stack>
@@ -68,14 +60,6 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
                 </Typography>
                 <Typography variant="body1" sx={{ mt: 0.25 }}>
                   {formattedCreatedAt}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  사용 상태
-                </Typography>
-                <Typography variant="body1" sx={{ mt: 0.25 }}>
-                  정상
                 </Typography>
               </Box>
             </Stack>
