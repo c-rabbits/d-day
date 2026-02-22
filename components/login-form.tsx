@@ -133,6 +133,38 @@ export function LoginForm({
 
             <Divider sx={{ my: 0.2 }}>
               <Typography variant="caption" color="text.secondary">
+                또는
+              </Typography>
+            </Divider>
+
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                size="large"
+                fullWidth
+                disabled
+                sx={{ textTransform: "none" }}
+              >
+                Google 로그인 (준비 중)
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                fullWidth
+                disabled
+                sx={{
+                  textTransform: "none",
+                  borderColor: "#FEE500",
+                  color: "#191919",
+                  "&:disabled": { borderColor: "#FEE500", color: "#666" },
+                }}
+              >
+                카카오 로그인 (준비 중)
+              </Button>
+            </Stack>
+
+            <Divider sx={{ my: 0.2 }}>
+              <Typography variant="caption" color="text.secondary">
                 처음 방문하셨나요?
               </Typography>
             </Divider>
