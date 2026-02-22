@@ -27,8 +27,18 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 풀폭 배너: 화면 가득, 가로 2.5:1, 가운데 정렬, 무한 오른쪽 흐름 */}
-        <Box sx={{ mx: -2, width: "calc(100% + 32px)" }}>
+        {/* 풀폭 배너: 화면 꽉 참, 중앙 정렬, 슬라이드 간 빈공간 없음 */}
+        <Box
+          sx={{
+            width: "100vw",
+            maxWidth: "100vw",
+            position: "relative",
+            left: "50%",
+            right: "50%",
+            marginLeft: "-50vw",
+            marginRight: "-50vw",
+          }}
+        >
           <DashboardBanner />
         </Box>
 

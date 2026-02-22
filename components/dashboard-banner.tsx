@@ -13,7 +13,6 @@ const BANNER_SLIDES: { src: string | null; alt: string }[] = [
   { src: null, alt: "배너 3" },
 ];
 
-const PEEK_PERCENT = 12;
 const TRACK_ORDER = [0, 1, 2, 0, 1, 2, 0];
 const TRACK_SLIDES = TRACK_ORDER.length;
 
@@ -85,9 +84,6 @@ export function DashboardBanner() {
           width: "100%",
           aspectRatio: "2.5 / 1",
           overflow: "hidden",
-          paddingLeft: `${PEEK_PERCENT}%`,
-          paddingRight: `${PEEK_PERCENT}%`,
-          boxSizing: "border-box",
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -110,9 +106,7 @@ export function DashboardBanner() {
                   sx={{
                     flex: `0 0 ${slideWidthPercent}%`,
                     minWidth: 0,
-                    borderRadius: 2.5,
                     overflow: "hidden",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
                   }}
                 >
                   <Box

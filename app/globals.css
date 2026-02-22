@@ -130,6 +130,12 @@
 
   html {
     scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   body {
@@ -140,6 +146,10 @@
     line-height: var(--leading-body);
     word-break: keep-all;
     overflow-wrap: break-word;
+    overflow-x: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
   p {
     line-height: var(--leading-body);
@@ -148,6 +158,13 @@
   h1, h2, h3, h4, h5, h6 {
     line-height: var(--leading-heading);
     letter-spacing: var(--tracking-heading);
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   ::selection {
