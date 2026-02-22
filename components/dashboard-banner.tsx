@@ -78,74 +78,86 @@ export function DashboardBanner() {
 
   return (
     <Box sx={{ width: "100%" }}>
+      {/* 슬라이더만 풀폭(100vw)으로, 점 네비는 콘텐츠 영역 가운데 */}
       <Box
         sx={{
           position: "relative",
-          width: "100%",
-          aspectRatio: "2.5 / 1",
-          overflow: "hidden",
+          left: "50%",
+          right: "50%",
+          marginLeft: "-50vw",
+          marginRight: "-50vw",
+          width: "100vw",
+          maxWidth: "100vw",
         }}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
       >
-        <Box sx={{ width: "100%", height: "100%", overflow: "hidden" }}>
-          <Box
-            sx={{
-              display: "flex",
-              width: `${TRACK_SLIDES * 100}%`,
-              height: "100%",
-              transform: `translateX(-${translatePercent}%)`,
-              transition: noTransition ? "none" : "transform 0.5s ease",
-            }}
-          >
-            {TRACK_ORDER.map((slideIdx, i) => {
-              const slide = BANNER_SLIDES[slideIdx];
-              return (
-                <Box
-                  key={i}
-                  sx={{
-                    flex: `0 0 ${slideWidthPercent}%`,
-                    minWidth: 0,
-                    overflow: "hidden",
-                  }}
-                >
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "2.5 / 1",
+            overflow: "hidden",
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <Box sx={{ width: "100%", height: "100%", overflow: "hidden" }}>
+            <Box
+              sx={{
+                display: "flex",
+                width: `${TRACK_SLIDES * 100}%`,
+                height: "100%",
+                transform: `translateX(-${translatePercent}%)`,
+                transition: noTransition ? "none" : "transform 0.5s ease",
+              }}
+            >
+              {TRACK_ORDER.map((slideIdx, i) => {
+                const slide = BANNER_SLIDES[slideIdx];
+                return (
                   <Box
+                    key={i}
                     sx={{
-                      width: "100%",
-                      height: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      bgcolor: slide.src ? undefined : "grey.300",
+                      flex: `0 0 ${slideWidthPercent}%`,
+                      minWidth: 0,
+                      overflow: "hidden",
                     }}
                   >
-                    {slide.src ? (
-                      <Box
-                        component="img"
-                        src={slide.src}
-                        alt={slide.alt}
-                        sx={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <Box sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
-                        배너 {slideIdx + 1} (이미지 추가 예정)
-                      </Box>
-                    )}
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        bgcolor: slide.src ? undefined : "grey.300",
+                      }}
+                    >
+                      {slide.src ? (
+                        <Box
+                          component="img"
+                          src={slide.src}
+                          alt={slide.alt}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <Box sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
+                          배너 {slideIdx + 1} (이미지 추가 예정)
+                        </Box>
+                      )}
+                    </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Box>
           </Box>
         </Box>
       </Box>
 
       <Box
         sx={{
-          width: "100%",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",

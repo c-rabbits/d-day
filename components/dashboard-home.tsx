@@ -27,20 +27,8 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, py: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 풀폭 배너: 화면 꽉 참, 중앙 정렬, 슬라이드 간 빈공간 없음 */}
-        <Box
-          sx={{
-            width: "100vw",
-            maxWidth: "100vw",
-            position: "relative",
-            left: "50%",
-            right: "50%",
-            marginLeft: "-50vw",
-            marginRight: "-50vw",
-          }}
-        >
-          <DashboardBanner />
-        </Box>
+        {/* 풀폭 배너: 슬라이더만 100vw, 점 네비는 콘텐츠 가운데 */}
+        <DashboardBanner />
 
         {/* 내 계약 현황 — 다크 카드 3열 + 프로그레스 바 */}
         <Box>
