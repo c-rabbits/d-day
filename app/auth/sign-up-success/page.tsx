@@ -39,9 +39,11 @@ export default function Page() {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             이메일을 확인해 계정을 인증해 주세요. 인증 후 로그인할 수 있습니다.
           </Typography>
-          <Button component={Link} href="/auth/login" variant="contained" fullWidth>
-            로그인
-          </Button>
+          <Link href="/auth/login" style={{ display: "block", width: "100%" }}>
+            <Button variant="contained" fullWidth>
+              로그인
+            </Button>
+          </Link>
         </CardContent>
       </Card>
     </Box>

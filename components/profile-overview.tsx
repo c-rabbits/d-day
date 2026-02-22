@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 type ProfileOverviewProps = {
@@ -31,28 +31,26 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
 
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 3 }}>
-            <Grid container spacing={3} alignItems="center">
-              <Grid item>
-                <Avatar
-                  sx={{
-                    width: 100,
-                    height: 100,
-                    bgcolor: "grey.300",
-                    color: "text.secondary",
-                  }}
-                >
-                  <PersonRoundedIcon sx={{ fontSize: 48 }} />
-                </Avatar>
-              </Grid>
-              <Grid item xs>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Avatar
+                sx={{
+                  width: 100,
+                  height: 100,
+                  bgcolor: "grey.300",
+                  color: "text.secondary",
+                }}
+              >
+                <PersonRoundedIcon sx={{ fontSize: 48 }} />
+              </Avatar>
+              <Box>
                 <Typography variant="h6" fontWeight={700}>
                   내 계정
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   이메일·가입일·상태
                 </Typography>
-              </Grid>
-            </Grid>
+              </Box>
+            </Stack>
           </CardContent>
           <CardContent sx={{ pt: 0 }}>
             <Stack spacing={2}>
