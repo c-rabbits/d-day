@@ -1,10 +1,10 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { getDday, getDdayLabel } from "@/lib/dday";
 import { CATEGORY_LABELS, type ContractCategory } from "@/lib/types";
+import { softDeleteContract } from "@/app/dashboard/actions";
 import {
   Box,
   Button,
@@ -13,6 +13,10 @@ import {
   CardContent,
   CardHeader,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Stack,
   Typography,
@@ -39,18 +43,20 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
   const router = useRouter();
   const dday = getDday(contract.end_date);
   const ddayColor = dday <= 7 ? "error" : dday <= 30 ? "warning" : "default";
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  const handleDelete = async () => {
-    if (!confirm("이 계약을 삭제할까요?")) return;
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("contracts")
-      .update({ deleted_at: new Date().toISOString() })
-      .eq("id", contract.id);
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+    const { error } = await softDeleteContract(contract.id);
+    setIsDeleting(false);
     if (error) {
-      alert("삭제에 실패했습니다.");
+      setDeleteError(error);
       return;
     }
+    setDeleteOpen(false);
     router.push("/dashboard");
     router.refresh();
   };
@@ -139,13 +145,36 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
               variant="contained"
               color="error"
               startIcon={<DeleteOutlineRoundedIcon />}
-              onClick={handleDelete}
+              onClick={() => setDeleteOpen(true)}
               sx={{ width: { xs: "100%", sm: "auto" } }}
             >
               삭제
             </Button>
           </CardActions>
         </Card>
+
+        <Dialog
+          open={deleteOpen}
+          onClose={() => !isDeleting && setDeleteOpen(false)}
+        >
+          <DialogTitle>삭제 확인</DialogTitle>
+          <DialogContent>
+            <Typography>이 계약을 삭제할까요?</Typography>
+            {deleteError && (
+              <Typography color="error" sx={{ mt: 1.5 }}>
+                {deleteError}
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteOpen(false)} disabled={isDeleting}>
+              취소
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDeleteConfirm} disabled={isDeleting}>
+              {isDeleting ? "삭제 중…" : "삭제"}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Stack>
     </Box>
   );

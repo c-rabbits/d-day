@@ -27,9 +27,9 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import SchoolIcon from "@mui/icons-material/School";
-import { createClient } from "@/lib/supabase/client";
 import { getDday, getDdayLabel } from "@/lib/dday";
 import { CATEGORY_LABELS, CATEGORY_PASTEL, type ContractCategory } from "@/lib/types";
+import { softDeleteContract } from "@/app/dashboard/actions";
 
 const CATEGORY_ICONS: Record<ContractCategory, React.ComponentType<{ sx?: object }>> = {
   RENT: HomeIcon,
@@ -55,21 +55,19 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
   const router = useRouter();
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleDeleteConfirm = async () => {
     if (!deleteTargetId) return;
     setIsDeleting(true);
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("contracts")
-      .update({ deleted_at: new Date().toISOString() })
-      .eq("id", deleteTargetId);
+    const { error } = await softDeleteContract(deleteTargetId);
     setIsDeleting(false);
-    setDeleteTargetId(null);
     if (error) {
-      alert("삭제에 실패했습니다.");
+      setDeleteError(error);
       return;
     }
+    setDeleteTargetId(null);
+    setDeleteError(null);
     router.refresh();
   };
 
@@ -209,13 +207,31 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
         })}
       </Stack>
 
-      <Dialog open={!!deleteTargetId} onClose={() => setDeleteTargetId(null)}>
+      <Dialog
+        open={!!deleteTargetId}
+        onClose={() => {
+          setDeleteTargetId(null);
+          setDeleteError(null);
+        }}
+      >
         <DialogTitle>삭제 확인</DialogTitle>
         <DialogContent>
           <Typography>만료된 계약을 삭제하시겠습니까?</Typography>
+          {deleteError && (
+            <Typography color="error" sx={{ mt: 1.5 }}>
+              {deleteError}
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteTargetId(null)}>취소</Button>
+          <Button
+            onClick={() => {
+              setDeleteTargetId(null);
+              setDeleteError(null);
+            }}
+          >
+            취소
+          </Button>
           <Button variant="contained" color="error" onClick={handleDeleteConfirm} disabled={isDeleting}>
             {isDeleting ? "삭제 중…" : "삭제"}
           </Button>

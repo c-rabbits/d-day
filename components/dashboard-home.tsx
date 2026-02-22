@@ -1,9 +1,12 @@
 "use client";
 
-import { Box, Card, Stack, Typography } from "@mui/material";
+import { useMemo, useState } from "react";
+import { Box, Card, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
 import { ContractList } from "@/components/contract-list";
 import { DashboardBanner } from "@/components/dashboard-banner";
-import type { ContractCategory } from "@/lib/types";
+import { CONTRACT_CATEGORIES, type ContractCategory } from "@/lib/types";
+
+export type ListSort = "end_date" | "category" | "amount";
 
 type ContractRow = {
   id: string;
@@ -19,18 +22,42 @@ type DashboardHomeProps = {
   expiredCount: number;
 };
 
+const SORT_OPTIONS: { value: ListSort; label: string }[] = [
+  { value: "end_date", label: "만료일" },
+  { value: "category", label: "카테고리" },
+  { value: "amount", label: "금액" },
+];
+
+function sortContracts(list: ContractRow[], sortBy: ListSort): ContractRow[] {
+  const arr = [...list];
+  if (sortBy === "end_date") {
+    arr.sort((a, b) => (a.end_date < b.end_date ? -1 : a.end_date > b.end_date ? 1 : 0));
+  } else if (sortBy === "category") {
+    const order = CONTRACT_CATEGORIES as unknown as string[];
+    arr.sort((a, b) => order.indexOf(a.category) - order.indexOf(b.category));
+  } else {
+    arr.sort((a, b) => {
+      const va = a.amount ?? -1;
+      const vb = b.amount ?? -1;
+      return vb - va;
+    });
+  }
+  return arr;
+}
+
 export function DashboardHome({
   contracts,
   soonCount,
   expiredCount,
 }: DashboardHomeProps) {
+  const [sortBy, setSortBy] = useState<ListSort>("end_date");
+  const sortedContracts = useMemo(() => sortContracts(contracts, sortBy), [contracts, sortBy]);
+
   return (
     <Box sx={{ px: 2, pt: 0, pb: 3.5 }}>
       <Stack spacing={2.4}>
-        {/* 풀폭 배너: 슬라이더만 100vw, 위 빈공간 없음 */}
         <DashboardBanner />
 
-        {/* 내 계약 현황 — 프로필/설정과 동일 카드 컨셉 */}
         <Box>
           <Typography variant="h5" fontWeight={700} gutterBottom>
             내 계약 현황
@@ -43,10 +70,27 @@ export function DashboardHome({
         </Box>
 
         <Stack spacing={1.5}>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            계약 목록
-          </Typography>
-          <ContractList contracts={contracts} />
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1 }}>
+            <Typography variant="h5" fontWeight={700}>
+              계약 목록
+            </Typography>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <InputLabel id="list-sort-label">필터</InputLabel>
+              <Select
+                labelId="list-sort-label"
+                label="필터"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as ListSort)}
+              >
+                {SORT_OPTIONS.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <ContractList contracts={sortedContracts} />
         </Stack>
       </Stack>
     </Box>
