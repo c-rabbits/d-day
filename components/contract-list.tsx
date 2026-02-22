@@ -84,18 +84,18 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
     return (
       <Box
         sx={{
-          py: 8,
+          py: 6,
           border: (theme) => `1px dashed ${theme.palette.divider}`,
-          borderRadius: 1.5,
+          borderRadius: 2,
           bgcolor: "background.paper",
           textAlign: "center",
         }}
       >
-        <DescriptionIcon sx={{ fontSize: 44, color: "text.secondary", mb: 1 }} />
+        <DescriptionIcon sx={{ fontSize: 40, color: "text.secondary", mb: 1 }} />
         <Typography variant="body1" color="text.secondary">
           등록된 계약이 없어요
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
           아래 + 버튼으로 첫 계약을 추가해 보세요
         </Typography>
       </Box>
@@ -115,17 +115,16 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
               key={c.id}
               variant="outlined"
               sx={{
-                borderRadius: 1.5,
+                borderRadius: 2,
                 borderColor: "divider",
-                transition: "transform .25s ease, box-shadow .25s ease, background-color .25s ease",
+                transition: "box-shadow .2s ease",
                 "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: 2,
+                  boxShadow: 1,
                 },
               }}
             >
               <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
-                <Stack spacing={1.5} sx={{ p: 2 }}>
+                <Stack spacing={1.5} sx={{ p: 2.5 }}>
                   {/* 상단: 아이콘 + 제목/카테고리 + D-day */}
                   <Stack
                     direction="row"
