@@ -54,7 +54,7 @@ export default function RootLayout({
             }
           >
             <MuiProvider>
-              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background overscroll-none">
+              <div className="mx-auto min-h-screen w-full max-w-mobile overflow-y-auto bg-background overscroll-none">
                 {children}
               </div>
             </MuiProvider>

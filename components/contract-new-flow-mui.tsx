@@ -103,6 +103,14 @@ export function ContractNewFlowMui() {
   const canGoBack = step > 0;
   const canGoNext =
     step < 2 && (step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : false);
+  const isCompleteDisabled =
+    isSubmitting ||
+    !step2AlertChosen ||
+    !category ||
+    !title.trim() ||
+    !startDate ||
+    (contractType === "longterm" && !endDate) ||
+    (contractType === "subscription" && !paymentDay);
 
   const toggleNotify = (targetDay: NotifyDaysBefore) => {
     setStep2AlertChosen(true);
@@ -512,15 +520,7 @@ export function ContractNewFlowMui() {
                 variant="contained"
                 endIcon={<TaskAltRoundedIcon />}
                 onClick={handleSubmit}
-                disabled={
-                  isSubmitting ||
-                  !step2AlertChosen ||
-                  !category ||
-                  !title.trim() ||
-                  !startDate ||
-                  (contractType === "longterm" && !endDate) ||
-                  (contractType === "subscription" && !paymentDay)
-                }
+                disabled={isCompleteDisabled}
               >
                 {isSubmitting ? "저장 중..." : "완료하고 저장"}
               </Button>

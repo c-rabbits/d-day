@@ -276,6 +276,10 @@
   }
 }
 
+.dashboard-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
