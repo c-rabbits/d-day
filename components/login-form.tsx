@@ -50,6 +50,8 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
       provider: "kakao",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        // account_email 미요청(비즈앱 전용). 동의 항목은 profile_nickname, profile_image만 사용.
+        scopes: "profile_nickname profile_image",
       },
     });
     if (error) setError(error.message);
