@@ -78,13 +78,13 @@ export function SettingsPanel() {
                 </Typography>
               </Stack>
               <Button
-                variant="outlined"
+                variant="contained"
                 onClick={handlePushPermission}
                 disabled={isLoadingPush}
                 fullWidth
                 sx={BUTTON_SX}
               >
-                {isLoadingPush ? "요청 중..." : "브라우저 알림 권한 요청"}
+                {isLoadingPush ? "요청 중..." : "알림 권한 요청"}
               </Button>
               {notificationMessage && (
                 <Alert severity={notificationError ? "error" : "success"}>{notificationMessage}</Alert>
