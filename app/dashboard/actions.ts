@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceRoleClient } from "@/lib/supabase/server-service";
 
 export async function softDeleteContract(contractId: string): Promise<{ error?: string }> {
   const supabase = await createClient();
@@ -10,7 +11,8 @@ export async function softDeleteContract(contractId: string): Promise<{ error?: 
   } = await supabase.auth.getUser();
   if (!user) return { error: "로그인이 필요합니다." };
 
-  const { error } = await supabase
+  const admin = createServiceRoleClient();
+  const { error } = await admin
     .from("contracts")
     .update({
       deleted_at: new Date().toISOString(),
