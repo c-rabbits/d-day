@@ -43,6 +43,18 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
     }
   };
 
+  const handleKakaoLogin = async () => {
+    const supabase = createClient();
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) setError(error.message);
+  };
+
   return (
     <Box {...props}>
       <AuthShellMui
@@ -111,18 +123,23 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
               <Button
                 variant="outlined"
                 fullWidth
-                disabled
+                onClick={handleKakaoLogin}
+                disabled={isLoading}
                 sx={{
                   textTransform: "none",
                   borderColor: "#FEE500",
                   color: "#191919",
-                  "&:disabled": { borderColor: "#FEE500", color: "#666" },
+                  backgroundColor: "#FEE500",
+                  "&:hover": {
+                    borderColor: "#FDD835",
+                    backgroundColor: "#FDD835",
+                  },
                   justifyContent: "center",
                   py: 1.75,
                   minHeight: 48,
                 }}
               >
-                카카오 (준비 중)
+                카카오로 로그인
               </Button>
             </Stack>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>

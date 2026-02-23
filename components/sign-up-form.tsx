@@ -5,7 +5,7 @@ import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert, Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, Stack, TextField, Typography } from "@mui/material";
 
 export function SignUpForm({
   className,
@@ -45,6 +45,18 @@ export function SignUpForm({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleKakaoSignUp = async () => {
+    const supabase = createClient();
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) setError(error.message);
   };
 
   return (
@@ -92,6 +104,30 @@ export function SignUpForm({
               sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}
             >
               {isLoading ? "가입 중…" : "회원가입"}
+            </Button>
+
+            <Divider sx={{ my: 0.5 }}>또는</Divider>
+            <Button
+              type="button"
+              variant="outlined"
+              fullWidth
+              onClick={handleKakaoSignUp}
+              disabled={isLoading}
+              sx={{
+                textTransform: "none",
+                borderColor: "#FEE500",
+                color: "#191919",
+                backgroundColor: "#FEE500",
+                "&:hover": {
+                  borderColor: "#FDD835",
+                  backgroundColor: "#FDD835",
+                },
+                justifyContent: "center",
+                py: 1.75,
+                minHeight: 48,
+              }}
+            >
+              카카오로 시작하기
             </Button>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
