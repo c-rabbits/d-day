@@ -9,7 +9,6 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   Stack,
   Typography,
@@ -68,6 +67,76 @@ export function SettingsPanel() {
           설정
         </Typography>
 
+        {/* 알림 */}
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+          <CardContent sx={{ p: 2.5 }}>
+            <Stack spacing={1.5}>
+              <Stack direction="row" alignItems="center" spacing={0.75}>
+                <NotificationsRoundedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
+                <Typography variant="subtitle2" fontWeight={700}>
+                  알림
+                </Typography>
+              </Stack>
+              <Button
+                variant="outlined"
+                onClick={handlePushPermission}
+                disabled={isLoadingPush}
+                fullWidth
+                sx={BUTTON_SX}
+              >
+                {isLoadingPush ? "요청 중..." : "브라우저 알림 권한 요청"}
+              </Button>
+              {notificationMessage && (
+                <Alert severity={notificationError ? "error" : "success"}>{notificationMessage}</Alert>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* 서비스 정보 - 알림과 동일한 테두리 카드 + 버튼 3개 */}
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+          <CardContent sx={{ p: 2.5 }}>
+            <Stack spacing={1.5}>
+              <Stack direction="row" alignItems="center" spacing={0.75}>
+                <InfoOutlinedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
+                <Typography variant="subtitle2" fontWeight={700}>
+                  서비스 정보
+                </Typography>
+              </Stack>
+              <Button
+                component={Link}
+                href="/terms"
+                variant="outlined"
+                fullWidth
+                startIcon={<DescriptionOutlinedIcon />}
+                sx={BUTTON_SX}
+              >
+                서비스 이용약관
+              </Button>
+              <Button
+                component={Link}
+                href="/privacy"
+                variant="outlined"
+                fullWidth
+                startIcon={<PrivacyTipOutlinedIcon />}
+                sx={BUTTON_SX}
+              >
+                개인정보 처리방침
+              </Button>
+              <Button
+                component="a"
+                href="mailto:sample@example.com"
+                variant="outlined"
+                fullWidth
+                startIcon={<EmailOutlinedIcon />}
+                sx={BUTTON_SX}
+              >
+                문의/피드백
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+
         {/* 계정 */}
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 2.5 }}>
@@ -98,67 +167,6 @@ export function SettingsPanel() {
               </Button>
             </Stack>
           </CardContent>
-        </Card>
-
-        {/* 알림 */}
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-          <CardContent sx={{ p: 2.5 }}>
-            <Stack spacing={1.5}>
-              <Stack direction="row" alignItems="center" spacing={0.75}>
-                <NotificationsRoundedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
-                <Typography variant="subtitle2" fontWeight={700}>
-                  알림
-                </Typography>
-              </Stack>
-              <Button
-                variant="outlined"
-                onClick={handlePushPermission}
-                disabled={isLoadingPush}
-                fullWidth
-                sx={BUTTON_SX}
-              >
-                {isLoadingPush ? "요청 중..." : "브라우저 알림 권한 요청"}
-              </Button>
-              {notificationMessage && (
-                <Alert severity={notificationError ? "error" : "success"}>{notificationMessage}</Alert>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-
-        {/* 서비스 정보 - 각각 독립 카드 */}
-        <Stack direction="row" alignItems="center" spacing={0.75}>
-          <InfoOutlinedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
-          <Typography variant="subtitle2" fontWeight={700}>
-            서비스 정보
-          </Typography>
-        </Stack>
-
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-          <CardActionArea component={Link} href="/terms">
-            <CardContent sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
-              <DescriptionOutlinedIcon sx={{ fontSize: 22, color: "text.secondary" }} />
-              <Typography fontWeight={600}>서비스 이용약관</Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-          <CardActionArea component={Link} href="/privacy">
-            <CardContent sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
-              <PrivacyTipOutlinedIcon sx={{ fontSize: 22, color: "text.secondary" }} />
-              <Typography fontWeight={600}>개인정보 처리방침</Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-          <CardActionArea component="a" href="mailto:sample@example.com">
-            <CardContent sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
-              <EmailOutlinedIcon sx={{ fontSize: 22, color: "text.secondary" }} />
-              <Typography fontWeight={600}>문의/피드백</Typography>
-            </CardContent>
-          </CardActionArea>
         </Card>
       </Stack>
     </Box>
