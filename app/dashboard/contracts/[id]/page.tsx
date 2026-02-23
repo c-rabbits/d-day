@@ -18,7 +18,16 @@ async function ContractContent({ id }: { id: string }) {
     .is("deleted_at", null)
     .single();
   if (error || !contract) notFound();
-  return <ContractDetail contract={contract} />;
+
+  const { data: notifs } = await supabase
+    .from("notifications")
+    .select("notify_days_before")
+    .eq("contract_id", id);
+  const notifyDays = [...new Set((notifs ?? []).map((n) => n.notify_days_before as number))].sort(
+    (a, b) => b - a,
+  );
+
+  return <ContractDetail contract={contract} notifyDays={notifyDays} />;
 }
 
 async function ParamsAndDetail({ params }: { params: Promise<{ id: string }> }) {

@@ -40,7 +40,13 @@ type ContractRow = {
   memo: string | null;
 };
 
-export function ContractEditForm({ contract }: { contract: ContractRow }) {
+export function ContractEditForm({
+  contract,
+  initialNotifyDays = [],
+}: {
+  contract: ContractRow;
+  initialNotifyDays?: number[];
+}) {
   const router = useRouter();
   const [title, setTitle] = useState(contract.title);
   const [category, setCategory] = useState<ContractCategory>(contract.category);
@@ -48,7 +54,9 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
   const [endDate, setEndDate] = useState(contract.end_date);
   const [amount, setAmount] = useState(contract.amount?.toString() ?? "");
   const [memo, setMemo] = useState(contract.memo ?? "");
-  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>([]);
+  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>(
+    initialNotifyDays.filter((d) => [30, 7, 1].includes(d)) as NotifyDaysBefore[],
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,6 +89,8 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
         .eq("id", contract.id);
 
       if (updateError) throw updateError;
+
+      await supabase.from("notifications").delete().eq("contract_id", contract.id);
 
       const end = new Date(endDate);
       const notificationsToInsert = notifyDays.map((d) => {
@@ -135,7 +145,7 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                       variant={category === targetCategory ? "contained" : "outlined"}
                       color={category === targetCategory ? "primary" : "inherit"}
                       onClick={() => setCategory(targetCategory)}
-                      sx={{ py: 1.2, fontSize: "0.8rem" }}
+                      sx={{ py: 1.5, minHeight: 44, fontSize: "0.8rem" }}
                     >
                       {CATEGORY_LABELS[targetCategory]}
                     </Button>
@@ -192,7 +202,7 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                 <Stack direction="row" spacing={0.7} alignItems="center">
                   <NotificationsActiveRoundedIcon sx={{ fontSize: 20 }} color="primary" />
                   <Typography variant="subtitle2" sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
-                    알림 (추가 설정)
+                    알림
                   </Typography>
                 </Stack>
                 <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -211,6 +221,18 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                       }}
                     />
                   ))}
+                  <Chip
+                    label="알림 없음"
+                    onClick={() => setNotifyDays([])}
+                    color={notifyDays.length === 0 ? "primary" : "default"}
+                    variant={notifyDays.length === 0 ? "filled" : "outlined"}
+                    sx={{
+                      fontSize: "1rem",
+                      py: 1.25,
+                      px: 1.5,
+                      minHeight: 44,
+                    }}
+                  />
                 </Stack>
               </Stack>
 
@@ -218,20 +240,20 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
 
               <Stack direction="row" spacing={1.5}>
                 <Button
-                  type="submit"
-                  variant="contained"
-                  disabled={isSubmitting}
-                  sx={ACTION_BUTTON_SX}
-                >
-                  {isSubmitting ? "저장 중…" : "저장"}
-                </Button>
-                <Button
                   type="button"
                   variant="outlined"
                   onClick={() => router.push(`/dashboard/contracts/${contract.id}`)}
                   sx={ACTION_BUTTON_SX}
                 >
                   취소
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={isSubmitting}
+                  sx={ACTION_BUTTON_SX}
+                >
+                  {isSubmitting ? "저장 중…" : "저장"}
                 </Button>
               </Stack>
           </Stack>

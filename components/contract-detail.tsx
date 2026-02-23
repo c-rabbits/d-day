@@ -43,6 +43,11 @@ type ContractRow = {
   memo: string | null;
 };
 
+type ContractDetailProps = {
+  contract: ContractRow;
+  notifyDays?: number[];
+};
+
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ py: 0.75 }}>
@@ -56,7 +61,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function ContractDetail({ contract }: { contract: ContractRow }) {
+export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProps) {
   const router = useRouter();
   const isSubscription = isSubscriptionContract(contract.end_date);
   const paymentDay = parsePaymentDayFromMemo(contract.memo);
@@ -100,25 +105,25 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
           목록으로
         </Button>
 
-        {/* 제목 + D-day 강조 */}
-        <Stack spacing={1.25}>
-          <Typography variant="h5" sx={{ fontWeight: 700, fontSize: "1.35rem", lineHeight: 1.3 }}>
-            {contract.title}
-          </Typography>
-          <Stack direction="row" alignItems="center" spacing={1} flexWrap="wrap">
-            <Chip
-              label={ddayLabel}
-              color={ddayColor}
-              sx={{ fontWeight: 700, fontSize: "0.9375rem", py: 1, px: 1.5 }}
-            />
+        {/* 제목 + 카테고리(왼쪽) / D-day(오른쪽) */}
+        <Stack direction="row" alignItems="flex-start" justifyContent="space-between" spacing={1}>
+          <Stack spacing={0.5} sx={{ minWidth: 0, flex: 1 }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, fontSize: "1.35rem", lineHeight: 1.3 }}>
+              {contract.title}
+            </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.875rem" }}>
               {CATEGORY_LABELS[contract.category]}
               {isSubscription ? " · 월구독" : " · 장기계약"}
             </Typography>
           </Stack>
+          <Chip
+            label={ddayLabel}
+            color={ddayColor}
+            sx={{ fontWeight: 700, fontSize: "0.9375rem", py: 1, px: 1.5, flexShrink: 0 }}
+          />
         </Stack>
 
-        {/* 기간·금액 정보 */}
+        {/* 한 카드: 시작일, 만료일, 금액, 알림, 메모 */}
         <Box
           sx={{
             py: 2,
@@ -141,54 +146,60 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
             {contract.amount != null && (
               <InfoRow label="금액" value={`${contract.amount.toLocaleString()}원`} />
             )}
+            <InfoRow
+              label="알림"
+              value={
+                notifyDays.length > 0
+                  ? notifyDays
+                      .sort((a, b) => b - a)
+                      .map((d) => `D-${d}`)
+                      .join(", ")
+                  : "알림 없음"
+              }
+            />
           </Stack>
+          {displayMemo && (
+            <>
+              <Divider sx={{ borderColor: "divider" }} />
+              <Box sx={{ pt: 1.5 }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ display: "block", mb: 0.5, fontSize: "0.75rem" }}
+                >
+                  메모
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "0.9375rem",
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {displayMemo}
+                </Typography>
+              </Box>
+            </>
+          )}
         </Box>
 
-        {/* 메모 */}
-        {displayMemo && (
-          <Box
-            sx={{
-              py: 1.5,
-              px: 2,
-              borderRadius: 2,
-              bgcolor: "background.paper",
-              border: "1px solid",
-              borderColor: "divider",
-            }}
-          >
-            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.75, fontSize: "0.75rem" }}>
-              메모
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: "0.9375rem",
-                lineHeight: 1.6,
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-word",
-              }}
-            >
-              {displayMemo}
-            </Typography>
-          </Box>
-        )}
-
-        {/* 수정 / 삭제 */}
+        {/* 삭제(왼쪽 흰색) / 수정(오른쪽 검정) */}
         <Stack direction="row" spacing={1.5} sx={{ pt: 0.5 }}>
           <Button
             variant="outlined"
-            onClick={() => router.push(`/dashboard/contracts/${contract.id}/edit`)}
-            sx={ACTION_BUTTON_SX}
-          >
-            수정
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
             onClick={() => setDeleteOpen(true)}
             sx={ACTION_BUTTON_SX}
           >
             삭제
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => router.push(`/dashboard/contracts/${contract.id}/edit`)}
+            sx={ACTION_BUTTON_SX}
+          >
+            수정
           </Button>
         </Stack>
       </Stack>

@@ -19,18 +19,20 @@ async function EditContent({ id }: { id: string }) {
     .is("deleted_at", null)
     .single();
   if (error || !contract) notFound();
+
+  const { data: notifs } = await supabase
+    .from("notifications")
+    .select("notify_days_before")
+    .eq("contract_id", id);
+  const initialNotifyDays = [...new Set((notifs ?? []).map((n) => n.notify_days_before as number))];
+
   return (
     <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={1.7}>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            계약 수정
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            필요한 정보만 수정하고 저장하면 만료 알림 일정도 함께 갱신됩니다.
-          </Typography>
-        </Box>
-        <ContractEditForm contract={contract} />
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>
+          계약 수정
+        </Typography>
+        <ContractEditForm contract={contract} initialNotifyDays={initialNotifyDays} />
       </Stack>
     </Box>
   );
