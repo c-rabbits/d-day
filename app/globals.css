@@ -18,16 +18,16 @@
     --outline: 210 12% 48%;
     --outline-variant: 210 18% 86%;
 
-    /* 테마: 검정·회색·흰색 */
-    --primary: 0 0% 14%;
+    /* 테마: 스카이블루 */
+    --primary: 199 89% 48%;
     --primary-foreground: 0 0% 100%;
-    --primary-container: 0 0% 95%;
-    --primary-container-foreground: 0 0% 14%;
+    --primary-container: 199 70% 92%;
+    --primary-container-foreground: 199 89% 28%;
 
-    --secondary: 0 0% 35%;
+    --secondary: 199 60% 40%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-container: 0 0% 92%;
-    --secondary-container-foreground: 0 0% 20%;
+    --secondary-container: 199 50% 90%;
+    --secondary-container-foreground: 199 70% 25%;
 
     --card: 0 0% 100%;
     --card-foreground: 210 25% 14%;
@@ -44,7 +44,7 @@
 
     --border: 210 18% 86%;
     --input: 210 25% 96%;
-    --ring: 0 0% 14%;
+    --ring: 199 89% 48%;
 
     --auth-header: 210 35% 14%;
 
@@ -86,16 +86,16 @@
     --outline: 210 12% 58%;
     --outline-variant: 210 14% 26%;
 
-    /* 다크 모드: 회색 톤 */
-    --primary: 0 0% 90%;
-    --primary-foreground: 0 0% 10%;
-    --primary-container: 0 0% 20%;
-    --primary-container-foreground: 0 0% 92%;
+    /* 다크 모드: 스카이블루 톤 */
+    --primary: 199 90% 60%;
+    --primary-foreground: 199 80% 12%;
+    --primary-container: 199 50% 22%;
+    --primary-container-foreground: 199 70% 88%;
 
-    --secondary: 0 0% 65%;
+    --secondary: 199 60% 55%;
     --secondary-foreground: 0 0% 10%;
-    --secondary-container: 0 0% 22%;
-    --secondary-container-foreground: 0 0% 90%;
+    --secondary-container: 199 40% 24%;
+    --secondary-container-foreground: 199 60% 90%;
 
     --card: 210 18% 17%;
     --card-foreground: 210 15% 94%;
