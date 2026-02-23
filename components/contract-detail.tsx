@@ -32,9 +32,14 @@ import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import NotesRoundedIcon from "@mui/icons-material/NotesRounded";
+
+const ACTION_BUTTON_SX = {
+  justifyContent: "center",
+  py: 1.75,
+  minHeight: 48,
+  flex: 1,
+};
 
 type ContractRow = {
   id: string;
@@ -90,13 +95,17 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
           목록으로
         </Button>
 
-        <Card variant="outlined" sx={{ borderRadius: 3.2 }}>
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
           <CardHeader
-            title={contract.title}
+            title={
+              <Typography variant="h6" sx={{ fontSize: "1.15rem", fontWeight: 700 }}>
+                {contract.title}
+              </Typography>
+            }
             subheader={
-              <Stack direction="row" spacing={0.8} alignItems="center" sx={{ mt: 0.7 }}>
-                <CategoryRoundedIcon sx={{ fontSize: 16, color: "text.secondary" }} />
-                <Typography variant="body2" color="text.secondary">
+              <Stack direction="row" spacing={0.8} alignItems="center" sx={{ mt: 0.5 }}>
+                <CategoryRoundedIcon sx={{ fontSize: 18, color: "text.secondary" }} />
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.875rem" }}>
                   {CATEGORY_LABELS[contract.category]}
                   {isSubscription ? " · 월구독" : " · 장기계약"}
                 </Typography>
@@ -106,19 +115,19 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
               <Chip
                 label={ddayLabel}
                 color={ddayColor}
-                sx={{ fontWeight: 700 }}
+                sx={{ fontWeight: 700, fontSize: "0.8rem" }}
               />
             }
-            sx={{ pb: 1.4 }}
+            sx={{ px: 2, pt: 2, pb: 1.5 }}
           />
           <Divider />
 
-          <CardContent sx={{ p: 2.2 }}>
+          <CardContent sx={{ px: 2, py: 2, "&:last-child": { pb: 2 } }}>
             <Box
               sx={{
                 display: "grid",
                 gridTemplateColumns: { xs: "1fr", sm: "repeat(2,minmax(0,1fr))" },
-                gap: 1.2,
+                gap: 1.5,
               }}
             >
               {isSubscription && paymentDay != null ? (
@@ -160,21 +169,19 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
           </CardContent>
 
           <Divider />
-          <CardActions sx={{ p: 2, gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
+          <CardActions sx={{ px: 2, py: 2, gap: 1.5, flexDirection: "row" }}>
             <Button
               variant="outlined"
-              startIcon={<EditRoundedIcon />}
               onClick={() => router.push(`/dashboard/contracts/${contract.id}/edit`)}
-              sx={{ width: { xs: "100%", sm: "auto" } }}
+              sx={ACTION_BUTTON_SX}
             >
               수정
             </Button>
             <Button
               variant="contained"
               color="error"
-              startIcon={<DeleteOutlineRoundedIcon />}
               onClick={() => setDeleteOpen(true)}
-              sx={{ width: { xs: "100%", sm: "auto" } }}
+              sx={ACTION_BUTTON_SX}
             >
               삭제
             </Button>
@@ -232,14 +239,15 @@ function InfoCard({
     >
       <Stack direction="row" spacing={0.7} alignItems="center">
         <Box sx={{ color: "text.secondary", display: "flex", alignItems: "center" }}>{icon}</Box>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.75rem" }}>
           {label}
         </Typography>
       </Stack>
       <Typography
         variant="body2"
         sx={{
-          mt: 0.7,
+          mt: 0.6,
+          fontSize: "0.9rem",
           fontWeight: 600,
           whiteSpace: wide ? "pre-wrap" : "normal",
           wordBreak: "break-word",

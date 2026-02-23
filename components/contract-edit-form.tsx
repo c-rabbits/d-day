@@ -21,10 +21,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
+
+const ACTION_BUTTON_SX = {
+  justifyContent: "center",
+  py: 1.75,
+  minHeight: 48,
+  flex: 1,
+};
 
 type ContractRow = {
   id: string;
@@ -101,34 +105,10 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 3.2 }}>
+    <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent sx={{ p: 2.4 }}>
-        <Stack spacing={2.1}>
-          <Box
-            sx={{
-              p: 1.7,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 3,
-              bgcolor: "background.default",
-            }}
-          >
-            <Stack direction="row" spacing={0.8} alignItems="center">
-              <EditNoteRoundedIcon color="primary" fontSize="small" />
-              <Typography
-                variant="caption"
-                sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
-              >
-                EDIT MODE
-              </Typography>
-            </Stack>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.6 }}>
-              필수 항목(계약명, 시작일, 만료일)을 확인한 뒤 저장해 주세요.
-            </Typography>
-          </Box>
-
-          <Box component="form" onSubmit={handleSubmit}>
-            <Stack spacing={1.7}>
+        <Box component="form" onSubmit={handleSubmit}>
+          <Stack spacing={1.9}>
               <TextField
                 label="계약명 *"
                 value={title}
@@ -137,15 +117,15 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                 fullWidth
               />
 
-              <Stack spacing={0.9}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+              <Stack spacing={0.8}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
                   카테고리
                 </Typography>
                 <Box
                   sx={{
                     display: "grid",
-                    gridTemplateColumns: { xs: "1fr", sm: "repeat(2, minmax(0,1fr))" },
-                    gap: 0.9,
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 1,
                   }}
                 >
                   {CONTRACT_CATEGORIES.map((targetCategory) => (
@@ -155,7 +135,7 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                       variant={category === targetCategory ? "contained" : "outlined"}
                       color={category === targetCategory ? "primary" : "inherit"}
                       onClick={() => setCategory(targetCategory)}
-                      sx={{ justifyContent: "flex-start", py: 1.1 }}
+                      sx={{ py: 1.2, fontSize: "0.8rem" }}
                     >
                       {CATEGORY_LABELS[targetCategory]}
                     </Button>
@@ -210,12 +190,12 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
 
               <Stack spacing={0.8}>
                 <Stack direction="row" spacing={0.7} alignItems="center">
-                  <NotificationsActiveRoundedIcon fontSize="small" color="primary" />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                  <NotificationsActiveRoundedIcon sx={{ fontSize: 20 }} color="primary" />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, fontSize: "0.9rem" }}>
                     알림 (추가 설정)
                   </Typography>
                 </Stack>
-                <Stack direction="row" spacing={0.8} flexWrap="wrap" useFlexGap>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                   {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
                     <Chip
                       key={targetDay}
@@ -223,6 +203,12 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
                       onClick={() => toggleNotify(targetDay)}
                       color={notifyDays.includes(targetDay) ? "primary" : "default"}
                       variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
+                      sx={{
+                        fontSize: "1rem",
+                        py: 1.25,
+                        px: 1.5,
+                        minHeight: 44,
+                      }}
                     />
                   ))}
                 </Stack>
@@ -230,29 +216,26 @@ export function ContractEditForm({ contract }: { contract: ContractRow }) {
 
               {error && <Alert severity="error">{error}</Alert>}
 
-              <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+              <Stack direction="row" spacing={1.5}>
                 <Button
                   type="submit"
                   variant="contained"
-                  startIcon={<SaveRoundedIcon />}
                   disabled={isSubmitting}
-                  sx={{ width: { xs: "100%", sm: "auto" } }}
+                  sx={ACTION_BUTTON_SX}
                 >
                   {isSubmitting ? "저장 중…" : "저장"}
                 </Button>
                 <Button
                   type="button"
                   variant="outlined"
-                  startIcon={<CloseRoundedIcon />}
                   onClick={() => router.push(`/dashboard/contracts/${contract.id}`)}
-                  sx={{ width: { xs: "100%", sm: "auto" } }}
+                  sx={ACTION_BUTTON_SX}
                 >
                   취소
                 </Button>
               </Stack>
-            </Stack>
-          </Box>
-        </Stack>
+          </Stack>
+        </Box>
       </CardContent>
     </Card>
   );

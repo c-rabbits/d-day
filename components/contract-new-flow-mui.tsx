@@ -257,7 +257,7 @@ export function ContractNewFlowMui() {
         <Stack spacing={2.3}>
           <Box>
             <Typography variant="caption" sx={{ color: "#000", fontWeight: 700, letterSpacing: "0.08em" }}>
-              STEP {step + 1}
+              {step + 1}단계
             </Typography>
             <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700, color: "#000" }}>
               {STEPS[step].title}

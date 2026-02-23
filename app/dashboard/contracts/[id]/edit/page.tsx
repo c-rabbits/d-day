@@ -23,16 +23,10 @@ async function EditContent({ id }: { id: string }) {
     <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={1.7}>
         <Box>
-          <Typography
-            variant="caption"
-            sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.08em" }}
-          >
-            EDIT CONTRACT
-          </Typography>
-          <Typography variant="h5" sx={{ mt: 0.3, fontWeight: 700 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             계약 수정
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.7 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             필요한 정보만 수정하고 저장하면 만료 알림 일정도 함께 갱신됩니다.
           </Typography>
         </Box>
