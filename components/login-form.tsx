@@ -55,6 +55,27 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
     if (error) setError(error.message);
   };
 
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) setError(error.message);
+  };
+
+  const socialButtonSx = {
+    justifyContent: "center",
+    py: 1.75,
+    minHeight: 48,
+    textTransform: "none" as const,
+    fontWeight: 600,
+    fontSize: "1rem",
+  };
+
   return (
     <Box {...props}>
       <AuthShellMui
@@ -111,35 +132,63 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
               {isLoading ? "로그인 중…" : "로그인"}
             </Button>
             <Divider sx={{ my: 0.5 }}>또는</Divider>
-            <Stack direction="row" spacing={1}>
+            <Stack spacing={1.5}>
+              {/* Google 공식 가이드: Light theme, stroke #747775, "Google로 로그인" */}
               <Button
                 variant="outlined"
                 fullWidth
-                disabled
-                sx={{ textTransform: "none", justifyContent: "center", py: 1.75, minHeight: 48 }}
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+                startIcon={
+                  <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
+                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />
+                      <path d="M13.25 17.92c-.25-.15-.78-.5-1.44-.5-1.22 0-2.15 1-2.49 2.5H7.03v2.32c1.71.85 3.89 1.34 5.22 1.34 1.3 0 2.4-.43 3.33-1.22l-2.33-2.32z" fill="#34A853" />
+                      <path d="M10 18.75c1.7 0 3.13-.57 4.27-1.55l-2.33-2.32c-.62.42-1.42.7-2.44.7-1.88 0-3.48-1.27-4.05-3H2.6v2.4c1.18 2.34 3.6 3.9 6.4 3.9z" fill="#FBBC05" />
+                      <path d="M5.95 13.58c-.18-.53-.28-1.1-.28-1.69 0-.6.1-1.17.28-1.69V9.2H2.6C2 10.23 1.67 11.4 1.67 12.69s.33 2.46.93 3.49l2.35-1.84z" fill="#EA4335" />
+                    </svg>
+                  </Box>
+                }
+                sx={{
+                  ...socialButtonSx,
+                  borderColor: "#dadce0",
+                  color: "#3c4043",
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  "&:hover": {
+                    borderColor: "#dadce0",
+                    backgroundColor: "rgba(0,0,0,0.04)",
+                  },
+                }}
               >
-                Google (준비 중)
+                Google로 로그인
               </Button>
+              {/* 카카오 공식 가이드: 배경 #FEE500, 심볼·텍스트 #000, radius 12px, 문구 "카카오 로그인" */}
               <Button
                 variant="outlined"
                 fullWidth
                 onClick={handleKakaoLogin}
                 disabled={isLoading}
+                startIcon={
+                  <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 3C6.48 3 2 6.58 2 10.9c0 3.45 2.26 6.47 5.57 8.12-.3.98-1.1 3.6-1.1 3.6-.13.48.18.46.34.34.13-.1 2.02-1.96 2.8-2.8.38.14.78.24 1.2.24 5.52 0 10-3.58 10-7.9S17.52 3 12 3z" fill="#000" />
+                    </svg>
+                  </Box>
+                }
                 sx={{
-                  textTransform: "none",
+                  ...socialButtonSx,
+                  border: "none",
                   borderColor: "#FEE500",
-                  color: "#191919",
+                  color: "rgba(0,0,0,0.85)",
                   backgroundColor: "#FEE500",
+                  borderRadius: "12px",
                   "&:hover": {
-                    borderColor: "#FDD835",
                     backgroundColor: "#FDD835",
                   },
-                  justifyContent: "center",
-                  py: 1.75,
-                  minHeight: 48,
                 }}
               >
-                카카오로 로그인
+                카카오 로그인
               </Button>
             </Stack>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
