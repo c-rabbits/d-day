@@ -21,14 +21,14 @@ const shape = {
   radiusXl: 28,
 };
 
-/* 테마: 스카이블루 계열 */
+/* 테마: 검정·회색·흰색. primary = 진한 회색, contrastText = 흰색 */
 const muiTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#0284c7",
-      light: "#0ea5e9",
-      dark: "#0369a1",
+      main: "#262626",
+      light: "#404040",
+      dark: "#171717",
       contrastText: "#fff",
     },
     secondary: {
@@ -71,20 +71,20 @@ const muiTheme = createTheme({
           fontWeight: 600,
         },
         contained: {
-          backgroundColor: "#0284c7",
+          backgroundColor: "#262626",
           color: "#fff",
           "&:hover": {
-            backgroundColor: "#0369a1",
+            backgroundColor: "#404040",
             color: "#fff",
           },
         },
         outlined: {
-          borderColor: "#0284c7",
-          color: "#0284c7",
+          borderColor: "#262626",
+          color: "#262626",
           "&:hover": {
-            borderColor: "#0369a1",
-            backgroundColor: "rgba(2,132,199,0.08)",
-            color: "#0369a1",
+            borderColor: "#171717",
+            backgroundColor: "rgba(0,0,0,0.04)",
+            color: "#171717",
           },
         },
       },

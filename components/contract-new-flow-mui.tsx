@@ -26,7 +26,6 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { alpha } from "@mui/material/styles";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
@@ -300,8 +299,7 @@ export function ContractNewFlowMui() {
                       transition: "transform 0.2s ease, box-shadow 0.2s ease",
                       transform: selected ? "scale(1.04)" : "scale(1)",
                       boxShadow: selected
-                        ? (theme) =>
-                            `0 0 0 2px ${theme.palette.primary.main}, 0 0 16px ${alpha(theme.palette.primary.main, 0.35)}, 0 4px 12px rgba(0,0,0,0.15)`
+                        ? "0 0 0 2px #fff, 0 0 16px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.15)"
                         : "0 1px 4px rgba(0,0,0,0.06)",
                     }}
                   >
