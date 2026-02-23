@@ -340,6 +340,18 @@ export function ContractNewFlowMui() {
                   }}
                   size="small"
                   fullWidth
+                  sx={{
+                    "& .MuiToggleButtonGroup-grouped": {
+                      "&.Mui-selected": {
+                        backgroundColor: "#262626",
+                        color: "#fff",
+                        "&:hover": {
+                          backgroundColor: "#404040",
+                          color: "#fff",
+                        },
+                      },
+                    },
+                  }}
                 >
                   <ToggleButton value="subscription">월구독</ToggleButton>
                   <ToggleButton value="longterm">장기계약</ToggleButton>
