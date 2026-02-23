@@ -285,7 +285,7 @@ export function ContractNewFlowMui() {
                     type="button"
                     onClick={() => setCategory(targetCategory)}
                     sx={{
-                      height: 118,
+                      height: 140,
                       borderRadius: 1.2,
                       border: "2px solid transparent",
                       backgroundColor: bg,
