@@ -141,22 +141,36 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
               <>
                 <InfoRow label="시작일" value={contract.start_date} />
                 <InfoRow label="만료일" value={contract.end_date} />
+                {!isSubscription && paymentDay != null && (
+                  <InfoRow label="월 지출일" value={`매월 ${paymentDay}일`} />
+                )}
               </>
             )}
             {contract.amount != null && (
               <InfoRow label="금액" value={`${contract.amount.toLocaleString()}원`} />
             )}
-            <InfoRow
-              label="알림"
-              value={
-                notifyDays.length > 0
-                  ? notifyDays
-                      .sort((a, b) => b - a)
-                      .map((d) => `D-${d}`)
-                      .join(", ")
-                  : "알림 없음"
-              }
-            />
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ py: 0.75 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.8125rem" }}>
+                알림
+              </Typography>
+              {notifyDays.length > 0 ? (
+                <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap justifyContent="flex-end">
+                  {[...notifyDays].sort((a, b) => b - a).map((d) => (
+                    <Chip
+                      key={d}
+                      label={`D-${d}`}
+                      size="small"
+                      variant="outlined"
+                      sx={{ fontWeight: 600, fontSize: "0.8125rem", borderRadius: 1.5 }}
+                    />
+                  ))}
+                </Stack>
+              ) : (
+                <Typography variant="body2" sx={{ fontWeight: 600, fontSize: "0.9375rem" }}>
+                  알림 없음
+                </Typography>
+              )}
+            </Stack>
           </Stack>
           {displayMemo && (
             <>
