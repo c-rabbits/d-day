@@ -129,7 +129,7 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
             py: 2,
             px: 2,
             borderRadius: 2,
-            bgcolor: "action.hover",
+            bgcolor: "#fff",
             border: "1px solid",
             borderColor: "divider",
           }}

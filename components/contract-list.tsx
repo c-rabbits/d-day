@@ -126,13 +126,20 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
               sx={{
                 borderRadius: 2,
                 borderColor: "divider",
-                transition: "box-shadow .2s ease",
-                "&:hover": {
-                  boxShadow: 1,
+                transition: "transform 0.2s ease",
+                "&:active": {
+                  transform: "scale(1.02)",
                 },
               }}
             >
-              <CardActionArea onClick={() => router.push(`/dashboard/contracts/${c.id}`)}>
+              <CardActionArea
+                disableRipple
+                onClick={() => router.push(`/dashboard/contracts/${c.id}`)}
+                sx={{
+                  "& .MuiCardActionArea-focusHighlight": { opacity: 0 },
+                  "&:hover .MuiCardActionArea-focusHighlight": { opacity: 0 },
+                }}
+              >
                 <Stack spacing={1.5} sx={{ p: 2.5 }}>
                   {/* 상단: 아이콘 + 제목/카테고리·유형 + D-day */}
                   <Stack
