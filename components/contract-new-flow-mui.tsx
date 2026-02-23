@@ -501,7 +501,7 @@ export function ContractNewFlowMui() {
               variant="outlined"
               startIcon={<ChevronLeftRoundedIcon />}
               onClick={handleBack}
-              disabled={!canGoBack}
+              disabled={step === 0}
             >
               이전
             </Button>
