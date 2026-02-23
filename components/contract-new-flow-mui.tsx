@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
@@ -76,6 +76,21 @@ const dateInputSx = {
     cursor: "pointer",
   },
 };
+
+/** (+) 버튼으로 진입할 때마다 1단계부터 시작하도록 key로 리마운트 */
+export function ContractNewFlowWithReset() {
+  const pathname = usePathname();
+  const prevPath = useRef<string | null>(null);
+  const [mountKey, setMountKey] = useState(0);
+  useEffect(() => {
+    const isNewPage = pathname === "/dashboard/contracts/new";
+    if (isNewPage && prevPath.current != null && prevPath.current !== "/dashboard/contracts/new") {
+      setMountKey((k) => k + 1);
+    }
+    prevPath.current = pathname;
+  }, [pathname]);
+  return <ContractNewFlowMui key={mountKey} />;
+}
 
 export function ContractNewFlowMui() {
   const router = useRouter();
@@ -297,7 +312,7 @@ export function ContractNewFlowMui() {
                       font: "inherit",
                       p: 1.2,
                       transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                      transform: selected ? "scale(1.04)" : "scale(1)",
+                      transform: selected ? "scale(1.12)" : "scale(1)",
                       boxShadow: selected
                         ? "0 0 0 2px #fff, 0 0 16px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.15)"
                         : "0 1px 4px rgba(0,0,0,0.06)",

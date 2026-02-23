@@ -1,4 +1,4 @@
-import { ContractNewFlowMui } from "@/components/contract-new-flow-mui";
+import { ContractNewFlowWithReset } from "@/components/contract-new-flow-mui";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Box, Stack, Typography } from "@mui/material";
@@ -17,7 +17,7 @@ export default async function NewContractPage() {
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
           계약을 단계별로 등록해보세요
         </Typography>
-        <ContractNewFlowMui />
+        <ContractNewFlowWithReset />
       </Stack>
     </Box>
   );
