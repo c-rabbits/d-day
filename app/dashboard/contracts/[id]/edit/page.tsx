@@ -20,7 +20,7 @@ async function EditContent({ id }: { id: string }) {
     .single();
   if (error || !contract) notFound();
   return (
-    <Box sx={{ px: 2, py: 3.5 }}>
+    <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={1.7}>
         <Box>
           <Typography

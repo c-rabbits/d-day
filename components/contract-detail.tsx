@@ -79,7 +79,7 @@ export function ContractDetail({ contract }: { contract: ContractRow }) {
   };
 
   return (
-    <Box sx={{ px: 2, py: 3.5 }}>
+    <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={1.5}>
         <Button
           variant="text"

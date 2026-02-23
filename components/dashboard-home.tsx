@@ -63,7 +63,7 @@ export function DashboardHome({
   const sortedContracts = useMemo(() => sortContracts(contracts, sortBy), [contracts, sortBy]);
 
   return (
-    <Box sx={{ px: 2, pt: 0, pb: 3.5 }}>
+    <Box sx={{ px: 2, pt: 0, pb: 14 }}>
       <Stack spacing={2.4}>
         <DashboardBanner />
 
