@@ -9,6 +9,8 @@ import { CONTRACT_CATEGORIES, type ContractCategory } from "@/lib/types";
 
 export type ListSort = "end_date" | "category" | "amount" | "contract_type";
 
+export type ListFilter = "all" | "subscription" | "longterm";
+
 type ContractRow = {
   id: string;
   title: string;
@@ -20,8 +22,12 @@ type ContractRow = {
 
 type DashboardHomeProps = {
   contracts: ContractRow[];
-  soonCount: number;
-  expiredCount: number;
+  subscriptionTotal: number;
+  subscriptionSoon7: number;
+  subscriptionSoon1: number;
+  longtermTotal: number;
+  longtermSoon30: number;
+  longtermExpired: number;
 };
 
 const SORT_OPTIONS: { value: ListSort; label: string }[] = [
@@ -54,13 +60,31 @@ function sortContracts(list: ContractRow[], sortBy: ListSort): ContractRow[] {
   return arr;
 }
 
+const FILTER_OPTIONS: { value: ListFilter; label: string }[] = [
+  { value: "all", label: "전체보기" },
+  { value: "subscription", label: "월구독" },
+  { value: "longterm", label: "정기계약" },
+];
+
+function filterContracts(list: ContractRow[], filter: ListFilter): ContractRow[] {
+  if (filter === "all") return list;
+  if (filter === "subscription") return list.filter((c) => isSubscriptionContract(c.end_date));
+  return list.filter((c) => !isSubscriptionContract(c.end_date));
+}
+
 export function DashboardHome({
   contracts,
-  soonCount,
-  expiredCount,
+  subscriptionTotal,
+  subscriptionSoon7,
+  subscriptionSoon1,
+  longtermTotal,
+  longtermSoon30,
+  longtermExpired,
 }: DashboardHomeProps) {
+  const [filter, setFilter] = useState<ListFilter>("all");
   const [sortBy, setSortBy] = useState<ListSort>("end_date");
-  const sortedContracts = useMemo(() => sortContracts(contracts, sortBy), [contracts, sortBy]);
+  const filteredContracts = useMemo(() => filterContracts(contracts, filter), [contracts, filter]);
+  const sortedContracts = useMemo(() => sortContracts(filteredContracts, sortBy), [filteredContracts, sortBy]);
 
   return (
     <Box sx={{ px: 2, pt: 0, pb: 14 }}>
@@ -72,9 +96,12 @@ export function DashboardHome({
             내 계약 현황
           </Typography>
           <ContractStatusCard
-            total={contracts.length}
-            soonCount={soonCount}
-            expiredCount={expiredCount}
+            subscriptionTotal={subscriptionTotal}
+            subscriptionSoon7={subscriptionSoon7}
+            subscriptionSoon1={subscriptionSoon1}
+            longtermTotal={longtermTotal}
+            longtermSoon30={longtermSoon30}
+            longtermExpired={longtermExpired}
           />
         </Box>
 
@@ -83,22 +110,40 @@ export function DashboardHome({
             <Typography variant="h5" fontWeight={700}>
               계약 목록
             </Typography>
-            <FormControl size="small" sx={{ minWidth: 92 }} variant="outlined">
-              <InputLabel id="list-sort-label">필터</InputLabel>
-              <Select
-                labelId="list-sort-label"
-                label="필터"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as ListSort)}
-                sx={{ fontSize: "0.875rem", py: 0.5 }}
-              >
-                {SORT_OPTIONS.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <FormControl size="small" sx={{ minWidth: 92 }} variant="outlined">
+                <InputLabel id="list-filter-label">구독</InputLabel>
+                <Select
+                  labelId="list-filter-label"
+                  label="구독"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value as ListFilter)}
+                  sx={{ fontSize: "0.875rem", py: 0.5 }}
+                >
+                  {FILTER_OPTIONS.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl size="small" sx={{ minWidth: 92 }} variant="outlined">
+                <InputLabel id="list-sort-label">정렬</InputLabel>
+                <Select
+                  labelId="list-sort-label"
+                  label="정렬"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as ListSort)}
+                  sx={{ fontSize: "0.875rem", py: 0.5 }}
+                >
+                  {SORT_OPTIONS.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
           <ContractList contracts={sortedContracts} />
         </Stack>
@@ -107,31 +152,46 @@ export function DashboardHome({
   );
 }
 
-/** 내 계약 현황 카드: 프로필/설정과 동일 컨셉 (outlined, borderRadius 2) */
+/** 내 계약 현황 카드: 월구독 / 장기계약 구분 */
 function ContractStatusCard({
-  total,
-  soonCount,
-  expiredCount,
+  subscriptionTotal,
+  subscriptionSoon7,
+  subscriptionSoon1,
+  longtermTotal,
+  longtermSoon30,
+  longtermExpired,
 }: {
-  total: number;
-  soonCount: number;
-  expiredCount: number;
+  subscriptionTotal: number;
+  subscriptionSoon7: number;
+  subscriptionSoon1: number;
+  longtermTotal: number;
+  longtermSoon30: number;
+  longtermExpired: number;
 }) {
   return (
     <Card variant="outlined" sx={{ borderRadius: 2, borderColor: "divider" }}>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 0,
-          py: 2,
-          px: 2,
-        }}
-      >
-        <StatusColumn value={total} unit="건" label="총 계약" />
-        <StatusColumn value={soonCount} unit="건" label="30일 내 만료" />
-        <StatusColumn value={expiredCount} unit="건" label="만료 지남" />
-      </Box>
+      <Stack divider={<Box sx={{ borderTop: 1, borderColor: "divider" }} />}>
+        <Box sx={{ py: 1.5, px: 2 }}>
+          <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ display: "block", mb: 1 }}>
+            월구독
+          </Typography>
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
+            <StatusColumn value={subscriptionTotal} unit="건" label="총 계약" />
+            <StatusColumn value={subscriptionSoon7} unit="건" label="7일 내 만료" />
+            <StatusColumn value={subscriptionSoon1} unit="건" label="1일 내 만료" />
+          </Box>
+        </Box>
+        <Box sx={{ py: 1.5, px: 2 }}>
+          <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ display: "block", mb: 1 }}>
+            장기계약
+          </Typography>
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
+            <StatusColumn value={longtermTotal} unit="건" label="총 계약" />
+            <StatusColumn value={longtermSoon30} unit="건" label="30일 내 만료" />
+            <StatusColumn value={longtermExpired} unit="건" label="만료 지남" />
+          </Box>
+        </Box>
+      </Stack>
     </Card>
   );
 }

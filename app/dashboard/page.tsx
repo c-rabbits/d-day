@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { DashboardHome } from "@/components/dashboard-home";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { Suspense } from "react";
+import { getDdayForPaymentDay, isSubscriptionContract } from "@/lib/dday";
+import { parsePaymentDayFromMemo } from "@/lib/contract-memo";
 
 async function DashboardContent() {
   const supabase = await createClient();
@@ -21,20 +23,47 @@ async function DashboardContent() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const soonCount = list.filter((c) => {
+  const subscriptionList = list.filter((c) => isSubscriptionContract(c.end_date));
+  const longtermList = list.filter((c) => !isSubscriptionContract(c.end_date));
+
+  const subscriptionTotal = subscriptionList.length;
+  const subscriptionSoon7 = subscriptionList.filter((c) => {
+    const day = parsePaymentDayFromMemo(c.memo);
+    if (day == null) return false;
+    const d = getDdayForPaymentDay(day);
+    return d >= 0 && d <= 7;
+  }).length;
+  const subscriptionSoon1 = subscriptionList.filter((c) => {
+    const day = parsePaymentDayFromMemo(c.memo);
+    if (day == null) return false;
+    const d = getDdayForPaymentDay(day);
+    return d >= 0 && d <= 1;
+  }).length;
+
+  const longtermTotal = longtermList.length;
+  const longtermSoon30 = longtermList.filter((c) => {
     const end = new Date(c.end_date);
     end.setHours(0, 0, 0, 0);
     const days = Math.round((end.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     return days >= 0 && days <= 30;
   }).length;
-
-  const expiredCount = list.filter((c) => {
+  const longtermExpired = longtermList.filter((c) => {
     const end = new Date(c.end_date);
     end.setHours(0, 0, 0, 0);
     return end.getTime() < today.getTime();
   }).length;
 
-  return <DashboardHome contracts={list} soonCount={soonCount} expiredCount={expiredCount} />;
+  return (
+    <DashboardHome
+      contracts={list}
+      subscriptionTotal={subscriptionTotal}
+      subscriptionSoon7={subscriptionSoon7}
+      subscriptionSoon1={subscriptionSoon1}
+      longtermTotal={longtermTotal}
+      longtermSoon30={longtermSoon30}
+      longtermExpired={longtermExpired}
+    />
+  );
 }
 
 export default function DashboardPage() {

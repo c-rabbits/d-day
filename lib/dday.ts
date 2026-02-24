@@ -40,13 +40,17 @@ export function getNextPaymentDate(paymentDay: number): Date {
   return nextMonth;
 }
 
-/** 월 지출일 기준 D-day (다음 지출일까지 남은 일수) */
+/**
+ * 월 지출일 기준 D-day (다음 지출일까지 남은 일수).
+ * 달력 기준 해당 월/다음 달 결제일을 보고, D-day 지나면 다음 달로 리셋. D+ 없이 D-xx만 표시.
+ */
 export function getDdayForPaymentDay(paymentDay: number): number {
   const next = getNextPaymentDate(paymentDay);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const diff = next.getTime() - today.getTime();
-  return Math.round(diff / (1000 * 60 * 60 * 24));
+  const days = Math.round(diff / (1000 * 60 * 60 * 24));
+  return Math.max(0, days);
 }
 
 /** D-day 표시 문자열 (예: D-12, D-day, D+3) */
@@ -57,12 +61,11 @@ export function getDdayLabel(endDate: string): string {
   return `D+${Math.abs(d)}`;
 }
 
-/** 월 지출일 기준 D-day 라벨 */
+/** 월 지출일 기준 D-day 라벨 (항상 D-xx 또는 D-day, 리셋 후 다음 달 기준) */
 export function getDdayLabelForPaymentDay(paymentDay: number): string {
   const d = getDdayForPaymentDay(paymentDay);
   if (d > 0) return `D-${d}`;
-  if (d === 0) return "D-day";
-  return `D+${Math.abs(d)}`;
+  return "D-day";
 }
 
 /** D-day에 따른 텍스트 색상 클래스 (Tailwind) */
