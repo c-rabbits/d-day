@@ -3,14 +3,14 @@
 import { useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import HomeIcon from "@mui/icons-material/Home";
-import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
+import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 const NAV_ITEMS = [
   { label: "홈", href: "/dashboard", icon: HomeIcon },
-  { label: "정보", href: "/dashboard/info", icon: ViewCarouselIcon },
+  { label: "미션", href: "/dashboard/missions", icon: EmojiEventsRoundedIcon },
   { label: "계약 추가", href: "/dashboard/contracts/new", icon: AddCircleIcon },
   { label: "프로필", href: "/dashboard/profile", icon: PersonIcon },
   { label: "설정", href: "/dashboard/settings", icon: SettingsIcon },
@@ -27,7 +27,7 @@ export function DashboardBottomNav() {
   const [pillKey, setPillKey] = useState(0);
 
   const activeIndex = useMemo(() => {
-    if (pathname.startsWith("/dashboard/info")) return 1;
+    if (pathname.startsWith("/dashboard/missions")) return 1;
     if (pathname.startsWith("/dashboard/contracts/new")) return 2;
     if (pathname.startsWith("/dashboard/profile")) return 3;
     if (pathname.startsWith("/dashboard/settings")) return 4;

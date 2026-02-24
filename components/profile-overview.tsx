@@ -2,6 +2,7 @@
 
 import { Avatar, Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import { ProfileXpBlock } from "@/components/profile-xp-block";
 
 type ProfileOverviewProps = {
   email: string;
@@ -37,11 +38,7 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
               >
                 <PersonRoundedIcon sx={{ fontSize: 30 }} />
               </Avatar>
-              <Box>
-                <Typography variant="h6" fontWeight={700}>
-                  내 계정
-                </Typography>
-              </Box>
+              <ProfileXpBlock />
             </Stack>
           </CardContent>
           <CardContent sx={{ pt: 0 }}>

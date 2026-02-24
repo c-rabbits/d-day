@@ -152,7 +152,7 @@ export function DashboardHome({
   );
 }
 
-/** 내 계약 현황 카드: 월구독 / 장기계약 구분 */
+/** 내 계약 현황: 세로 구분(월구독 | 장기계약), 그라데이션 카드, 폭 좁게 */
 function ContractStatusCard({
   subscriptionTotal,
   subscriptionSoon7,
@@ -169,52 +169,60 @@ function ContractStatusCard({
   longtermExpired: number;
 }) {
   return (
-    <Card variant="outlined" sx={{ borderRadius: 2, borderColor: "divider" }}>
-      <Stack divider={<Box sx={{ borderTop: 1, borderColor: "divider" }} />}>
-        <Box sx={{ py: 1.5, px: 2 }}>
-          <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ display: "block", mb: 1 }}>
-            월구독
-          </Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
-            <StatusColumn value={subscriptionTotal} unit="건" label="총 계약" />
-            <StatusColumn value={subscriptionSoon7} unit="건" label="7일 내 만료" />
-            <StatusColumn value={subscriptionSoon1} unit="건" label="1일 내 만료" />
-          </Box>
-        </Box>
-        <Box sx={{ py: 1.5, px: 2 }}>
-          <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ display: "block", mb: 1 }}>
-            장기계약
-          </Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 0 }}>
-            <StatusColumn value={longtermTotal} unit="건" label="총 계약" />
-            <StatusColumn value={longtermSoon30} unit="건" label="30일 내 만료" />
-            <StatusColumn value={longtermExpired} unit="건" label="만료 지남" />
-          </Box>
-        </Box>
-      </Stack>
-    </Card>
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 1,
+        maxWidth: 320,
+      }}
+    >
+      <Box
+        sx={{
+          borderRadius: 2,
+          overflow: "hidden",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          color: "#fff",
+          py: 1.25,
+          px: 1.5,
+        }}
+      >
+        <Typography variant="caption" sx={{ opacity: 0.9, fontWeight: 700 }}>
+          월구독
+        </Typography>
+        <CompactRow label="총계약" value={subscriptionTotal} />
+        <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
+        <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
+      </Box>
+      <Box
+        sx={{
+          borderRadius: 2,
+          overflow: "hidden",
+          background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+          color: "#fff",
+          py: 1.25,
+          px: 1.5,
+        }}
+      >
+        <Typography variant="caption" sx={{ opacity: 0.9, fontWeight: 700 }}>
+          장기계약
+        </Typography>
+        <CompactRow label="총계약" value={longtermTotal} />
+        <CompactRow label="30일 내 만료" value={longtermSoon30} />
+        <CompactRow label="만료 지남" value={longtermExpired} />
+      </Box>
+    </Box>
   );
 }
 
-function StatusColumn({
-  value,
-  unit,
-  label,
-}: {
-  value: number;
-  unit: string;
-  label: string;
-}) {
+function CompactRow({ label, value }: { label: string; value: number }) {
   return (
-    <Box sx={{ px: 0.5, textAlign: "center" }}>
-      <Typography variant="h6" fontWeight={700} color="text.primary">
-        {value}
-        <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 0.25 }}>
-          {unit}
-        </Typography>
-      </Typography>
-      <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.25 }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mt: 0.4 }}>
+      <Typography variant="caption" sx={{ opacity: 0.95, fontSize: "0.7rem" }}>
         {label}
+      </Typography>
+      <Typography variant="body2" fontWeight={700}>
+        {value}건
       </Typography>
     </Box>
   );
