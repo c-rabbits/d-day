@@ -6,11 +6,14 @@ export function LoadingSpinner() {
   return (
     <Box
       sx={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "40vh",
-        width: "100%",
+        zIndex: 1,
       }}
     >
       <CircularProgress size={40} />
