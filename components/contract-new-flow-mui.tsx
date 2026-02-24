@@ -269,6 +269,8 @@ export function ContractNewFlowMui() {
               px: 1,
               py: 0.35,
               display: "inline-block",
+              width: "fit-content",
+              alignSelf: "flex-start",
               lineHeight: 1.25,
             }}
           >
