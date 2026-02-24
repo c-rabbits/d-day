@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
@@ -17,7 +18,13 @@ import { getXP, addXP, isDailyDone, setDailyDone, isOnetimeDone, setOnetimeDone,
 import { getLevelFromXP, getXPProgressInLevel, MAX_LEVEL } from "@/lib/level";
 import { MISSIONS, type Mission } from "@/lib/mission";
 
-export function MissionList() {
+type MissionListProps = {
+  contractCount: number;
+  hasNotification: boolean;
+};
+
+export function MissionList({ contractCount, hasNotification }: MissionListProps) {
+  const router = useRouter();
   const [xp, setXp] = useState(0);
   const [dailyDone, setDailyDoneState] = useState(false);
   const [doneIds, setDoneIds] = useState<string[]>([]);
@@ -32,9 +39,9 @@ export function MissionList() {
     );
   };
 
-  useEffect(() => refresh(), [todayKey]);
+  useEffect(() => refresh(), [todayKey, contractCount, hasNotification]);
 
-  const handleComplete = (mission: Mission) => {
+  const completeAndGrantXP = (mission: Mission) => {
     if (mission.type === "daily") {
       if (isDailyDone(todayKey)) return;
       setDailyDone(todayKey);
@@ -42,15 +49,47 @@ export function MissionList() {
       if (isOnetimeDone(mission.id)) return;
       setOnetimeDone(mission.id);
     }
-    const newXP = addXP(mission.xpReward);
-    setXp(newXP);
+    addXP(mission.xpReward);
+    setXp(getXP());
     refresh();
+  };
+
+  const handleStart = (mission: Mission) => {
+    if (mission.type === "daily") {
+      completeAndGrantXP(mission);
+      return;
+    }
+    if (isOnetimeDone(mission.id)) return;
+    if (mission.id === "first_contract") {
+      if (contractCount >= 1) completeAndGrantXP(mission);
+      else router.push("/dashboard/contracts/new");
+      return;
+    }
+    if (mission.id === "three_contracts") {
+      if (contractCount >= 3) completeAndGrantXP(mission);
+      else router.push("/dashboard/contracts/new");
+      return;
+    }
+    if (mission.id === "set_notification") {
+      if (hasNotification) completeAndGrantXP(mission);
+      else router.push("/dashboard");
+      return;
+    }
+    completeAndGrantXP(mission);
   };
 
   const level = getLevelFromXP(xp);
   const progress = getXPProgressInLevel(xp);
   const dailyMissions = MISSIONS.filter((m) => m.type === "daily");
   const oneTimeMissions = MISSIONS.filter((m) => m.type === "one_time");
+
+  const isConditionMet = (m: Mission) => {
+    if (m.type === "daily") return true;
+    if (m.id === "first_contract") return contractCount >= 1;
+    if (m.id === "three_contracts") return contractCount >= 3;
+    if (m.id === "set_notification") return hasNotification;
+    return false;
+  };
 
   return (
     <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
@@ -102,7 +141,8 @@ export function MissionList() {
                   key={m.id}
                   mission={m}
                   done={done}
-                  onComplete={() => handleComplete(m)}
+                  canClaim={false}
+                  onStart={() => handleStart(m)}
                 />
               );
             })}
@@ -117,12 +157,14 @@ export function MissionList() {
           <Stack spacing={1.5}>
             {oneTimeMissions.map((m) => {
               const done = doneIds.includes(m.id);
+              const canClaim = !done && isConditionMet(m);
               return (
                 <MissionCard
                   key={m.id}
                   mission={m}
                   done={done}
-                  onComplete={() => handleComplete(m)}
+                  canClaim={canClaim}
+                  onStart={() => handleStart(m)}
                 />
               );
             })}
@@ -133,14 +175,18 @@ export function MissionList() {
   );
 }
 
+const SKY_BLUE = "#44B2FF";
+
 function MissionCard({
   mission,
   done,
-  onComplete,
+  canClaim,
+  onStart,
 }: {
   mission: Mission;
   done: boolean;
-  onComplete: () => void;
+  canClaim: boolean;
+  onStart: () => void;
 }) {
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
@@ -169,18 +215,32 @@ function MissionCard({
               color="success"
               variant="outlined"
             />
+          ) : canClaim ? (
+            <Button
+              variant="contained"
+              size="small"
+              onClick={onStart}
+              sx={{
+                bgcolor: SKY_BLUE,
+                color: "#fff",
+                "&:hover": { bgcolor: "#3692d9" },
+                flexShrink: 0,
+              }}
+            >
+              받기
+            </Button>
           ) : (
             <Button
               variant="contained"
               size="small"
-              onClick={onComplete}
+              onClick={onStart}
               sx={{
                 bgcolor: "#262626",
                 "&:hover": { bgcolor: "#404040" },
                 flexShrink: 0,
               }}
             >
-              수행
+              시작
             </Button>
           )}
         </Stack>

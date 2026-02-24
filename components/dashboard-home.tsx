@@ -172,25 +172,25 @@ function ContractStatusCard({
   return (
     <Box
       sx={{
+        width: "100%",
         borderRadius: 2,
         overflow: "hidden",
         background: cardBg,
         color: "#fff",
-        maxWidth: 320,
         boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
       }}
     >
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 0 }}>
-        <Box sx={{ py: 1.5, px: 1.5, borderRight: "1px solid rgba(255,255,255,0.12)" }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
+        <Box sx={{ py: 1.5, pl: 2, pr: 1.5, borderRight: "1px solid rgba(255,255,255,0.12)" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75, ml: 0.5 }}>
             월구독
           </Typography>
           <CompactRow label="총계약" value={subscriptionTotal} />
           <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
           <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
         </Box>
-        <Box sx={{ py: 1.5, px: 1.5 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
+        <Box sx={{ py: 1.5, pl: 2, pr: 1.5 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75, ml: 0.5 }}>
             장기계약
           </Typography>
           <CompactRow label="총계약" value={longtermTotal} />
