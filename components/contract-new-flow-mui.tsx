@@ -293,7 +293,7 @@ export function ContractNewFlowMui() {
                   type="button"
                   onClick={() => setCategory(targetCategory)}
                   sx={{
-                    minHeight: 100,
+                    height: 140,
                     borderRadius: 2,
                     border: "2px solid",
                     borderColor: selected ? "#262626" : "divider",
@@ -326,7 +326,7 @@ export function ContractNewFlowMui() {
                   </Box>
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontWeight: 700, color: "#000", pl: 0, fontSize: "0.9rem" }}
+                    sx={{ fontWeight: 700, color: "#000", pl: 0, fontSize: "1rem" }}
                   >
                     {CATEGORY_LABELS[targetCategory]}
                   </Typography>
