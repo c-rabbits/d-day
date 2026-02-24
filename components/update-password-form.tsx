@@ -10,24 +10,45 @@ export function UpdatePasswordForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleForgotPassword = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    if (password !== passwordConfirm) {
+      setError("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("새 비밀번호는 6자 이상이어야 합니다.");
+      return;
+    }
+
     const supabase = createClient();
     setIsLoading(true);
-    setError(null);
 
     try {
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) {
+        throw new Error("로그인 정보를 찾을 수 없습니다.");
+      }
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+      if (signInError) {
+        throw new Error("현재 비밀번호가 올바르지 않습니다.");
+      }
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) throw updateError;
       router.push("/dashboard");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "비밀번호 변경에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -36,19 +57,36 @@ export function UpdatePasswordForm({
   return (
     <Box className={className} {...props}>
       <AuthShellMui
-        title="새 비밀번호 설정"
-        subtitle="새 비밀번호를 입력한 뒤 저장하세요."
-        backHref="/auth/login"
+        title="비밀번호 변경"
+        subtitle="현재 비밀번호를 입력한 뒤 새 비밀번호로 변경하세요."
+        backHref="/dashboard/settings"
+        hideLogo
       >
-        <Box component="form" noValidate autoComplete="off" onSubmit={handleForgotPassword}>
+        <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
           <Stack spacing={2.5}>
             <TextField
               autoFocus
+              fullWidth
+              label="현재 비밀번호"
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
+            <TextField
               fullWidth
               label="새 비밀번호"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="비밀번호 확인"
+              type="password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
               required
             />
             {error && <Alert severity="error">{error}</Alert>}

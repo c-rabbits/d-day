@@ -221,9 +221,14 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
       <Dialog
         open={deleteOpen}
         onClose={() => !isDeleting && setDeleteOpen(false)}
+        PaperProps={{
+          sx: { maxWidth: 520, width: "100%", borderRadius: 2 },
+        }}
       >
-        <DialogTitle>삭제 확인</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{ textAlign: "center", fontWeight: 700, pt: 2.5 }}>
+          삭제 확인
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: "center", pb: 1 }}>
           <Typography>이 계약을 삭제할까요?</Typography>
           {deleteError && (
             <Typography color="error" sx={{ mt: 1.5 }}>
@@ -231,11 +236,32 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
             </Typography>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteOpen(false)} disabled={isDeleting}>
+        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2.5, px: 2.5 }}>
+          <Button
+            variant="outlined"
+            onClick={() => setDeleteOpen(false)}
+            disabled={isDeleting}
+            sx={{
+              minHeight: 48,
+              px: 3,
+              borderColor: "#262626",
+              color: "#262626",
+              "&:hover": { borderColor: "#262626", backgroundColor: "rgba(0,0,0,0.04)" },
+            }}
+          >
             취소
           </Button>
-          <Button variant="contained" color="error" onClick={handleDeleteConfirm} disabled={isDeleting}>
+          <Button
+            variant="contained"
+            onClick={handleDeleteConfirm}
+            disabled={isDeleting}
+            sx={{
+              minHeight: 48,
+              px: 3,
+              backgroundColor: "#262626",
+              "&:hover": { backgroundColor: "#404040" },
+            }}
+          >
             {isDeleting ? "삭제 중…" : "삭제"}
           </Button>
         </DialogActions>

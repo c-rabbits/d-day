@@ -8,6 +8,7 @@ type AuthShellMuiProps = {
   title: string;
   subtitle: string;
   backHref?: string;
+  hideLogo?: boolean;
   children: ReactNode;
 };
 
@@ -16,6 +17,7 @@ export function AuthShellMui({
   title,
   subtitle,
   backHref = "/",
+  hideLogo = false,
   children,
 }: AuthShellMuiProps) {
   return (
@@ -33,21 +35,23 @@ export function AuthShellMui({
     >
       <Card sx={{ width: "100%", maxWidth: 450 }}>
         <CardContent sx={{ p: { xs: 2.5, sm: 4 } }}>
-          <Link
-            href={backHref}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: 24,
-              textDecoration: "none",
-              color: "inherit",
-            }}
-          >
-            <Typography variant="h6" fontWeight={700}>
-              디데이
-            </Typography>
-          </Link>
+          {!hideLogo && (
+            <Link
+              href={backHref}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 24,
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <Typography variant="h6" fontWeight={700}>
+                디데이
+              </Typography>
+            </Link>
+          )}
           <Typography variant="h5" fontWeight={700} gutterBottom>
             {title}
           </Typography>
