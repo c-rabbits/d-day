@@ -104,6 +104,7 @@ export function ContractNewFlowMui() {
   const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>([]); // 장기계약 만료일 알림
   const [monthlyNotifyDays, setMonthlyNotifyDays] = useState<number[]>([]); // 7, 1 (월구독 또는 장기 월지출 알림)
   const [step2AlertChosen, setStep2AlertChosen] = useState(false); // step2에서 알림/알림없음 한 번이라도 선택했는지
+  const [hasInteractedStep1, setHasInteractedStep1] = useState(false); // 2단계 진입 후 한 번이라도 입력/선택했는지
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -112,7 +113,15 @@ export function ContractNewFlowMui() {
     contractType === "subscription"
       ? Boolean(title.trim() && startDate && paymentDay)
       : Boolean(title.trim() && startDate && endDate);
-  const canGoBack = step > 0;
+  // 페이지 진입 시에는 비활성, 조건 충족 시에만 활성
+  const canGoBack =
+    step === 0
+      ? false
+      : step === 1
+        ? hasInteractedStep1
+        : step === 2
+          ? step2AlertChosen
+          : true;
   const canGoNext =
     step < 2 && (step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : false);
   const isCompleteDisabled =
@@ -165,6 +174,7 @@ export function ContractNewFlowMui() {
       return;
     }
     setError(null);
+    if (step === 0) setHasInteractedStep1(false); // 2단계 진입 시 이전/다음 비활성 유지를 위해
     if (step === 1) {
       setStep2AlertChosen(false);
       setNotifyDays([]);
@@ -175,6 +185,7 @@ export function ContractNewFlowMui() {
 
   const handleBack = () => {
     setError(null);
+    if (step === 2) setHasInteractedStep1(false); // 2단계 재진입 시 이전 비활성 유지
     if (step > 0) setStep((prev) => prev - 1);
   };
 
@@ -372,7 +383,10 @@ export function ContractNewFlowMui() {
                   exclusive
                   value={contractType}
                   onChange={(_event, next: ContractType | null) => {
-                    if (next) setContractType(next);
+                    if (next) {
+                      setContractType(next);
+                      setHasInteractedStep1(true);
+                    }
                   }}
                   size="small"
                   fullWidth
@@ -397,7 +411,10 @@ export function ContractNewFlowMui() {
               <TextField
                 label="계약명 *"
                 value={title}
-                onChange={(event) => setTitle(event.target.value)}
+                onChange={(event) => {
+                  setTitle(event.target.value);
+                  setHasInteractedStep1(true);
+                }}
                 placeholder="예: 넷플릭스 스탠다드"
                 fullWidth
               />
@@ -406,7 +423,10 @@ export function ContractNewFlowMui() {
                 label="시작일 *"
                 type="date"
                 value={startDate}
-                onChange={(event) => setStartDate(event.target.value)}
+                onChange={(event) => {
+                  setStartDate(event.target.value);
+                  setHasInteractedStep1(true);
+                }}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
                 sx={dateInputSx}
@@ -417,7 +437,10 @@ export function ContractNewFlowMui() {
                   label="만료일 *"
                   type="date"
                   value={endDate}
-                  onChange={(event) => setEndDate(event.target.value)}
+                  onChange={(event) => {
+                    setEndDate(event.target.value);
+                    setHasInteractedStep1(true);
+                  }}
                   InputLabelProps={{ shrink: true }}
                   fullWidth
                   sx={dateInputSx}
@@ -431,7 +454,10 @@ export function ContractNewFlowMui() {
                 value={paymentDay}
                 onChange={(event) => {
                   const v = event.target.value.replace(/\D/g, "");
-                  if (v === "" || (Number(v) >= 1 && Number(v) <= 31)) setPaymentDay(v);
+                  if (v === "" || (Number(v) >= 1 && Number(v) <= 31)) {
+                    setPaymentDay(v);
+                    setHasInteractedStep1(true);
+                  }
                 }}
                 placeholder="1–31"
                 fullWidth
@@ -553,7 +579,7 @@ export function ContractNewFlowMui() {
               variant="outlined"
               startIcon={<ChevronLeftRoundedIcon />}
               onClick={handleBack}
-              disabled={step === 0}
+              disabled={!canGoBack}
             >
               이전
             </Button>
