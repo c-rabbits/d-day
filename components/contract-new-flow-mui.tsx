@@ -294,8 +294,8 @@ export function ContractNewFlowMui() {
                 const bg = CATEGORY_PASTEL[targetCategory];
                 const shadowColor = CATEGORY_SHADOW[targetCategory];
                 const selected = category === targetCategory;
-                const baseShadow = `0 6px 24px ${shadowColor}50, 0 10px 32px ${shadowColor}38, 0 0 40px ${bg}28`;
-                const selectedShadow = `0 0 0 2px #fff, 0 8px 28px ${shadowColor}55, 0 12px 40px ${shadowColor}45, 0 0 48px ${bg}35`;
+                const baseShadow = `0 8px 12px ${shadowColor}55, 0 14px 24px ${shadowColor}48, 0 18px 32px ${shadowColor}40`;
+                const selectedShadow = `0 0 0 2px #fff, 0 8px 12px ${shadowColor}60, 0 16px 28px ${shadowColor}52, 0 20px 36px ${shadowColor}44`;
                 return (
                   <Box
                     key={targetCategory}
@@ -304,7 +304,7 @@ export function ContractNewFlowMui() {
                     onClick={() => setCategory(targetCategory)}
                     sx={{
                       height: 140,
-                      borderRadius: 4,
+                      borderRadius: 2,
                       border: "none",
                       backgroundColor: bg,
                       cursor: "pointer",

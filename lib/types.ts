@@ -48,30 +48,30 @@ export type NotifyDaysBefore = (typeof NOTIFY_DAYS_OPTIONS)[number];
 export const MONTHLY_NOTIFY_DAYS_OPTIONS = [7, 1] as const;
 export type MonthlyNotifyDaysBefore = (typeof MONTHLY_NOTIFY_DAYS_OPTIONS)[number];
 
-/** 카테고리 카드 파스텔 배경색 (스트리밍은 별도 파스텔 톤) */
+/** 카테고리 카드 배경색 (참고 이미지 팔레트: 틸/퍼플/옐로우오렌지/스카이블루/오렌지/핑크/라이트퍼플/시안 + 그린) */
 export const CATEGORY_PASTEL: Record<ContractCategory, string> = {
-  RENT: "#F4A261",
-  PHONE: "#ACE7FF",
-  CAR_INSURANCE: "#E2BEF1",
-  GYM: "#B5EAD7",
-  RENTAL: "#FFEAA7",
-  STREAMING: "#B8D4E3", // 다른 파스텔 톤 (연한 세룰리언)
-  FINANCE: "#E8D5B7",
-  EDUCATION: "#D4E5D4",
-  OTHER: "#C7CEEA",
+  RENT: "#34D3BE",
+  PHONE: "#44B2FF",
+  CAR_INSURANCE: "#9762ED",
+  GYM: "#FFC434",
+  RENTAL: "#2ECCDB",
+  STREAMING: "#A96BFF",
+  FINANCE: "#FF7E44",
+  EDUCATION: "#FF6295",
+  OTHER: "#6BCB77",
 };
 
-/** 카테고리별 같은 계열 그림자용 색 (약간 어둡고 채도 낮은 톤) */
+/** 카테고리별 같은 계열 그림자용 (아래 끝 입체감용, 더 어두운 톤) */
 export const CATEGORY_SHADOW: Record<ContractCategory, string> = {
-  RENT: "#c4844d",
-  PHONE: "#7eb8d9",
-  CAR_INSURANCE: "#b894c4",
-  GYM: "#8bc4a8",
-  RENTAL: "#d9c67a",
-  STREAMING: "#8aaeb8",
-  FINANCE: "#c4b088",
-  EDUCATION: "#a8b8a8",
-  OTHER: "#9a9ec4",
+  RENT: "#28a89a",
+  PHONE: "#3692d9",
+  CAR_INSURANCE: "#7a4fc4",
+  GYM: "#d9a62b",
+  RENTAL: "#25a8b5",
+  STREAMING: "#8d52e6",
+  FINANCE: "#e66a33",
+  EDUCATION: "#e04d7a",
+  OTHER: "#52a85e",
 };
 
 export interface Contract {
