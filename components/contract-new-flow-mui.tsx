@@ -295,7 +295,7 @@ export function ContractNewFlowMui() {
                   sx={{
                     height: 140,
                     borderRadius: 2,
-                    border: "2px solid",
+                    border: "1px solid",
                     borderColor: selected ? "#262626" : "divider",
                     backgroundColor: "#fff",
                     cursor: "pointer",
