@@ -266,9 +266,10 @@ export function ContractNewFlowMui() {
               backgroundColor: "#262626",
               color: CATEGORY_PASTEL.GYM,
               borderRadius: 1.5,
-              px: 1.5,
-              py: 0.75,
+              px: 1,
+              py: 0.35,
               display: "inline-block",
+              lineHeight: 1.25,
             }}
           >
             <Typography variant="caption" sx={{ color: "inherit", fontWeight: 700, letterSpacing: "0.08em" }}>
