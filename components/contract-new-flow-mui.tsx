@@ -260,20 +260,22 @@ export function ContractNewFlowMui() {
   return (
     <Box sx={{ px: 1.5, py: 2 }}>
       <Stack spacing={2.3} sx={{ width: "100%", maxWidth: "100%" }}>
-        <Box
-          sx={{
-            backgroundColor: "#262626",
-            color: CATEGORY_PASTEL.GYM,
-            borderRadius: 1.5,
-            px: 1.5,
-            py: 1,
-            display: "inline-block",
-          }}
-        >
-          <Typography variant="caption" sx={{ color: "inherit", fontWeight: 700, letterSpacing: "0.08em" }}>
-            {step + 1}단계
-          </Typography>
-          <Typography variant="h5" sx={{ mt: 0.25, fontSize: "1.4rem", fontWeight: 700, color: "inherit" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Box
+            sx={{
+              backgroundColor: "#262626",
+              color: CATEGORY_PASTEL.GYM,
+              borderRadius: 1.5,
+              px: 1.5,
+              py: 0.75,
+              display: "inline-block",
+            }}
+          >
+            <Typography variant="caption" sx={{ color: "inherit", fontWeight: 700, letterSpacing: "0.08em" }}>
+              {step + 1}단계
+            </Typography>
+          </Box>
+          <Typography variant="h5" sx={{ fontSize: "1.4rem", fontWeight: 700, color: "#000" }}>
             {STEPS[step].title}
           </Typography>
         </Box>
