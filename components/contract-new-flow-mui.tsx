@@ -172,8 +172,14 @@ export function ContractNewFlowMui() {
 
   const handleBack = () => {
     setError(null);
+    if (step === 2) setHasInteractedStep1(false); // 2단계 재진입 시 다음 비활성 유지
     if (step > 0) setStep((prev) => prev - 1);
   };
+
+  // 2단계 진입 시 다음 버튼 비활성 유지
+  useEffect(() => {
+    if (step === 1) setHasInteractedStep1(false);
+  }, [step]);
 
   const handleSubmit = async () => {
     setError(null);
@@ -561,14 +567,16 @@ export function ContractNewFlowMui() {
           {error && <Alert severity="error">{error}</Alert>}
 
           <Stack direction="row" justifyContent="center" spacing={1.2} sx={{ mt: 2.5 }}>
-            <Button
-              variant="outlined"
-              startIcon={<ChevronLeftRoundedIcon />}
-              onClick={handleBack}
-              disabled={!canGoBack}
-            >
-              이전
-            </Button>
+            {step > 0 && (
+              <Button
+                variant="outlined"
+                startIcon={<ChevronLeftRoundedIcon />}
+                onClick={handleBack}
+                disabled={!canGoBack}
+              >
+                이전
+              </Button>
+            )}
 
             {step < 2 ? (
               <Button
