@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -26,23 +26,43 @@ const BUTTON_SX = {
   minHeight: 48,
 };
 
+const SERVICE_BUTTON_SX = {
+  ...BUTTON_SX,
+  justifyContent: "flex-start",
+  pl: 2,
+  textAlign: "left",
+};
+
 export function SettingsPanel() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationError, setNotificationError] = useState(false);
   const [isLoadingPush, setIsLoadingPush] = useState(false);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    if (typeof Notification !== "undefined") {
+      setNotificationPermission(Notification.permission);
+    }
+  }, []);
+
   const handlePushPermission = async () => {
+    if (typeof Notification === "undefined") {
+      setNotificationError(true);
+      setNotificationMessage("이 브라우저는 알림을 지원하지 않습니다.");
+      return;
+    }
+    if (Notification.permission === "granted") {
+      setNotificationMessage("브라우저 설정에서 알림을 끌 수 있습니다.");
+      setNotificationError(false);
+      return;
+    }
     setIsLoadingPush(true);
     setNotificationError(false);
     setNotificationMessage("");
     try {
-      if (typeof Notification === "undefined") {
-        setNotificationError(true);
-        setNotificationMessage("이 브라우저는 알림을 지원하지 않습니다.");
-        return;
-      }
       const permission = await Notification.requestPermission();
+      setNotificationPermission(permission);
       if (permission === "granted") {
         setNotificationMessage("브라우저 알림이 허용되었습니다.");
       } else {
@@ -84,55 +104,11 @@ export function SettingsPanel() {
                 fullWidth
                 sx={BUTTON_SX}
               >
-                {isLoadingPush ? "요청 중..." : "알림 권한 요청"}
+                {isLoadingPush ? "요청 중..." : notificationPermission === "granted" ? "알림 권한 끄기" : "알림 권한 켜기"}
               </Button>
               {notificationMessage && (
                 <Alert severity={notificationError ? "error" : "success"}>{notificationMessage}</Alert>
               )}
-            </Stack>
-          </CardContent>
-        </Card>
-
-        {/* 서비스 정보 - 알림과 동일한 테두리 카드 + 버튼 3개 */}
-        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-          <CardContent sx={{ p: 2.5 }}>
-            <Stack spacing={1.5}>
-              <Stack direction="row" alignItems="center" spacing={0.75}>
-                <InfoOutlinedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
-                <Typography variant="subtitle2" fontWeight={700}>
-                  서비스 정보
-                </Typography>
-              </Stack>
-              <Button
-                component={Link}
-                href="/terms"
-                variant="outlined"
-                fullWidth
-                startIcon={<DescriptionOutlinedIcon />}
-                sx={BUTTON_SX}
-              >
-                서비스 이용약관
-              </Button>
-              <Button
-                component={Link}
-                href="/privacy"
-                variant="outlined"
-                fullWidth
-                startIcon={<PrivacyTipOutlinedIcon />}
-                sx={BUTTON_SX}
-              >
-                개인정보 처리방침
-              </Button>
-              <Button
-                component="a"
-                href="mailto:sample@example.com"
-                variant="outlined"
-                fullWidth
-                startIcon={<EmailOutlinedIcon />}
-                sx={BUTTON_SX}
-              >
-                문의/피드백
-              </Button>
             </Stack>
           </CardContent>
         </Card>
@@ -164,6 +140,50 @@ export function SettingsPanel() {
                 sx={BUTTON_SX}
               >
                 로그아웃
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+
+        {/* 서비스 정보 - 아이콘·내용 왼쪽 정렬, 왼쪽 여백 */}
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+          <CardContent sx={{ p: 2.5 }}>
+            <Stack spacing={1.5}>
+              <Stack direction="row" alignItems="center" spacing={0.75}>
+                <InfoOutlinedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
+                <Typography variant="subtitle2" fontWeight={700}>
+                  서비스 정보
+                </Typography>
+              </Stack>
+              <Button
+                component={Link}
+                href="/terms"
+                variant="outlined"
+                fullWidth
+                startIcon={<DescriptionOutlinedIcon />}
+                sx={SERVICE_BUTTON_SX}
+              >
+                서비스 이용약관
+              </Button>
+              <Button
+                component={Link}
+                href="/privacy"
+                variant="outlined"
+                fullWidth
+                startIcon={<PrivacyTipOutlinedIcon />}
+                sx={SERVICE_BUTTON_SX}
+              >
+                개인정보 처리방침
+              </Button>
+              <Button
+                component="a"
+                href="mailto:sample@example.com"
+                variant="outlined"
+                fullWidth
+                startIcon={<EmailOutlinedIcon />}
+                sx={SERVICE_BUTTON_SX}
+              >
+                문의/피드백
               </Button>
             </Stack>
           </CardContent>
