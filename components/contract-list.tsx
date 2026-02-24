@@ -256,7 +256,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
             </Typography>
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2.5, px: 2.5 }}>
+        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2.5, px: 2.5, mt: 2 }}>
           <Button
             variant="outlined"
             onClick={() => {

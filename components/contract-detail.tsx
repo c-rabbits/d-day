@@ -236,7 +236,7 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
             </Typography>
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2.5, px: 2.5 }}>
+        <DialogActions sx={{ justifyContent: "center", gap: 1.5, pb: 2.5, px: 2.5, mt: 2 }}>
           <Button
             variant="outlined"
             onClick={() => setDeleteOpen(false)}
