@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
   CATEGORY_PASTEL,
+  CATEGORY_SHADOW,
   CATEGORY_SUBTITLES,
   CONTRACT_CATEGORIES,
   MONTHLY_NOTIFY_DAYS_OPTIONS,
@@ -291,7 +292,10 @@ export function ContractNewFlowMui() {
               {CONTRACT_CATEGORIES.map((targetCategory) => {
                 const Icon = CATEGORY_ICONS[targetCategory];
                 const bg = CATEGORY_PASTEL[targetCategory];
+                const shadowColor = CATEGORY_SHADOW[targetCategory];
                 const selected = category === targetCategory;
+                const baseShadow = `0 6px 24px ${shadowColor}50, 0 10px 32px ${shadowColor}38, 0 0 40px ${bg}28`;
+                const selectedShadow = `0 0 0 2px #fff, 0 8px 28px ${shadowColor}55, 0 12px 40px ${shadowColor}45, 0 0 48px ${bg}35`;
                 return (
                   <Box
                     key={targetCategory}
@@ -300,8 +304,8 @@ export function ContractNewFlowMui() {
                     onClick={() => setCategory(targetCategory)}
                     sx={{
                       height: 140,
-                      borderRadius: 1.2,
-                      border: "2px solid transparent",
+                      borderRadius: 4,
+                      border: "none",
                       backgroundColor: bg,
                       cursor: "pointer",
                       display: "flex",
@@ -311,28 +315,27 @@ export function ContractNewFlowMui() {
                       textAlign: "left",
                       font: "inherit",
                       p: 1.2,
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                      transform: selected ? "scale(1.12)" : "scale(1)",
-                      boxShadow: selected
-                        ? "0 0 0 2px #fff, 0 0 16px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.15)"
-                        : "0 1px 4px rgba(0,0,0,0.06)",
+                      transition: "transform 0.2s ease, box-shadow 0.25s ease",
+                      transform: selected ? "scale(1.04)" : "scale(1)",
+                      boxShadow: selected ? selectedShadow : baseShadow,
                     }}
                   >
                     <Icon sx={{ fontSize: 26, color: "#fff", mb: 0.5, alignSelf: "flex-start" }} />
                     <Typography
                       variant="subtitle2"
-                      sx={{ fontWeight: 700, color: "#333", pl: 0, fontSize: "0.95rem" }}
+                      sx={{ fontWeight: 700, color: "#fff", pl: 0, fontSize: "0.95rem", textShadow: "0 1px 2px rgba(0,0,0,0.15)" }}
                     >
                       {CATEGORY_LABELS[targetCategory]}
                     </Typography>
                     <Typography
                       variant="caption"
                       sx={{
-                        color: "#555",
+                        color: "rgba(255,255,255,0.92)",
                         mt: 0.25,
                         lineHeight: 1.35,
                         whiteSpace: "pre-line",
                         pl: 0,
+                        textShadow: "0 1px 2px rgba(0,0,0,0.12)",
                       }}
                     >
                       {CATEGORY_SUBTITLES[targetCategory]}

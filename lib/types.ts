@@ -61,6 +61,19 @@ export const CATEGORY_PASTEL: Record<ContractCategory, string> = {
   OTHER: "#C7CEEA",
 };
 
+/** 카테고리별 같은 계열 그림자용 색 (약간 어둡고 채도 낮은 톤) */
+export const CATEGORY_SHADOW: Record<ContractCategory, string> = {
+  RENT: "#c4844d",
+  PHONE: "#7eb8d9",
+  CAR_INSURANCE: "#b894c4",
+  GYM: "#8bc4a8",
+  RENTAL: "#d9c67a",
+  STREAMING: "#8aaeb8",
+  FINANCE: "#c4b088",
+  EDUCATION: "#a8b8a8",
+  OTHER: "#9a9ec4",
+};
+
 export interface Contract {
   id: string;
   user_id: string;
