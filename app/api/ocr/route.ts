@@ -1,3 +1,4 @@
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { type NextRequest } from "next/server";
 
 const VISION_URL = "https://vision.googleapis.com/v1/images:annotate";
@@ -141,8 +142,9 @@ export async function POST(request: NextRequest) {
     };
     const first = data.responses?.[0];
     if (first?.error) {
+      const msg = first.error.message ?? "Vision API 오류";
       return Response.json(
-        { error: first.error.message ?? "Vision API 오류" },
+        { error: toUserFriendlyMessage(msg) },
         { status: 502 }
       );
     }
@@ -158,8 +160,9 @@ export async function POST(request: NextRequest) {
     return Response.json(parsed);
   } catch (e) {
     console.error("OCR error", e);
+    const msg = e instanceof Error ? e.message : "OCR 처리 중 오류";
     return Response.json(
-      { error: e instanceof Error ? e.message : "OCR 처리 중 오류" },
+      { error: toUserFriendlyMessage(msg) },
       { status: 500 }
     );
   }

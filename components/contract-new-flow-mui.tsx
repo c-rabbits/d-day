@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import {
   CATEGORY_LABELS,
   CATEGORY_PASTEL,
@@ -254,7 +255,7 @@ export function ContractNewFlowMui() {
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "저장에 실패했습니다.");
+      setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "저장에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
     }

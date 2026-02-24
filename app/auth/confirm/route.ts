@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
@@ -20,11 +21,11 @@ export async function GET(request: NextRequest) {
       // redirect user to specified redirect URL or root of app
       redirect(next);
     } else {
-      // redirect the user to an error page with some instructions
-      redirect(`/auth/error?error=${error?.message}`);
+      const msg = toUserFriendlyMessage(error?.message ?? "");
+      redirect(`/auth/error?error=${encodeURIComponent(msg)}`);
     }
   }
 
-  // redirect the user to an error page with some instructions
-  redirect(`/auth/error?error=No token hash or type`);
+  const msg = toUserFriendlyMessage("No token hash or type");
+  redirect(`/auth/error?error=${encodeURIComponent(msg)}`);
 }

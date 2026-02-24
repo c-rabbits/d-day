@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { Button } from "@/components/ui/button";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 
@@ -60,7 +61,7 @@ export function PushEnable() {
       setMessage("알림이 활성화되었습니다.");
     } catch (e) {
       setStatus("error");
-      setMessage(e instanceof Error ? e.message : "설정에 실패했습니다.");
+      setMessage(e instanceof Error ? toUserFriendlyMessage(e.message) : "설정에 실패했습니다.");
     }
   };
 

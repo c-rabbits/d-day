@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/server-service";
 
@@ -21,7 +22,7 @@ export async function softDeleteContract(contractId: string): Promise<{ error?: 
     .eq("id", contractId)
     .eq("user_id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: toUserFriendlyMessage(error.message) };
   revalidatePath("/dashboard");
   return {};
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -41,7 +42,7 @@ export function SignUpForm({
       if (error) throw error;
       router.push("/auth/sign-up-success");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
+      setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "회원가입에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +58,7 @@ export function SignUpForm({
         scopes: "profile_nickname profile_image",
       },
     });
-    if (error) setError(error.message);
+    if (error) setError(toUserFriendlyMessage(error.message));
   };
 
   return (
@@ -66,6 +67,7 @@ export function SignUpForm({
         title="회원가입"
         subtitle="계약 만료 알림을 받기 위한 계정을 만드세요."
         backHref="/"
+        hideLogo
       >
         <Box component="form" noValidate autoComplete="off" onSubmit={handleSignUp}>
           <Stack spacing={2.5}>

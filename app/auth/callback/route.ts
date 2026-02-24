@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -13,15 +14,17 @@ export async function GET(request: NextRequest) {
   const safeNext = next.startsWith("/") ? next : "/dashboard";
 
   if (!code) {
-    return NextResponse.redirect(new URL("/auth/error?error=No auth code", request.url));
+    const msg = toUserFriendlyMessage("No auth code");
+    return NextResponse.redirect(new URL(`/auth/error?error=${encodeURIComponent(msg)}`, request.url));
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
+    const msg = toUserFriendlyMessage(error.message);
     return NextResponse.redirect(
-      new URL(`/auth/error?error=${encodeURIComponent(error.message)}`, request.url),
+      new URL(`/auth/error?error=${encodeURIComponent(msg)}`, request.url),
     );
   }
 

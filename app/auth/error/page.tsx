@@ -10,33 +10,28 @@ import {
 } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Suspense } from "react";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 
 async function ErrorContent({
   searchParams,
 }: {
-  searchParams: Promise<{ error: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   const params = await searchParams;
+  const rawError = params?.error ?? "";
+  const message = rawError ? toUserFriendlyMessage(rawError) : "확인되지 않은 오류가 발생했습니다.";
 
   return (
-    <>
-      {params?.error ? (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-          오류 코드: {params.error}
-        </Typography>
-      ) : (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-          확인되지 않은 오류가 발생했습니다.
-        </Typography>
-      )}
-    </>
+    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
+      {message}
+    </Typography>
   );
 }
 
 export default function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ error: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   return (
     <Box
@@ -54,7 +49,7 @@ export default function Page({
             <Stack spacing={2}>
               <Chip
                 icon={<ErrorOutlineIcon />}
-                label="AUTH ERROR"
+                label="인증 오류"
                 color="error"
                 variant="outlined"
                 sx={{ alignSelf: "flex-start", fontWeight: 700 }}

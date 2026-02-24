@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,7 +49,7 @@ export function UpdatePasswordForm({
       if (updateError) throw updateError;
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "비밀번호 변경에 실패했습니다.");
+      setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "비밀번호 변경에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }

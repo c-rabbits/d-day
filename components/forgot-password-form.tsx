@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useState } from "react";
@@ -29,7 +30,7 @@ export function ForgotPasswordForm({
       if (error) throw error;
       setSuccess(true);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "요청에 실패했습니다.");
+      setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "요청에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -41,6 +42,7 @@ export function ForgotPasswordForm({
         title="비밀번호 찾기"
         subtitle="가입한 이메일을 입력하면 재설정 링크를 보내드립니다."
         backHref="/auth/login"
+        hideLogo
       >
         {success ? (
           <Stack spacing={2.2} alignItems="center" sx={{ py: 1.5 }}>

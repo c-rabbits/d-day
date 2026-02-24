@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import {
   CATEGORY_LABELS,
   CONTRACT_CATEGORIES,
@@ -108,7 +109,7 @@ export function ContractEditForm({
       router.push(`/dashboard/contracts/${contract.id}`);
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "저장에 실패했습니다.");
+      setError(e instanceof Error ? toUserFriendlyMessage(e.message) : "저장에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
     }

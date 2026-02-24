@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { toUserFriendlyMessage } from "@/lib/error-messages";
 import { AuthShellMui } from "@/components/auth-shell-mui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,7 +38,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
       if (error) throw error;
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
+      setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "로그인에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +55,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
         scopes: "profile_nickname profile_image",
       },
     });
-    if (error) setError(error.message);
+    if (error) setError(toUserFriendlyMessage(error.message));
   };
 
   const handleGoogleLogin = async () => {
@@ -66,7 +67,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-    if (error) setError(error.message);
+    if (error) setError(toUserFriendlyMessage(error.message));
   };
 
   const socialButtonSx = {
@@ -84,6 +85,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
         title="로그인"
         subtitle="계정에 로그인하여 계약과 알림을 관리하세요."
         backHref="/"
+        hideLogo
       >
         <Box component="form" noValidate autoComplete="off" onSubmit={handleLogin}>
           <Stack spacing={2.5}>
