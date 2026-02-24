@@ -277,6 +277,9 @@ export function ContractNewFlowMui() {
               gap: 1,
               alignItems: "stretch",
               width: "100%",
+              maxWidth: "100%",
+              mx: "auto",
+              justifyItems: "stretch",
             }}
           >
             {CONTRACT_CATEGORIES.map((targetCategory) => {
@@ -290,9 +293,9 @@ export function ContractNewFlowMui() {
                   type="button"
                   onClick={() => setCategory(targetCategory)}
                   sx={{
-                    aspectRatio: "1",
+                    minHeight: 100,
                     borderRadius: 2,
-                    border: selected ? "2px solid #262626" : "1px solid",
+                    border: "2px solid",
                     borderColor: selected ? "#262626" : "divider",
                     backgroundColor: "#fff",
                     cursor: "pointer",
@@ -303,8 +306,7 @@ export function ContractNewFlowMui() {
                     textAlign: "left",
                     font: "inherit",
                     p: 1.2,
-                    transition: "transform 0.2s ease, border-color 0.2s ease",
-                    transform: selected ? "scale(1.02)" : "scale(1)",
+                    transition: "border-color 0.2s ease, outline-color 0.2s ease",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                   }}
                 >
@@ -531,7 +533,7 @@ export function ContractNewFlowMui() {
 
           {error && <Alert severity="error">{error}</Alert>}
 
-          <Stack direction="row" justifyContent="center" spacing={1.2}>
+          <Stack direction="row" justifyContent="center" spacing={1.2} sx={{ mt: 2.5 }}>
             <Button
               variant="outlined"
               startIcon={<ChevronLeftRoundedIcon />}
