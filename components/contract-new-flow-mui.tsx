@@ -6,7 +6,6 @@ import { createClient } from "@/lib/supabase/client";
 import {
   CATEGORY_LABELS,
   CATEGORY_PASTEL,
-  CATEGORY_SHADOW,
   CATEGORY_SUBTITLES,
   CONTRACT_CATEGORIES,
   MONTHLY_NOTIFY_DAYS_OPTIONS,
@@ -18,8 +17,6 @@ import {
   Alert,
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
   Stack,
   TextField,
@@ -261,90 +258,93 @@ export function ContractNewFlowMui() {
   };
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        borderRadius: 3.2,
-        borderColor: "divider",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-      }}
-    >
-      <CardContent sx={{ p: 2.4 }}>
-        <Stack spacing={2.3}>
-          <Box>
-            <Typography variant="caption" sx={{ color: "#000", fontWeight: 700, letterSpacing: "0.08em" }}>
-              {step + 1}단계
-            </Typography>
-            <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700, color: "#000" }}>
-              {STEPS[step].title}
-            </Typography>
-          </Box>
+    <Box sx={{ p: 2.4 }}>
+      <Stack spacing={2.3}>
+        <Box>
+          <Typography variant="caption" sx={{ color: "#000", fontWeight: 700, letterSpacing: "0.08em" }}>
+            {step + 1}단계
+          </Typography>
+          <Typography variant="h5" sx={{ mt: 0.5, fontSize: "1.4rem", fontWeight: 700, color: "#000" }}>
+            {STEPS[step].title}
+          </Typography>
+        </Box>
 
-          {step === 0 && (
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: 1,
-                alignItems: "stretch",
-              }}
-            >
-              {CONTRACT_CATEGORIES.map((targetCategory) => {
-                const Icon = CATEGORY_ICONS[targetCategory];
-                const bg = CATEGORY_PASTEL[targetCategory];
-                const shadowColor = CATEGORY_SHADOW[targetCategory];
-                const selected = category === targetCategory;
-                const baseShadow = `0 8px 12px ${shadowColor}55, 0 14px 24px ${shadowColor}48, 0 18px 32px ${shadowColor}40`;
-                const selectedShadow = `0 0 0 2px #fff, 0 8px 12px ${shadowColor}60, 0 16px 28px ${shadowColor}52, 0 20px 36px ${shadowColor}44`;
-                return (
+        {step === 0 && (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: 1,
+              alignItems: "stretch",
+            }}
+          >
+            {CONTRACT_CATEGORIES.map((targetCategory) => {
+              const Icon = CATEGORY_ICONS[targetCategory];
+              const iconBg = CATEGORY_PASTEL[targetCategory];
+              const selected = category === targetCategory;
+              return (
+                <Box
+                  key={targetCategory}
+                  component="button"
+                  type="button"
+                  onClick={() => setCategory(targetCategory)}
+                  sx={{
+                    aspectRatio: "1",
+                    borderRadius: 2,
+                    border: selected ? "2px solid #262626" : "1px solid",
+                    borderColor: selected ? "#262626" : "divider",
+                    backgroundColor: "#fff",
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    textAlign: "left",
+                    font: "inherit",
+                    p: 1.2,
+                    transition: "transform 0.2s ease, border-color 0.2s ease",
+                    transform: selected ? "scale(1.02)" : "scale(1)",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  }}
+                >
                   <Box
-                    key={targetCategory}
-                    component="button"
-                    type="button"
-                    onClick={() => setCategory(targetCategory)}
                     sx={{
-                      height: 140,
-                      borderRadius: 2,
-                      border: "none",
-                      backgroundColor: bg,
-                      cursor: "pointer",
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      bgcolor: iconBg,
                       display: "flex",
-                      flexDirection: "column",
-                      alignItems: "flex-start",
-                      justifyContent: "flex-start",
-                      textAlign: "left",
-                      font: "inherit",
-                      p: 1.2,
-                      transition: "transform 0.2s ease, box-shadow 0.25s ease",
-                      transform: selected ? "scale(1.04)" : "scale(1)",
-                      boxShadow: selected ? selectedShadow : baseShadow,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mb: 0.75,
                     }}
                   >
-                    <Icon sx={{ fontSize: 26, color: "#fff", mb: 0.5, alignSelf: "flex-start" }} />
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ fontWeight: 700, color: "#fff", pl: 0, fontSize: "0.95rem", textShadow: "0 1px 2px rgba(0,0,0,0.15)" }}
-                    >
-                      {CATEGORY_LABELS[targetCategory]}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: "rgba(255,255,255,0.92)",
-                        mt: 0.25,
-                        lineHeight: 1.35,
-                        whiteSpace: "pre-line",
-                        pl: 0,
-                        textShadow: "0 1px 2px rgba(0,0,0,0.12)",
-                      }}
-                    >
-                      {CATEGORY_SUBTITLES[targetCategory]}
-                    </Typography>
+                    <Icon sx={{ fontSize: 22, color: "#fff" }} />
                   </Box>
-                );
-              })}
-            </Box>
-          )}
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ fontWeight: 700, color: "#000", pl: 0, fontSize: "0.9rem" }}
+                  >
+                    {CATEGORY_LABELS[targetCategory]}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#555",
+                      mt: 0.25,
+                      lineHeight: 1.35,
+                      whiteSpace: "pre-line",
+                      pl: 0,
+                      fontSize: "0.7rem",
+                    }}
+                  >
+                    {CATEGORY_SUBTITLES[targetCategory]}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        )}
 
           {step === 1 && (
             <Stack spacing={1.7}>
@@ -462,6 +462,7 @@ export function ContractNewFlowMui() {
                         onClick={() => toggleMonthlyNotify(d)}
                         color={monthlyNotifyDays.includes(d) ? "primary" : "default"}
                         variant={monthlyNotifyDays.includes(d) ? "filled" : "outlined"}
+                        sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                       />
                     ))}
                     <Chip
@@ -469,6 +470,7 @@ export function ContractNewFlowMui() {
                       onClick={setNoMonthlyAlert}
                       color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
                       variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
+                      sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                     />
                   </Stack>
                 </>
@@ -488,6 +490,7 @@ export function ContractNewFlowMui() {
                         onClick={() => toggleNotify(targetDay)}
                         color={notifyDays.includes(targetDay) ? "primary" : "default"}
                         variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
+                        sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                       />
                     ))}
                     <Chip
@@ -495,6 +498,7 @@ export function ContractNewFlowMui() {
                       onClick={setNoExpiryAlert}
                       color={notifyDays.length === 0 ? "primary" : "default"}
                       variant={notifyDays.length === 0 ? "filled" : "outlined"}
+                      sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                     />
                   </Stack>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -508,6 +512,7 @@ export function ContractNewFlowMui() {
                         onClick={() => toggleMonthlyNotify(d)}
                         color={monthlyNotifyDays.includes(d) ? "primary" : "default"}
                         variant={monthlyNotifyDays.includes(d) ? "filled" : "outlined"}
+                        sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                       />
                     ))}
                     <Chip
@@ -515,6 +520,7 @@ export function ContractNewFlowMui() {
                       onClick={setNoMonthlyAlert}
                       color={monthlyNotifyDays.length === 0 ? "primary" : "default"}
                       variant={monthlyNotifyDays.length === 0 ? "filled" : "outlined"}
+                      sx={{ py: 1.25, px: 1.5, minHeight: 44 }}
                     />
                   </Stack>
                 </>
@@ -546,17 +552,15 @@ export function ContractNewFlowMui() {
             ) : (
               <Button
                 variant="contained"
-                endIcon={<TaskAltRoundedIcon />}
                 onClick={handleSubmit}
                 disabled={isCompleteDisabled}
               >
-                {isSubmitting ? "저장 중..." : "완료하고 저장"}
+                {isSubmitting ? "등록 중..." : "등록"}
               </Button>
             )}
           </Stack>
         </Stack>
-      </CardContent>
-    </Card>
+    </Box>
   );
 }
 

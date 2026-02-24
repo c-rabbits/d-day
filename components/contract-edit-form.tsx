@@ -205,7 +205,7 @@ export function ContractEditForm({
                     알림
                   </Typography>
                 </Stack>
-                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "nowrap" }}>
                   {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
                     <Chip
                       key={targetDay}
@@ -214,9 +214,11 @@ export function ContractEditForm({
                       color={notifyDays.includes(targetDay) ? "primary" : "default"}
                       variant={notifyDays.includes(targetDay) ? "filled" : "outlined"}
                       sx={{
-                        fontSize: "1rem",
+                        flex: "1 1 0",
+                        minWidth: 0,
+                        fontSize: "0.875rem",
                         py: 1.25,
-                        px: 1.5,
+                        px: 0.75,
                         minHeight: 44,
                       }}
                     />
@@ -227,9 +229,11 @@ export function ContractEditForm({
                     color={notifyDays.length === 0 ? "primary" : "default"}
                     variant={notifyDays.length === 0 ? "filled" : "outlined"}
                     sx={{
-                      fontSize: "1rem",
+                      flex: "1 1 0",
+                      minWidth: 0,
+                      fontSize: "0.875rem",
                       py: 1.25,
-                      px: 1.5,
+                      px: 0.75,
                       minHeight: 44,
                     }}
                   />
