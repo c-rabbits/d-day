@@ -306,6 +306,7 @@ export function ContractNewFlowMui() {
                     textAlign: "left",
                     font: "inherit",
                     p: 1.2,
+                    pl: 1.5,
                     transition: "border-color 0.2s ease, outline-color 0.2s ease",
                     boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
                   }}
