@@ -258,8 +258,8 @@ export function ContractNewFlowMui() {
   };
 
   return (
-    <Box sx={{ p: 2.4 }}>
-      <Stack spacing={2.3}>
+    <Box sx={{ px: 1.5, py: 2 }}>
+      <Stack spacing={2.3} sx={{ width: "100%", maxWidth: "100%" }}>
         <Box>
           <Typography variant="caption" sx={{ color: "#000", fontWeight: 700, letterSpacing: "0.08em" }}>
             {step + 1}단계
@@ -276,6 +276,7 @@ export function ContractNewFlowMui() {
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: 1,
               alignItems: "stretch",
+              width: "100%",
             }}
           >
             {CONTRACT_CATEGORIES.map((targetCategory) => {
