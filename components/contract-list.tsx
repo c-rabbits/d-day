@@ -133,12 +133,7 @@ export function ContractList({ contracts }: { contracts: ContractRow[] }) {
               }}
             >
               <CardActionArea
-                disableRipple
                 onClick={() => router.push(`/dashboard/contracts/${c.id}`)}
-                sx={{
-                  "& .MuiCardActionArea-focusHighlight": { opacity: 0 },
-                  "&:hover .MuiCardActionArea-focusHighlight": { opacity: 0 },
-                }}
               >
                 <Stack spacing={1.5} sx={{ p: 2.5 }}>
                   {/* 상단: 아이콘 + 제목/카테고리·유형 + D-day */}
