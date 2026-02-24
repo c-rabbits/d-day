@@ -181,7 +181,7 @@ function ContractStatusCard({
       }}
     >
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 0 }}>
-        <Box sx={{ py: 1.5, pl: 2, pr: 1.5, borderRight: "1px solid rgba(255,255,255,0.12)" }}>
+        <Box sx={{ py: 1.5, px: 2, borderRight: "1px solid rgba(255,255,255,0.12)" }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75, ml: 0.5 }}>
             월구독
           </Typography>
@@ -189,7 +189,7 @@ function ContractStatusCard({
           <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
           <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
         </Box>
-        <Box sx={{ py: 1.5, pl: 2, pr: 1.5 }}>
+        <Box sx={{ py: 1.5, px: 2 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75, ml: 0.5 }}>
             장기계약
           </Typography>

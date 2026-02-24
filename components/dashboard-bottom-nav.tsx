@@ -83,7 +83,7 @@ export function DashboardBottomNav() {
           />
         </div>
 
-        {/* 아이템들 — 기본 흰 아이콘, 활성 시 #FFC434 */}
+        {/* 아이템들 — 기본 흰 아이콘, 활성 시 검정 */}
         <div className="relative z-10 flex w-full">
           {NAV_ITEMS.map((item, index) => {
             const isActive = index === activeIndex;
@@ -95,7 +95,7 @@ export function DashboardBottomNav() {
                 onClick={() => router.push(item.href)}
                 className="flex flex-1 flex-col items-center justify-center py-2 transition-colors"
                 style={{
-                  color: isActive ? "#FFC434" : "#ffffff",
+                  color: isActive ? "#262626" : "#ffffff",
                 }}
               >
                 <Icon
