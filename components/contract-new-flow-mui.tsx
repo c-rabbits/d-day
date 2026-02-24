@@ -113,25 +113,12 @@ export function ContractNewFlowMui() {
     contractType === "subscription"
       ? Boolean(title.trim() && startDate && paymentDay)
       : Boolean(title.trim() && startDate && endDate);
-  // 페이지 진입 시에는 비활성, 조건 충족 시에만 활성
-  const canGoBack =
-    step === 0
-      ? false
-      : step === 1
-        ? hasInteractedStep1
-        : step === 2
-          ? step2AlertChosen
-          : true;
+  // 2·3단계 이전 버튼은 무조건 활성
+  const canGoBack = step > 0;
+  // 1단계: 카테고리 선택 시 다음 활성. 2단계: 진입 시 비활성, 입력 후 조건 충족 시에만 활성
   const canGoNext =
-    step < 2 && (step === 0 ? canMoveNextStepOne : step === 1 ? canMoveNextStepTwo : false);
-  const isCompleteDisabled =
-    isSubmitting ||
-    !step2AlertChosen ||
-    !category ||
-    !title.trim() ||
-    !startDate ||
-    (contractType === "longterm" && !endDate) ||
-    (contractType === "subscription" && !paymentDay);
+    step < 2 &&
+    (step === 0 ? canMoveNextStepOne : step === 1 ? hasInteractedStep1 && canMoveNextStepTwo : false);
 
   const toggleNotify = (targetDay: NotifyDaysBefore) => {
     setStep2AlertChosen(true);
@@ -185,7 +172,6 @@ export function ContractNewFlowMui() {
 
   const handleBack = () => {
     setError(null);
-    if (step === 2) setHasInteractedStep1(false); // 2단계 재진입 시 이전 비활성 유지
     if (step > 0) setStep((prev) => prev - 1);
   };
 
@@ -597,7 +583,7 @@ export function ContractNewFlowMui() {
               <Button
                 variant="contained"
                 onClick={handleSubmit}
-                disabled={isCompleteDisabled}
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "등록 중..." : "등록"}
               </Button>
