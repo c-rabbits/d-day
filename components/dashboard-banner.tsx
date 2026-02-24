@@ -7,10 +7,10 @@ const BANNER_COUNT = 3;
 const ROTATE_INTERVAL_MS = 5000;
 const SWIPE_THRESHOLD_PX = 50;
 
-const BANNER_SLIDES: { src: string | null; alt: string }[] = [
-  { src: null, alt: "배너 1" },
-  { src: null, alt: "배너 2" },
-  { src: null, alt: "배너 3" },
+const BANNER_SLIDES: { src: string; alt: string }[] = [
+  { src: "/banner/Dday_Banner_001.png", alt: "배너 1" },
+  { src: "/banner/Dday_Banner_002.png", alt: "배너 2" },
+  { src: "/banner/Dday_Banner_003.png", alt: "배너 3" },
 ];
 
 const TRACK_ORDER = [0, 1, 2, 0, 1, 2, 0];
@@ -128,25 +128,18 @@ export function DashboardBanner() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        bgcolor: slide.src ? undefined : "grey.300",
                       }}
                     >
-                      {slide.src ? (
-                        <Box
-                          component="img"
-                          src={slide.src}
-                          alt={slide.alt}
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <Box sx={{ color: "text.secondary", fontSize: "0.875rem" }}>
-                          배너 {slideIdx + 1} (이미지 추가 예정)
-                        </Box>
-                      )}
+                      <Box
+                        component="img"
+                        src={slide.src}
+                        alt={slide.alt}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
                     </Box>
                   </Box>
                 );
