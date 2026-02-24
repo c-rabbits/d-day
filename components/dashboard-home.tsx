@@ -152,7 +152,7 @@ export function DashboardHome({
   );
 }
 
-/** 내 계약 현황: 세로 구분(월구독 | 장기계약), 그라데이션 카드, 폭 좁게 */
+/** 내 계약 현황: 하나의 카드 안에 월구독 | 장기계약 구분, 다크 퍼플/인디고 계열 */
 function ContractStatusCard({
   subscriptionTotal,
   subscriptionSoon7,
@@ -168,48 +168,35 @@ function ContractStatusCard({
   longtermSoon30: number;
   longtermExpired: number;
 }) {
+  const cardBg = "linear-gradient(145deg, #3d3852 0%, #2e2b42 100%)";
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 1,
+        borderRadius: 2,
+        overflow: "hidden",
+        background: cardBg,
+        color: "#fff",
         maxWidth: 320,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
       }}
     >
-      <Box
-        sx={{
-          borderRadius: 2,
-          overflow: "hidden",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "#fff",
-          py: 1.25,
-          px: 1.5,
-        }}
-      >
-        <Typography variant="caption" sx={{ opacity: 0.9, fontWeight: 700 }}>
-          월구독
-        </Typography>
-        <CompactRow label="총계약" value={subscriptionTotal} />
-        <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
-        <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
-      </Box>
-      <Box
-        sx={{
-          borderRadius: 2,
-          overflow: "hidden",
-          background: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-          color: "#fff",
-          py: 1.25,
-          px: 1.5,
-        }}
-      >
-        <Typography variant="caption" sx={{ opacity: 0.9, fontWeight: 700 }}>
-          장기계약
-        </Typography>
-        <CompactRow label="총계약" value={longtermTotal} />
-        <CompactRow label="30일 내 만료" value={longtermSoon30} />
-        <CompactRow label="만료 지남" value={longtermExpired} />
+      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: 0 }}>
+        <Box sx={{ py: 1.5, px: 1.5, borderRight: "1px solid rgba(255,255,255,0.12)" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
+            월구독
+          </Typography>
+          <CompactRow label="총계약" value={subscriptionTotal} />
+          <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
+          <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
+        </Box>
+        <Box sx={{ py: 1.5, px: 1.5 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
+            장기계약
+          </Typography>
+          <CompactRow label="총계약" value={longtermTotal} />
+          <CompactRow label="30일 내 만료" value={longtermSoon30} />
+          <CompactRow label="만료 지남" value={longtermExpired} />
+        </Box>
       </Box>
     </Box>
   );
