@@ -27,6 +27,9 @@ async function DashboardContent() {
   const longtermList = list.filter((c) => !isSubscriptionContract(c.end_date));
 
   const subscriptionTotal = subscriptionList.length;
+  const subscriptionAmountSum = subscriptionList.reduce((sum, c) => sum + (c.amount ?? 0), 0);
+  const longtermAmountSum = longtermList.reduce((sum, c) => sum + (c.amount ?? 0), 0);
+
   const subscriptionSoon7 = subscriptionList.filter((c) => {
     const day = parsePaymentDayFromMemo(c.memo);
     if (day == null) return false;
@@ -59,9 +62,11 @@ async function DashboardContent() {
       subscriptionTotal={subscriptionTotal}
       subscriptionSoon7={subscriptionSoon7}
       subscriptionSoon1={subscriptionSoon1}
+      subscriptionAmountSum={subscriptionAmountSum}
       longtermTotal={longtermTotal}
       longtermSoon30={longtermSoon30}
       longtermExpired={longtermExpired}
+      longtermAmountSum={longtermAmountSum}
     />
   );
 }

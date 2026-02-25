@@ -31,3 +31,14 @@ export function getDisplayMemo(memo: string | null): string | null {
   const joined = parts.join(" / ").trim();
   return joined || null;
 }
+
+/** 메모에서 월구독 알림 일수 추출 (알림=7,1일전 → [7, 1]) */
+export function parseMonthlyNotifyFromMemo(memo: string | null): number[] {
+  if (!memo) return [];
+  const m = memo.match(/알림=([\d,]+)일전/);
+  if (!m) return [];
+  return m[1]
+    .split(",")
+    .map((s) => parseInt(s.trim(), 10))
+    .filter((n) => !Number.isNaN(n) && (n === 7 || n === 1));
+}

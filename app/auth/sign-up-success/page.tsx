@@ -40,7 +40,7 @@ export default function Page() {
             이메일을 확인해 계정을 인증해 주세요. 인증 후 로그인할 수 있습니다.
           </Typography>
           <Link href="/auth/login" style={{ display: "block", width: "100%" }}>
-            <Button variant="contained" fullWidth>
+            <Button variant="contained" fullWidth sx={{ justifyContent: "center", py: 1.75, minHeight: 48 }}>
               로그인
             </Button>
           </Link>

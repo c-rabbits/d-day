@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { clearContractNotifications } from "@/app/dashboard/actions";
 import { toUserFriendlyMessage } from "@/lib/error-messages";
+import {
+  getDisplayMemo,
+  parseMonthlyNotifyFromMemo,
+  parsePaymentDayFromMemo,
+} from "@/lib/contract-memo";
+import { isSubscriptionContract } from "@/lib/dday";
 import {
   CATEGORY_LABELS,
   CONTRACT_CATEGORIES,
@@ -41,6 +48,8 @@ type ContractRow = {
   memo: string | null;
 };
 
+const SUBSCRIPTION_END_DATE = "9999-12-31";
+
 export function ContractEditForm({
   contract,
   initialNotifyDays = [],
@@ -49,15 +58,25 @@ export function ContractEditForm({
   initialNotifyDays?: number[];
 }) {
   const router = useRouter();
+  const isSubscription = isSubscriptionContract(contract.end_date);
   const [title, setTitle] = useState(contract.title);
   const [category, setCategory] = useState<ContractCategory>(contract.category);
   const [startDate, setStartDate] = useState(contract.start_date);
   const [endDate, setEndDate] = useState(contract.end_date);
   const [amount, setAmount] = useState(contract.amount?.toString() ?? "");
-  const [memo, setMemo] = useState(contract.memo ?? "");
-  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>(
-    initialNotifyDays.filter((d) => [30, 7, 1].includes(d)) as NotifyDaysBefore[],
+  const [memo, setMemo] = useState(
+    isSubscription ? (getDisplayMemo(contract.memo) ?? "") : (contract.memo ?? ""),
   );
+  const subscriptionNotifyOptions = (NOTIFY_DAYS_OPTIONS.filter((d) => d !== 30) as NotifyDaysBefore[]);
+  const [notifyDays, setNotifyDays] = useState<NotifyDaysBefore[]>(() => {
+    if (isSubscription) {
+      const fromDb = initialNotifyDays.filter((d) => d !== 30) as NotifyDaysBefore[];
+      if (fromDb.length > 0) return fromDb;
+      const fromMemo = parseMonthlyNotifyFromMemo(contract.memo) as NotifyDaysBefore[];
+      return fromMemo;
+    }
+    return initialNotifyDays.filter((d) => [30, 7, 1].includes(d)) as NotifyDaysBefore[];
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,30 +89,47 @@ export function ContractEditForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!title.trim() || !startDate || !endDate) {
-      setError("계약명, 시작일, 만료일을 입력해 주세요.");
+    const effectiveEndDate = isSubscription ? SUBSCRIPTION_END_DATE : endDate;
+    if (!title.trim() || !startDate) {
+      setError("계약명, 시작일을 입력해 주세요.");
+      return;
+    }
+    if (!isSubscription && !endDate) {
+      setError("만료일을 입력해 주세요.");
       return;
     }
     setIsSubmitting(true);
     try {
       const supabase = createClient();
+      let finalMemo: string | null = memo.trim() || null;
+      if (isSubscription) {
+        const paymentDay = parsePaymentDayFromMemo(contract.memo) ?? 1;
+        const parts: string[] = [];
+        if (finalMemo) parts.push(finalMemo);
+        parts.push(`월구독|지출일=${paymentDay}`);
+        if (notifyDays.length > 0) {
+          parts.push(`알림=${notifyDays.join(",")}일전`);
+        }
+        finalMemo = parts.join(" / ");
+      }
       const { error: updateError } = await supabase
         .from("contracts")
         .update({
           title: title.trim(),
           category,
           start_date: startDate,
-          end_date: endDate,
+          end_date: effectiveEndDate,
           amount: amount ? parseFloat(amount.replace(/,/g, "")) || null : null,
-          memo: memo.trim() || null,
+          memo: finalMemo,
         })
         .eq("id", contract.id);
 
       if (updateError) throw updateError;
 
-      await supabase.from("notifications").delete().eq("contract_id", contract.id);
+      const { error: clearErr } = await clearContractNotifications(contract.id);
+      if (clearErr) throw new Error(clearErr);
 
-      const end = new Date(endDate);
+      const end = new Date(effectiveEndDate);
       const notificationsToInsert = notifyDays.map((d) => {
         const dte = new Date(end);
         dte.setDate(dte.getDate() - d);
@@ -104,7 +140,8 @@ export function ContractEditForm({
         };
       });
       if (notificationsToInsert.length > 0) {
-        await supabase.from("notifications").insert(notificationsToInsert);
+        const { error: insertErr } = await supabase.from("notifications").insert(notificationsToInsert);
+        if (insertErr) throw insertErr;
       }
       router.push(`/dashboard/contracts/${contract.id}`);
       router.refresh();
@@ -120,6 +157,22 @@ export function ContractEditForm({
       <CardContent sx={{ p: 2.4 }}>
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={1.9}>
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "inline-block",
+                  alignSelf: "flex-start",
+                  px: 1,
+                  py: 0.35,
+                  borderRadius: 1,
+                  bgcolor: isSubscription ? "primary.main" : "grey.700",
+                  color: "white",
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {isSubscription ? "월구독 계약 수정" : "장기계약 수정"}
+              </Typography>
               <TextField
                 label="계약명 *"
                 value={title}
@@ -157,7 +210,7 @@ export function ContractEditForm({
               <Box
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gridTemplateColumns: isSubscription ? "1fr" : { xs: "1fr", sm: "1fr 1fr" },
                   gap: 1.1,
                 }}
               >
@@ -170,15 +223,17 @@ export function ContractEditForm({
                   required
                   fullWidth
                 />
-                <TextField
-                  label="만료일 *"
-                  type="date"
-                  value={endDate}
-                  onChange={(event) => setEndDate(event.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  fullWidth
-                />
+                {!isSubscription && (
+                  <TextField
+                    label="만료일 *"
+                    type="date"
+                    value={endDate}
+                    onChange={(event) => setEndDate(event.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    required
+                    fullWidth
+                  />
+                )}
               </Box>
 
               <TextField
@@ -207,7 +262,7 @@ export function ContractEditForm({
                   </Typography>
                 </Stack>
                 <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "wrap" }}>
-                  {NOTIFY_DAYS_OPTIONS.map((targetDay) => (
+                  {(isSubscription ? subscriptionNotifyOptions : NOTIFY_DAYS_OPTIONS).map((targetDay) => (
                     <Chip
                       key={targetDay}
                       label={`D-${targetDay}`}
