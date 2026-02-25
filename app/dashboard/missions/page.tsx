@@ -2,6 +2,10 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { MissionList } from "@/components/mission-list";
 
+/**
+ * 미션 페이지. 계약 수·알림 여부는 MissionList가 클라이언트에서 /api/missions/status 로만 조회하므로
+ * 서버는 인증만 확인해 부하를 줄임.
+ */
 export default async function MissionsPage() {
   const supabase = await createClient();
   const {
@@ -9,31 +13,5 @@ export default async function MissionsPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/login");
 
-  const { count: contractCount } = await supabase
-    .from("contracts")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
-    .is("deleted_at", null);
-
-  const { data: contracts } = await supabase
-    .from("contracts")
-    .select("id")
-    .eq("user_id", user.id)
-    .is("deleted_at", null);
-  const contractIds = (contracts ?? []).map((c) => c.id);
-  let hasNotification = false;
-  if (contractIds.length > 0) {
-    const { count } = await supabase
-      .from("notifications")
-      .select("*", { count: "exact", head: true })
-      .in("contract_id", contractIds);
-    hasNotification = (count ?? 0) > 0;
-  }
-
-  return (
-    <MissionList
-      contractCount={contractCount ?? 0}
-      hasNotification={hasNotification}
-    />
-  );
+  return <MissionList />;
 }

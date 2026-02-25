@@ -88,7 +88,10 @@ export function setOnetimeDone(missionId: string): void {
   }
 }
 
-/** 한국시간(Asia/Seoul) 자정 기준 오늘 날짜 키 (YYYY-MM-DD). 데일리 미션 리셋용 */
+/**
+ * 한국시간(Asia/Seoul) 자정 기준 오늘 날짜 키 (YYYY-MM-DD).
+ * 데일리 미션(출석체크) 리셋: 자정 KST가 지나면 새 날짜 키가 되어 미완료 상태로 갱신됨.
+ */
 export function getTodayKey(): string {
   const d = new Date();
   return d.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });

@@ -19,27 +19,81 @@ import { getLevelFromXP, getXPProgressInLevel, MAX_LEVEL } from "@/lib/level";
 import { MISSIONS, type Mission } from "@/lib/mission";
 
 type MissionListProps = {
-  contractCount: number;
-  hasNotification: boolean;
+  contractCount?: number;
+  hasNotification?: boolean;
 };
 
-export function MissionList({ contractCount, hasNotification }: MissionListProps) {
+export function MissionList({ contractCount: initialContractCount, hasNotification: initialHasNotification }: MissionListProps = {}) {
   const router = useRouter();
   const [xp, setXp] = useState(0);
   const [dailyDone, setDailyDoneState] = useState(false);
   const [doneIds, setDoneIds] = useState<string[]>([]);
+  const [contractCount, setContractCount] = useState(initialContractCount ?? 0);
+  const [hasNotification, setHasNotification] = useState(initialHasNotification ?? false);
+  const [statusLoaded, setStatusLoaded] = useState(false);
 
-  const todayKey = getTodayKey();
+  const [todayKey, setTodayKey] = useState(() => getTodayKey());
 
   const refresh = () => {
+    const key = getTodayKey();
+    setTodayKey(key);
     setXp(getXP());
-    setDailyDoneState(isDailyDone(todayKey));
+    setDailyDoneState(isDailyDone(key));
     setDoneIds(
       MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id),
     );
   };
 
-  useEffect(() => refresh(), [todayKey, contractCount, hasNotification]);
+  // 1회성 미션은 한 번 받기 완료하면 계약 수를 다시 조회하지 않음. 완료 안 한 미션이 있을 때만 API 호출.
+  useEffect(() => {
+    const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
+    const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification"];
+    const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
+    if (!needStatus) {
+      setStatusLoaded(true);
+      refresh();
+      return;
+    }
+    let cancelled = false;
+    fetch("/api/missions/status")
+      .then((res) => {
+        if (!res.ok) throw new Error("status failed");
+        return res.json();
+      })
+      .then((data: { contractCount: number; hasNotification: boolean }) => {
+        if (!cancelled) {
+          setContractCount(data.contractCount);
+          setHasNotification(data.hasNotification);
+          setStatusLoaded(true);
+        }
+      })
+      .catch(() => setStatusLoaded(true))
+      .finally(() => {
+        if (!cancelled) refresh();
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (statusLoaded) refresh();
+  }, [contractCount, hasNotification, statusLoaded]);
+
+  // 탭을 다시 볼 때만 날짜 확인 (서버/폴링 없음). 자정 지나 탭 복귀 시 출석 상태 갱신.
+  useEffect(() => {
+    const onVisible = () => {
+      const key = getTodayKey();
+      setTodayKey((prev) => {
+        if (prev !== key) setDailyDoneState(isDailyDone(key));
+        return key;
+      });
+    };
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", onVisible);
+      return () => document.removeEventListener("visibilitychange", onVisible);
+    }
+  }, []);
 
   const completeAndGrantXP = (mission: Mission) => {
     if (mission.type === "daily") {
