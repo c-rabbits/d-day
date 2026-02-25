@@ -96,7 +96,7 @@ const CLAUSES = [
 export default function TermsPage() {
   const router = useRouter();
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", pb: 6 }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "grey.50", pb: 6, overflowY: "auto", WebkitOverflowScrolling: "touch" }}>
       <Container maxWidth="sm" sx={{ py: 3, px: 2.5 }}>
         <Button
           startIcon={<ArrowBackRoundedIcon />}
