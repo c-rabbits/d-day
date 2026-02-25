@@ -137,63 +137,51 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
             </Button>
             <Divider sx={{ my: 0.5 }}>또는</Divider>
             <Stack spacing={1.5}>
-              {/* Google 공식 가이드: Light theme, stroke #747775, "Google로 로그인" */}
-              <Button
-                variant="outlined"
-                fullWidth
+              {/* Google GSI Material Button: 공식 SVG 로고 + "Google로 로그인" */}
+              <Box
+                component="button"
+                type="button"
+                className="gsi-material-button"
                 onClick={handleGoogleLogin}
                 disabled={isLoading}
-                startIcon={
-                  <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
-                    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" fill="#4285F4" />
-                      <path d="M13.25 17.92c-.25-.15-.78-.5-1.44-.5-1.22 0-2.15 1-2.49 2.5H7.03v2.32c1.71.85 3.89 1.34 5.22 1.34 1.3 0 2.4-.43 3.33-1.22l-2.33-2.32z" fill="#34A853" />
-                      <path d="M10 18.75c1.7 0 3.13-.57 4.27-1.55l-2.33-2.32c-.62.42-1.42.7-2.44.7-1.88 0-3.48-1.27-4.05-3H2.6v2.4c1.18 2.34 3.6 3.9 6.4 3.9z" fill="#FBBC05" />
-                      <path d="M5.95 13.58c-.18-.53-.28-1.1-.28-1.69 0-.6.1-1.17.28-1.69V9.2H2.6C2 10.23 1.67 11.4 1.67 12.69s.33 2.46.93 3.49l2.35-1.84z" fill="#EA4335" />
-                    </svg>
-                  </Box>
-                }
-                sx={{
-                  ...socialButtonSx,
-                  borderColor: "#dadce0",
-                  color: "#3c4043",
-                  backgroundColor: "#fff",
-                  borderRadius: "12px",
-                  "&:hover": {
-                    borderColor: "#dadce0",
-                    backgroundColor: "rgba(0,0,0,0.04)",
-                  },
-                }}
+                sx={{ position: "relative" }}
               >
-                Google로 로그인
-              </Button>
-              {/* 카카오 공식 가이드: 배경 #FEE500, 심볼·텍스트 #000, radius 12px, 문구 "카카오 로그인" */}
-              <Button
-                variant="outlined"
-                fullWidth
+                <div className="gsi-material-button-state" aria-hidden />
+                <div className="gsi-material-button-content-wrapper">
+                  <div className="gsi-material-button-icon">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{ display: "block" }}>
+                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                    </svg>
+                  </div>
+                  <span className="gsi-material-button-contents">Google로 로그인</span>
+                </div>
+              </Box>
+              {/* 카카오 디자인 가이드: 컨테이너 #FEE500, 심볼 #000000, 레이블 #000 85%, radius 12px, 심볼+레이블 중앙 정렬 */}
+              <Box
+                component="button"
+                type="button"
+                className="kakao-login-button"
                 onClick={handleKakaoLogin}
                 disabled={isLoading}
-                startIcon={
-                  <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 3C6.48 3 2 6.58 2 10.9c0 3.45 2.26 6.47 5.57 8.12-.3.98-1.1 3.6-1.1 3.6-.13.48.18.46.34.34.13-.1 2.02-1.96 2.8-2.8.38.14.78.24 1.2.24 5.52 0 10-3.58 10-7.9S17.52 3 12 3z" fill="#000" />
-                    </svg>
-                  </Box>
-                }
-                sx={{
-                  ...socialButtonSx,
-                  border: "none",
-                  borderColor: "#FEE500",
-                  color: "rgba(0,0,0,0.85)",
-                  backgroundColor: "#FEE500",
-                  borderRadius: "12px",
-                  "&:hover": {
-                    backgroundColor: "#FDD835",
-                  },
-                }}
+                sx={{ position: "relative" }}
               >
-                카카오 로그인
-              </Button>
+                <div className="kakao-login-button-content-wrapper">
+                  <div className="kakao-login-button-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+                      <path
+                        fill="#000000"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M12 3C6.48 3 2 6.58 2 10.9c0 3.45 2.26 6.47 5.57 8.12-.3.98-1.1 3.6-1.1 3.6-.13.48.18.46.34.34.13-.1 2.02-1.96 2.8-2.8.38.14.78.24 1.2.24 5.52 0 10-3.58 10-7.9S17.52 3 12 3z"
+                      />
+                    </svg>
+                  </div>
+                  <span className="kakao-login-button-contents">카카오 로그인</span>
+                </div>
+              </Box>
             </Stack>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
               <Typography variant="body2" color="text.secondary">

@@ -304,3 +304,108 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Google GSI Material Button 스타일 */
+.gsi-material-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid #dadce0;
+  border-radius: 12px;
+  background: #fff;
+  color: #3c4043;
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.gsi-material-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: #dadce0;
+}
+.gsi-material-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.gsi-material-button-state {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.gsi-material-button-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+.gsi-material-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.gsi-material-button-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.gsi-material-button-contents {
+  white-space: nowrap;
+}
+
+/* 카카오 로그인 버튼 - 디자인 가이드 준수, 중앙 정렬 */
+.kakao-login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 12px;
+  background: #FEE500;
+  color: rgba(0, 0, 0, 0.85);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.kakao-login-button:hover {
+  background: #FDD835;
+}
+.kakao-login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.kakao-login-button-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+}
+.kakao-login-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.kakao-login-button-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.kakao-login-button-contents {
+  white-space: nowrap;
+}
