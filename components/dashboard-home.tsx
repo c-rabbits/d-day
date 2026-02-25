@@ -111,7 +111,7 @@ export function DashboardHome({
           />
         </Box>
 
-        <Stack spacing={1.5}>
+        <Stack spacing={1.5} sx={{ mt: 3.5 }}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1 }}>
             <Typography variant="h5" fontWeight={700}>
               계약 목록
@@ -164,15 +164,18 @@ function formatAmount(n: number): string {
   return `${n.toLocaleString()}원`;
 }
 
-/** 월 지출 합계용 라운드 박스 (눈에 띄는 포인트 색) */
+/** 월 지출 합계용 라운드 박스: 좌우 여백, 한 줄에 라벨(왼쪽) 금액(오른쪽), 텍스트 한 단계 크게 */
 const MONTHLY_SUM_BOX_SX = {
   borderRadius: 2,
-  px: 1.25,
-  py: 0.75,
+  px: 2,
+  py: 1,
   mt: 1.25,
   background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
   color: "#000",
   boxShadow: "0 2px 6px rgba(245,124,0,0.35)",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
 };
 
 /** 내 계약 현황: 하나의 카드 안에 월구독 | 장기계약 구분, 카드 맨 밑에 통합 월 지출 합계 */
@@ -228,10 +231,10 @@ function ContractStatusCard({
       </Box>
       <Box sx={{ px: 2, pb: 1.5, pt: 0 }}>
         <Box sx={MONTHLY_SUM_BOX_SX}>
-          <Typography variant="caption" sx={{ color: "#000", opacity: 0.9, fontSize: "0.7rem", display: "block" }}>
+          <Typography variant="body2" fontWeight={700} sx={{ color: "#000", fontSize: "0.9375rem" }}>
             월 지출 합계
           </Typography>
-          <Typography variant="body2" fontWeight={700} sx={{ fontSize: "1rem", color: "#000" }}>
+          <Typography variant="subtitle2" fontWeight={700} sx={{ color: "#000", fontSize: "1.0625rem" }}>
             {formatAmount(totalAmount)}
           </Typography>
         </Box>
