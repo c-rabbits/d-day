@@ -169,14 +169,13 @@ const MONTHLY_SUM_BOX_SX = {
   borderRadius: 2,
   px: 1.25,
   py: 0.75,
-  mt: 1,
-  mb: 0.5,
+  mt: 1.25,
   background: "linear-gradient(135deg, #ff9800 0%, #f57c00 100%)",
-  color: "#fff",
+  color: "#000",
   boxShadow: "0 2px 6px rgba(245,124,0,0.35)",
 };
 
-/** 내 계약 현황: 하나의 카드 안에 월구독 | 장기계약 구분, 다크 퍼플/인디고 계열. 오른쪽으로 넓게, 월 지출 합계 표시 */
+/** 내 계약 현황: 하나의 카드 안에 월구독 | 장기계약 구분, 카드 맨 밑에 통합 월 지출 합계 */
 function ContractStatusCard({
   subscriptionTotal,
   subscriptionSoon7,
@@ -197,12 +196,11 @@ function ContractStatusCard({
   longtermAmountSum: number;
 }) {
   const cardBg = "linear-gradient(145deg, #3d3852 0%, #2e2b42 100%)";
+  const totalAmount = subscriptionAmountSum + longtermAmountSum;
   return (
     <Box
       sx={{
-        width: "calc(100% + 12px)",
-        marginLeft: -6,
-        marginRight: -6,
+        width: "100%",
         borderRadius: 2,
         overflow: "hidden",
         background: cardBg,
@@ -215,14 +213,6 @@ function ContractStatusCard({
           <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
             월구독
           </Typography>
-          <Box sx={MONTHLY_SUM_BOX_SX}>
-            <Typography variant="caption" sx={{ opacity: 0.95, fontSize: "0.7rem", display: "block" }}>
-              월 지출 합계
-            </Typography>
-            <Typography variant="body2" fontWeight={700} sx={{ fontSize: "1rem" }}>
-              {formatAmount(subscriptionAmountSum)}
-            </Typography>
-          </Box>
           <CompactRow label="총계약" value={subscriptionTotal} />
           <CompactRow label="7일 내 만료" value={subscriptionSoon7} />
           <CompactRow label="1일 내 만료" value={subscriptionSoon1} />
@@ -231,17 +221,19 @@ function ContractStatusCard({
           <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: "1rem", mb: 0.75 }}>
             장기계약
           </Typography>
-          <Box sx={MONTHLY_SUM_BOX_SX}>
-            <Typography variant="caption" sx={{ opacity: 0.95, fontSize: "0.7rem", display: "block" }}>
-              월 지출 합계
-            </Typography>
-            <Typography variant="body2" fontWeight={700} sx={{ fontSize: "1rem" }}>
-              {formatAmount(longtermAmountSum)}
-            </Typography>
-          </Box>
           <CompactRow label="총계약" value={longtermTotal} />
           <CompactRow label="30일 내 만료" value={longtermSoon30} />
           <CompactRow label="만료 지남" value={longtermExpired} />
+        </Box>
+      </Box>
+      <Box sx={{ px: 2, pb: 1.5, pt: 0 }}>
+        <Box sx={MONTHLY_SUM_BOX_SX}>
+          <Typography variant="caption" sx={{ color: "#000", opacity: 0.9, fontSize: "0.7rem", display: "block" }}>
+            월 지출 합계
+          </Typography>
+          <Typography variant="body2" fontWeight={700} sx={{ fontSize: "1rem", color: "#000" }}>
+            {formatAmount(totalAmount)}
+          </Typography>
         </Box>
       </Box>
     </Box>
