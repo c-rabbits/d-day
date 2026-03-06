@@ -26,6 +26,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSocialLoading, setIsSocialLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -47,6 +48,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
   const handleKakaoLogin = async () => {
     const supabase = createClient();
     setError(null);
+    setIsSocialLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
@@ -55,19 +57,26 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
         scopes: "profile_nickname profile_image",
       },
     });
-    if (error) setError(toUserFriendlyMessage(error.message));
+    if (error) {
+      setError(toUserFriendlyMessage(error.message));
+      setIsSocialLoading(false);
+    }
   };
 
   const handleGoogleLogin = async () => {
     const supabase = createClient();
     setError(null);
+    setIsSocialLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-    if (error) setError(toUserFriendlyMessage(error.message));
+    if (error) {
+      setError(toUserFriendlyMessage(error.message));
+      setIsSocialLoading(false);
+    }
   };
 
   const socialButtonSx = {
@@ -143,7 +152,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
                 type="button"
                 className="gsi-material-button"
                 onClick={handleGoogleLogin}
-                disabled={isLoading}
+                disabled={isLoading || isSocialLoading}
                 sx={{ position: "relative" }}
               >
                 <div className="gsi-material-button-state" aria-hidden />
@@ -156,7 +165,9 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
                       <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
                     </svg>
                   </div>
-                  <span className="gsi-material-button-contents">Google로 로그인</span>
+                  <span className="gsi-material-button-contents">
+                    {isSocialLoading ? "로그인 중…" : "Google로 로그인"}
+                  </span>
                 </div>
               </Box>
               {/* 카카오 디자인 가이드: 컨테이너 #FEE500, 심볼 #000000, 레이블 #000 85%, radius 12px, 심볼+레이블 중앙 정렬 */}
@@ -165,7 +176,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
                 type="button"
                 className="kakao-login-button"
                 onClick={handleKakaoLogin}
-                disabled={isLoading}
+                disabled={isLoading || isSocialLoading}
                 sx={{ position: "relative" }}
               >
                 <div className="kakao-login-button-content-wrapper">
@@ -179,7 +190,9 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
                       />
                     </svg>
                   </div>
-                  <span className="kakao-login-button-contents">카카오 로그인</span>
+                  <span className="kakao-login-button-contents">
+                    {isSocialLoading ? "로그인 중…" : "카카오 로그인"}
+                  </span>
                 </div>
               </Box>
             </Stack>
