@@ -44,8 +44,9 @@ export default function RootLayout({
         <PwaRegister />
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <Suspense

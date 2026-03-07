@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    /* 항상 밝은 모드(절전/다크모드 무관) */
+    color-scheme: light;
     /* 앱 배경 흰색 통일 */
     --background: 0 0% 100%;
     --foreground: 210 25% 14%;
