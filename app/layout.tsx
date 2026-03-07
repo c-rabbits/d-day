@@ -24,6 +24,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
 };
 
 const notoSansKR = Noto_Sans_KR({
@@ -51,11 +52,11 @@ export default function RootLayout({
         >
           <Suspense
             fallback={
-              <div className="mx-auto min-h-screen w-full max-w-mobile bg-background" />
+              <div className="mx-auto min-h-screen w-full max-w-mobile max-w-[min(430px,100vw)] bg-background" />
             }
           >
             <MuiProvider>
-              <div className="mx-auto min-h-screen w-full max-w-mobile overflow-y-auto bg-background overscroll-none">
+              <div className="mx-auto min-h-screen w-full max-w-mobile max-w-[min(430px,100vw)] overflow-x-hidden overflow-y-auto bg-background overscroll-none">
                 {children}
               </div>
             </MuiProvider>
