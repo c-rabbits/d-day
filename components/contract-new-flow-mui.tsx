@@ -76,14 +76,14 @@ const dateInputSx = {
   },
 };
 
-/** (+) 버튼으로 진입할 때마다 1단계부터 시작하도록 key로 리마운트 */
+/** (+) 버튼으로 진입할 때마다 1단계(카테고리)부터 시작하도록, 이 페이지에 들어설 때마다 key를 바꿔 리마운트 */
 export function ContractNewFlowWithReset() {
   const pathname = usePathname();
   const prevPath = useRef<string | null>(null);
   const [mountKey, setMountKey] = useState(0);
   useEffect(() => {
     const isNewPage = pathname === "/dashboard/contracts/new";
-    if (isNewPage && prevPath.current != null && prevPath.current !== "/dashboard/contracts/new") {
+    if (isNewPage && prevPath.current !== pathname) {
       setMountKey((k) => k + 1);
     }
     prevPath.current = pathname;
