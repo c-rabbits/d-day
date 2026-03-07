@@ -67,16 +67,24 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
     const supabase = createClient();
     setError(null);
     setIsSocialLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo },
     });
     if (error) {
       setError(toUserFriendlyMessage(error.message));
       setIsSocialLoading(false);
+      return;
     }
+    // 구글 동의 화면이 인앱 브라우저에서 좁게 보이는 문제 회피: 새 탭에서 열면 보통 올바른 뷰포트로 표시됨
+    if (data?.url) {
+      const w = window.open(data.url, "_blank");
+      if (!w) window.location.href = data.url;
+    } else {
+      window.location.href = redirectTo;
+    }
+    setIsSocialLoading(false);
   };
 
   const socialButtonSx = {
