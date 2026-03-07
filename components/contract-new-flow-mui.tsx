@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { toUserFriendlyMessage } from "@/lib/error-messages";
@@ -76,19 +76,18 @@ const dateInputSx = {
   },
 };
 
-/** (+) 버튼으로 진입할 때마다 1단계(카테고리)부터 시작하도록, 이 페이지에 들어설 때마다 key를 바꿔 리마운트 */
+/** (+) 버튼으로 진입할 때마다 1단계(카테고리)부터 시작하도록, 이 경로에 올 때마다 새 key로 폼 리마운트 */
+const NEW_CONTRACT_PATH = "/dashboard/contracts/new";
+
 export function ContractNewFlowWithReset() {
   const pathname = usePathname();
-  const prevPath = useRef<string | null>(null);
-  const [mountKey, setMountKey] = useState(0);
+  const [formKey, setFormKey] = useState(() => Date.now());
   useEffect(() => {
-    const isNewPage = pathname === "/dashboard/contracts/new";
-    if (isNewPage && prevPath.current !== pathname) {
-      setMountKey((k) => k + 1);
+    if (pathname === NEW_CONTRACT_PATH) {
+      setFormKey(Date.now());
     }
-    prevPath.current = pathname;
   }, [pathname]);
-  return <ContractNewFlowMui key={mountKey} />;
+  return <ContractNewFlowMui key={formKey} />;
 }
 
 export function ContractNewFlowMui() {
