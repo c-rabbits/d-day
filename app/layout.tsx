@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import { MuiProvider } from "@/components/mui-provider";
 import { PwaRegister } from "@/components/pwa-register";
@@ -42,6 +43,14 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`}>
+        {/* 구글 로그인 리다이렉트 직후 첫 로드에서 뷰포트가 늦게 적용되는 문제 방지 - 가능한 한 먼저 실행 */}
+        <Script
+          id="viewport-first-paint"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var m=document.querySelector('meta[name=viewport]');var c='width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover';if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}})();`,
+          }}
+        />
         <PwaRegister />
         <ThemeProvider
           attribute="class"
