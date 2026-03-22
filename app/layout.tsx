@@ -61,11 +61,11 @@ export default function RootLayout({
         >
           <Suspense
             fallback={
-              <div className="mx-auto min-h-screen w-full max-w-mobile max-w-[min(430px,100vw)] bg-background" />
+              <div className="mx-auto min-h-screen w-full sm:max-w-[430px] bg-background" />
             }
           >
             <MuiProvider>
-              <div className="mx-auto min-h-screen w-full max-w-mobile max-w-[min(430px,100vw)] overflow-x-hidden overflow-y-auto bg-background overscroll-none">
+              <div className="mx-auto min-h-screen w-full sm:max-w-[430px] overflow-x-hidden overflow-y-auto bg-background overscroll-none">
                 {children}
               </div>
             </MuiProvider>
