@@ -104,7 +104,6 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
         <Box component="form" noValidate autoComplete="off" onSubmit={handleLogin}>
           <Stack spacing={2.5}>
             <TextField
-              autoFocus
               fullWidth
               label="이메일"
               type="email"
