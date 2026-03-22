@@ -43,12 +43,12 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`} suppressHydrationWarning>
-        {/* 구글 로그인 리다이렉트 직후 뷰포트 줌아웃 방지 — 즉시 + 페이지 로드 후 재적용 */}
+        {/* 구글 로그인 리다이렉트 직후 뷰포트 줌아웃 방지 + 새로고침 전 화면 숨김 */}
         <Script
           id="viewport-first-paint"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){var c='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';function fix(){var m=document.querySelector('meta[name=viewport]');if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('pageshow',fix);})();`,
+            __html: `(function(){var c='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';function fix(){var m=document.querySelector('meta[name=viewport]');if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('pageshow',fix);if(location.search.indexOf('from=oauth')!==-1&&!sessionStorage.getItem('__viewport_reloaded')){document.documentElement.style.visibility='hidden';}})();`,
           }}
         />
         <PwaRegister />
