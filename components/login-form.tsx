@@ -77,12 +77,9 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
       setIsSocialLoading(false);
       return;
     }
-    // 구글 동의 화면이 인앱 브라우저에서 좁게 보이는 문제 회피: 새 탭에서 열면 보통 올바른 뷰포트로 표시됨
+    // PWA/인앱 브라우저에서는 새 탭이 웹뷰로 열려 뷰포트가 작아지므로 현재 창에서 직접 이동
     if (data?.url) {
-      const w = window.open(data.url, "_blank");
-      if (!w) window.location.href = data.url;
-    } else {
-      window.location.href = redirectTo;
+      window.location.href = data.url;
     }
     setIsSocialLoading(false);
   };
