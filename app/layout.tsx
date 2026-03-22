@@ -43,12 +43,12 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`} suppressHydrationWarning>
-        {/* 구글 로그인 리다이렉트 직후 첫 로드에서 뷰포트가 늦게 적용되는 문제 방지 - 가능한 한 먼저 실행 */}
+        {/* 구글 로그인 리다이렉트 직후 뷰포트 줌아웃 방지 — 즉시 + 페이지 로드 후 재적용 */}
         <Script
           id="viewport-first-paint"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){var m=document.querySelector('meta[name=viewport]');var c='width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover';if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}})();`,
+            __html: `(function(){var c='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';function fix(){var m=document.querySelector('meta[name=viewport]');if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('pageshow',fix);})();`,
           }}
         />
         <PwaRegister />

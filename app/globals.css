@@ -2,17 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 구글 로그인 리다이렉트·인앱 브라우저에서도 화면에 맞게 표시 */
+/* 구글 로그인 리다이렉트·인앱 브라우저에서도 화면에 맞게 표시 + 줌 방지 */
 @layer base {
   html {
     width: 100%;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
   }
   body {
     width: 100%;
     min-height: 100%;
     overflow-x: hidden;
+    touch-action: manipulation;
   }
 }
 
