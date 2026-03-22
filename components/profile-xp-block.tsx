@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 import { Box, LinearProgress, Typography } from "@mui/material";
 import { getXP } from "@/lib/xp-store";
 import { getLevelFromXP, getXPProgressInLevel, MAX_LEVEL } from "@/lib/level";
+import { useXpSync } from "@/lib/hooks/use-xp-sync";
 
 /** 프로필 카드 내 XP 게이지, 경험치 숫자, 현재 레벨 (0~9999999 표기, 실제 상한 999999) */
 export function ProfileXpBlock() {
+  useXpSync();
+
   const [xp, setXp] = useState(0);
   useEffect(() => {
     setXp(getXP());

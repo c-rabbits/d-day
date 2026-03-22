@@ -64,6 +64,9 @@ export function ContractEditForm({
   const [startDate, setStartDate] = useState(contract.start_date);
   const [endDate, setEndDate] = useState(contract.end_date);
   const [amount, setAmount] = useState(contract.amount?.toString() ?? "");
+  const [paymentDay, setPaymentDay] = useState(() =>
+    isSubscription ? (parsePaymentDayFromMemo(contract.memo) ?? 1) : 1,
+  );
   const [memo, setMemo] = useState(
     isSubscription ? (getDisplayMemo(contract.memo) ?? "") : (contract.memo ?? ""),
   );
@@ -103,10 +106,10 @@ export function ContractEditForm({
       const supabase = createClient();
       let finalMemo: string | null = memo.trim() || null;
       if (isSubscription) {
-        const paymentDay = parsePaymentDayFromMemo(contract.memo) ?? 1;
+        const day = paymentDay;
         const parts: string[] = [];
         if (finalMemo) parts.push(finalMemo);
-        parts.push(`월구독|지출일=${paymentDay}`);
+        parts.push(`월구독|지출일=${day}`);
         if (notifyDays.length > 0) {
           parts.push(`알림=${notifyDays.join(",")}일전`);
         }
@@ -210,7 +213,7 @@ export function ContractEditForm({
               <Box
                 sx={{
                   display: "grid",
-                  gridTemplateColumns: isSubscription ? "1fr" : { xs: "1fr", sm: "1fr 1fr" },
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                   gap: 1.1,
                 }}
               >
@@ -223,7 +226,22 @@ export function ContractEditForm({
                   required
                   fullWidth
                 />
-                {!isSubscription && (
+                {isSubscription ? (
+                  <TextField
+                    label="매월 지출일 *"
+                    type="number"
+                    value={paymentDay}
+                    onChange={(event) => {
+                      const v = parseInt(event.target.value, 10);
+                      if (!isNaN(v) && v >= 1 && v <= 31) setPaymentDay(v);
+                    }}
+                    inputProps={{ min: 1, max: 31 }}
+                    InputLabelProps={{ shrink: true }}
+                    helperText="1~31일"
+                    required
+                    fullWidth
+                  />
+                ) : (
                   <TextField
                     label="만료일 *"
                     type="date"

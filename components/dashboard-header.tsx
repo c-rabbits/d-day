@@ -8,6 +8,8 @@ const ROUTE_TITLES: Record<string, { headline: string; subtitle?: string }> = {
   "/dashboard/profile": { headline: "프로필" },
   "/dashboard/info": { headline: "정보" },
   "/dashboard/contracts/new": { headline: "새 계약", subtitle: "계약 추가" },
+  "/dashboard/achievements": { headline: "업적" },
+  "/dashboard/leaderboard": { headline: "리더보드" },
 };
 
 function getTitle(pathname: string): { headline: string; subtitle?: string } | null {

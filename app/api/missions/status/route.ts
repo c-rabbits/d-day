@@ -33,8 +33,15 @@ export async function GET() {
     hasNotification = (count ?? 0) > 0;
   }
 
+  // 초대 수
+  const { count: inviteCount } = await supabase
+    .from("referrals")
+    .select("*", { count: "exact", head: true })
+    .eq("referrer_id", user.id);
+
   return NextResponse.json({
     contractCount: resolvedCount,
     hasNotification,
+    inviteCount: inviteCount ?? 0,
   });
 }

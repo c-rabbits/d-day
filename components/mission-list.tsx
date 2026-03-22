@@ -8,15 +8,19 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
   LinearProgress,
   Stack,
   Typography,
 } from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import { getXP, addXP, isDailyDone, setDailyDone, isOnetimeDone, setOnetimeDone, getTodayKey } from "@/lib/xp-store";
+import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
+import LeaderboardRoundedIcon from "@mui/icons-material/LeaderboardRounded";
+import { getXP, isDailyDone, isOnetimeDone, getTodayKey, completeMission } from "@/lib/xp-store";
 import { getLevelFromXP, getXPProgressInLevel, MAX_LEVEL } from "@/lib/level";
 import { MISSIONS, type Mission } from "@/lib/mission";
+import { useXpSync } from "@/lib/hooks/use-xp-sync";
 
 type MissionListProps = {
   contractCount?: number;
@@ -25,12 +29,18 @@ type MissionListProps = {
 
 export function MissionList({ contractCount: initialContractCount, hasNotification: initialHasNotification }: MissionListProps = {}) {
   const router = useRouter();
+
+  // DB -> localStorage 동기화
+  useXpSync();
+
   const [xp, setXp] = useState(0);
   const [dailyDone, setDailyDoneState] = useState(false);
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [contractCount, setContractCount] = useState(initialContractCount ?? 0);
   const [hasNotification, setHasNotification] = useState(initialHasNotification ?? false);
+  const [inviteCount, setInviteCount] = useState(0);
   const [statusLoaded, setStatusLoaded] = useState(false);
+  const [loadingMission, setLoadingMission] = useState<string | null>(null);
 
   const [todayKey, setTodayKey] = useState(() => getTodayKey());
 
@@ -44,10 +54,17 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     );
   };
 
-  // 1회성 미션은 한 번 받기 완료하면 계약 수를 다시 조회하지 않음. 완료 안 한 미션이 있을 때만 API 호출.
+  // XP 업데이트 이벤트 리스너 (syncFromServer 완료 시 갱신)
+  useEffect(() => {
+    const onXpUpdated = () => refresh();
+    window.addEventListener("dday_xp_updated", onXpUpdated);
+    return () => window.removeEventListener("dday_xp_updated", onXpUpdated);
+  }, []);
+
+  // 1회성 미션 조건 확인 API 호출
   useEffect(() => {
     const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
-    const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification"];
+    const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification", "invite_1", "invite_3", "invite_5", "invite_10", "invite_20", "invite_30"];
     const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
     if (!needStatus) {
       setStatusLoaded(true);
@@ -60,10 +77,11 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
         if (!res.ok) throw new Error("status failed");
         return res.json();
       })
-      .then((data: { contractCount: number; hasNotification: boolean }) => {
+      .then((data: { contractCount: number; hasNotification: boolean; inviteCount: number }) => {
         if (!cancelled) {
           setContractCount(data.contractCount);
           setHasNotification(data.hasNotification);
+          setInviteCount(data.inviteCount ?? 0);
           setStatusLoaded(true);
         }
       })
@@ -80,7 +98,7 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     if (statusLoaded) refresh();
   }, [contractCount, hasNotification, statusLoaded]);
 
-  // 탭을 다시 볼 때만 날짜 확인 (서버/폴링 없음). 자정 지나 탭 복귀 시 출석 상태 갱신.
+  // 탭 복귀 시 날짜 확인 (자정 리셋)
   useEffect(() => {
     const onVisible = () => {
       const key = getTodayKey();
@@ -95,41 +113,56 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     }
   }, []);
 
-  const completeAndGrantXP = (mission: Mission) => {
+  const handleStart = async (mission: Mission) => {
+    // 이미 로딩 중이면 무시
+    if (loadingMission) return;
+
     if (mission.type === "daily") {
       if (isDailyDone(todayKey)) return;
-      setDailyDone(todayKey);
-    } else {
-      if (isOnetimeDone(mission.id)) return;
-      setOnetimeDone(mission.id);
+      setLoadingMission(mission.id);
+      const result = await completeMission(mission.id);
+      setLoadingMission(null);
+      if (result.success) {
+        setXp(result.totalXp);
+        refresh();
+      }
+      return;
     }
-    addXP(mission.xpReward);
-    setXp(getXP());
-    refresh();
-  };
 
-  const handleStart = (mission: Mission) => {
-    if (mission.type === "daily") {
-      completeAndGrantXP(mission);
-      return;
-    }
     if (isOnetimeDone(mission.id)) return;
-    if (mission.id === "first_contract") {
-      if (contractCount >= 1) completeAndGrantXP(mission);
-      else router.push("/dashboard/contracts/new");
+
+    // 조건 미충족 시 해당 페이지로 이동
+    if (mission.id === "first_contract" && contractCount < 1) {
+      router.push("/dashboard/contracts/new");
       return;
     }
-    if (mission.id === "three_contracts") {
-      if (contractCount >= 3) completeAndGrantXP(mission);
-      else router.push("/dashboard/contracts/new");
+    if (mission.id === "three_contracts" && contractCount < 3) {
+      router.push("/dashboard/contracts/new");
       return;
     }
-    if (mission.id === "set_notification") {
-      if (hasNotification) completeAndGrantXP(mission);
-      else router.push("/dashboard");
+    if (mission.id === "set_notification" && !hasNotification) {
+      router.push("/dashboard");
       return;
     }
-    completeAndGrantXP(mission);
+
+    // 초대 미션: 조건 미충족 시 설정(공유) 페이지로
+    const inviteMatch = mission.id.match(/^invite_(\d+)$/);
+    if (inviteMatch) {
+      const required = parseInt(inviteMatch[1], 10);
+      if (inviteCount < required) {
+        router.push("/dashboard/settings");
+        return;
+      }
+    }
+
+    // 조건 충족 → 서버에 완료 요청
+    setLoadingMission(mission.id);
+    const result = await completeMission(mission.id);
+    setLoadingMission(null);
+    if (result.success) {
+      setXp(result.totalXp);
+      refresh();
+    }
   };
 
   const level = getLevelFromXP(xp);
@@ -142,6 +175,8 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     if (m.id === "first_contract") return contractCount >= 1;
     if (m.id === "three_contracts") return contractCount >= 3;
     if (m.id === "set_notification") return hasNotification;
+    const inviteMatch = m.id.match(/^invite_(\d+)$/);
+    if (inviteMatch) return inviteCount >= parseInt(inviteMatch[1], 10);
     return false;
   };
 
@@ -153,6 +188,28 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
             미션
           </Typography>
         </Box>
+
+        {/* 업적 & 리더보드 바로가기 */}
+        <Stack direction="row" spacing={1.5}>
+          <Button
+            variant="outlined"
+            fullWidth
+            startIcon={<EmojiEventsRoundedIcon />}
+            onClick={() => router.push("/dashboard/achievements")}
+            sx={{ borderRadius: 2, fontWeight: 700, py: 1.2 }}
+          >
+            업적
+          </Button>
+          <Button
+            variant="outlined"
+            fullWidth
+            startIcon={<LeaderboardRoundedIcon />}
+            onClick={() => router.push("/dashboard/leaderboard")}
+            sx={{ borderRadius: 2, fontWeight: 700, py: 1.2 }}
+          >
+            리더보드
+          </Button>
+        </Stack>
 
         {/* 레벨 & XP 요약 */}
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
@@ -196,6 +253,7 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
                   mission={m}
                   done={done}
                   canClaim={false}
+                  loading={loadingMission === m.id}
                   onStart={() => handleStart(m)}
                 />
               );
@@ -218,6 +276,7 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
                   mission={m}
                   done={done}
                   canClaim={canClaim}
+                  loading={loadingMission === m.id}
                   onStart={() => handleStart(m)}
                 />
               );
@@ -235,11 +294,13 @@ function MissionCard({
   mission,
   done,
   canClaim,
+  loading,
   onStart,
 }: {
   mission: Mission;
   done: boolean;
   canClaim: boolean;
+  loading: boolean;
   onStart: () => void;
 }) {
   return (
@@ -269,6 +330,8 @@ function MissionCard({
               color="success"
               variant="outlined"
             />
+          ) : loading ? (
+            <CircularProgress size={24} sx={{ color: SKY_BLUE, flexShrink: 0 }} />
           ) : canClaim ? (
             <Button
               variant="contained"

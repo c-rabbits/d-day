@@ -25,6 +25,8 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import { getBannerForCategory } from "@/lib/ad-banners";
+import { AdBannerCard } from "@/components/ad-banner";
 
 const ACTION_BUTTON_SX = {
   justifyContent: "center",
@@ -198,6 +200,9 @@ export function ContractDetail({ contract, notifyDays = [] }: ContractDetailProp
             </>
           )}
         </Box>
+
+        {/* CPA 제휴 배너 */}
+        <AdBannerCard banner={getBannerForCategory(contract.category)} dDay={dday} />
 
         {/* 삭제(왼쪽 흰색) / 수정(오른쪽 검정) */}
         <Stack direction="row" spacing={1.5} sx={{ pt: 0.5 }}>

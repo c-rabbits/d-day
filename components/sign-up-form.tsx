@@ -15,6 +15,7 @@ export function SignUpForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [referralCode, setReferralCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -40,6 +41,10 @@ export function SignUpForm({
         },
       });
       if (error) throw error;
+      // 추천 코드가 있으면 로그인 후 처리하도록 저장
+      if (referralCode.trim()) {
+        localStorage.setItem("dday_pending_referral", referralCode.trim().toUpperCase());
+      }
       router.push("/auth/sign-up-success");
     } catch (err: unknown) {
       setError(err instanceof Error ? toUserFriendlyMessage(err.message) : "회원가입에 실패했습니다.");
@@ -51,6 +56,10 @@ export function SignUpForm({
   const handleKakaoSignUp = async () => {
     const supabase = createClient();
     setError(null);
+    // 추천 코드가 있으면 로그인 후 처리하도록 저장
+    if (referralCode.trim()) {
+      localStorage.setItem("dday_pending_referral", referralCode.trim().toUpperCase());
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {
@@ -95,6 +104,15 @@ export function SignUpForm({
               value={repeatPassword}
               onChange={(e) => setRepeatPassword(e.target.value)}
               required
+            />
+
+            <TextField
+              fullWidth
+              label="추천 코드 (선택)"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+              inputProps={{ maxLength: 6, style: { textTransform: "uppercase", letterSpacing: "0.15em" } }}
+              helperText="친구에게 받은 추천 코드가 있다면 입력하세요."
             />
 
             {error && <Alert severity="error">{error}</Alert>}

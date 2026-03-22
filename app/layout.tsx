@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`}>
+      <body className={`${notoSansKR.variable} font-sans antialiased bg-background overscroll-none`} suppressHydrationWarning>
         {/* 구글 로그인 리다이렉트 직후 첫 로드에서 뷰포트가 늦게 적용되는 문제 방지 - 가능한 한 먼저 실행 */}
         <Script
           id="viewport-first-paint"

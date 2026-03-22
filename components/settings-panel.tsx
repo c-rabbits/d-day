@@ -19,6 +19,7 @@ import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 
 const BUTTON_SX = {
   justifyContent: "center",
@@ -38,12 +39,23 @@ export function SettingsPanel() {
   const [notificationError, setNotificationError] = useState(false);
   const [isLoadingPush, setIsLoadingPush] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
+  const [shareMessage, setShareMessage] = useState("");
+  const [referralCode, setReferralCode] = useState<string | null>(null);
+  const [inviteCount, setInviteCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     if (typeof Notification !== "undefined") {
       setNotificationPermission(Notification.permission);
     }
+    // 추천 코드 조회
+    fetch("/api/referral")
+      .then((res) => res.json())
+      .then((data) => {
+        setReferralCode(data.referralCode ?? null);
+        setInviteCount(data.inviteCount ?? 0);
+      })
+      .catch(() => {});
   }, []);
 
   const handlePushPermission = async () => {
@@ -86,6 +98,79 @@ export function SettingsPanel() {
         <Typography variant="h5" fontWeight={700}>
           설정
         </Typography>
+
+        {/* 앱 초대 */}
+        <Card variant="outlined" sx={{ borderRadius: 2 }}>
+          <CardContent sx={{ p: 2.5 }}>
+            <Stack spacing={1.5}>
+              <Stack direction="row" alignItems="center" spacing={0.75}>
+                <ShareRoundedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
+                <Typography variant="subtitle2" fontWeight={700}>
+                  앱 초대
+                </Typography>
+              </Stack>
+
+              {/* 내 추천 코드 */}
+              {referralCode && (
+                <Box
+                  sx={{
+                    bgcolor: "grey.100",
+                    borderRadius: 2,
+                    p: 2,
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    내 추천 코드
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    fontWeight={800}
+                    letterSpacing="0.2em"
+                    sx={{ mt: 0.5 }}
+                  >
+                    {referralCode}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+                    {inviteCount}/30명 초대 완료
+                  </Typography>
+                </Box>
+              )}
+
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ ...BUTTON_SX, bgcolor: "#FFC434", color: "#333", "&:hover": { bgcolor: "#e6b02e" } }}
+                onClick={async () => {
+                  const code = referralCode ?? "";
+                  const shareData = {
+                    title: "D-Day - 계약 만료일 관리",
+                    text: `계약 만료일, 놓치지 마세요! D-Day로 간편하게 관리하세요.\n추천코드: ${code}`,
+                    url: "https://d-day-one.vercel.app",
+                  };
+                  try {
+                    if (navigator.share) {
+                      await navigator.share(shareData);
+                    } else {
+                      await navigator.clipboard.writeText(
+                        `${shareData.text}\n${shareData.url}`
+                      );
+                      setShareMessage("링크가 복사되었습니다!");
+                      setTimeout(() => setShareMessage(""), 3000);
+                    }
+                  } catch {
+                    // 사용자가 공유 취소한 경우
+                  }
+                }}
+              >
+                친구에게 추천하기
+              </Button>
+              {shareMessage && (
+                <Alert severity="success">{shareMessage}</Alert>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
 
         {/* 알림 */}
         <Card variant="outlined" sx={{ borderRadius: 2 }}>

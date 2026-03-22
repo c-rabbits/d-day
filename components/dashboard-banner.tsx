@@ -82,12 +82,8 @@ export function DashboardBanner() {
       <Box
         sx={{
           position: "relative",
-          left: "50%",
-          right: "50%",
-          marginLeft: "-50vw",
-          marginRight: "-50vw",
-          width: "100vw",
-          maxWidth: "100vw",
+          width: "100%",
+          maxWidth: "100%",
         }}
       >
         <Box
