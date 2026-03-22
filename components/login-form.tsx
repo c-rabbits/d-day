@@ -53,6 +53,7 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
       provider: "kakao",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        skipBrowserRedirect: false,
         // account_email 미요청(비즈앱 전용). 동의 항목은 profile_nickname, profile_image만 사용.
         scopes: "profile_nickname profile_image",
       },
@@ -67,21 +68,19 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
     const supabase = createClient();
     setError(null);
     setIsSocialLoading(true);
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    // skipBrowserRedirect: false → Supabase가 현재 창에서 바로 구글 로그인 페이지로 리다이렉트
+    // 팝업이 아닌 전체 화면 리다이렉트로 PWA에서도 정상 크기 유지
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        skipBrowserRedirect: false,
+      },
     });
     if (error) {
       setError(toUserFriendlyMessage(error.message));
       setIsSocialLoading(false);
-      return;
     }
-    // PWA/인앱 브라우저에서는 새 탭이 웹뷰로 열려 뷰포트가 작아지므로 현재 창에서 직접 이동
-    if (data?.url) {
-      window.location.href = data.url;
-    }
-    setIsSocialLoading(false);
   };
 
   const socialButtonSx = {
