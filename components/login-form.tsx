@@ -189,12 +189,12 @@ export function LoginForm(props: React.ComponentPropsWithoutRef<"div">) {
               >
                 <div className="kakao-login-button-content-wrapper">
                   <div className="kakao-login-button-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+                    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
                       <path
                         fill="#000000"
                         fillRule="evenodd"
                         clipRule="evenodd"
-                        d="M12 3C6.48 3 2 6.58 2 10.9c0 3.45 2.26 6.47 5.57 8.12-.3.98-1.1 3.6-1.1 3.6-.13.48.18.46.34.34.13-.1 2.02-1.96 2.8-2.8.38.14.78.24 1.2.24 5.52 0 10-3.58 10-7.9S17.52 3 12 3z"
+                        d="M9 0.5C4.03 0.5 0 3.73 0 7.71c0 2.54 1.69 4.78 4.22 6.07-.19.68-.68 2.48-.78 2.87-.12.48.18.47.37.34.15-.1 2.37-1.61 3.34-2.27.28.03.56.05.85.05 4.97 0 9-3.23 9-7.06S13.97 0.5 9 0.5z"
                       />
                     </svg>
                   </div>
