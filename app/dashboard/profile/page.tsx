@@ -1,13 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { ProfileOverview } from "@/components/profile-overview";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user) redirect("/auth/login");
-  return <ProfileOverview email={user.email ?? ""} createdAt={user.created_at ?? null} />;
+  // middleware에서 이미 인증 확인됨, user는 항상 존재
+  return <ProfileOverview email={user?.email ?? ""} createdAt={user?.created_at ?? null} />;
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -23,7 +24,6 @@ const BAR_HEIGHT = CIRCLE_SIZE + GAP * 2;
 
 export function DashboardBottomNav() {
   const pathname = usePathname();
-  const router = useRouter();
   const [pillKey, setPillKey] = useState(0);
 
   const activeIndex = useMemo(() => {
@@ -89,10 +89,10 @@ export function DashboardBottomNav() {
             const isActive = index === activeIndex;
             const Icon = item.icon;
             return (
-              <button
+              <Link
                 key={item.href}
-                type="button"
-                onClick={() => router.push(item.href)}
+                href={item.href}
+                prefetch={true}
                 className="flex flex-1 flex-col items-center justify-center py-2 transition-colors"
                 style={{
                   color: isActive ? "#262626" : "#ffffff",
@@ -103,7 +103,7 @@ export function DashboardBottomNav() {
                     fontSize: index === 2 ? 26 : 24,
                   }}
                 />
-              </button>
+              </Link>
             );
           })}
         </div>

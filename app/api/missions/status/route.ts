@@ -39,9 +39,11 @@ export async function GET() {
     .select("*", { count: "exact", head: true })
     .eq("referrer_id", user.id);
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     contractCount: resolvedCount,
     hasNotification,
     inviteCount: inviteCount ?? 0,
   });
+  res.headers.set("Cache-Control", "private, max-age=10, stale-while-revalidate=30");
+  return res;
 }

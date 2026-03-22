@@ -32,11 +32,13 @@ export async function GET(request: Request) {
 
   const myRankData = myRank && myRank.length > 0 ? myRank[0] : null;
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     type,
     leaderboard: leaderboard ?? [],
     myRank: myRankData
       ? { rank: myRankData.rank, xp: myRankData.xp }
       : null,
   });
+  res.headers.set("Cache-Control", "private, max-age=30, stale-while-revalidate=60");
+  return res;
 }

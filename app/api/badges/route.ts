@@ -24,7 +24,9 @@ export async function GET() {
     .eq("user_id", user.id)
     .order("unlocked_at", { ascending: true });
 
-  return NextResponse.json({
+  const res = NextResponse.json({
     badges: badges ?? [],
   });
+  res.headers.set("Cache-Control", "private, max-age=60, stale-while-revalidate=120");
+  return res;
 }
