@@ -31,5 +31,7 @@ export async function GET(request: NextRequest) {
   const origin = request.headers.get("x-forwarded-host")
     ? `${request.headers.get("x-forwarded-proto") ?? "https"}://${request.headers.get("x-forwarded-host")}`
     : request.nextUrl.origin;
-  return NextResponse.redirect(`${origin}${safeNext}`);
+  // OAuth 리다이렉트 후 모바일 뷰포트 줌 복원을 위해 from=oauth 파라미터 추가
+  const separator = safeNext.includes("?") ? "&" : "?";
+  return NextResponse.redirect(`${origin}${safeNext}${separator}from=oauth`);
 }
