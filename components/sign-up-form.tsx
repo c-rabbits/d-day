@@ -112,7 +112,7 @@ export function SignUpForm({
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
               inputProps={{ maxLength: 6, style: { textTransform: "uppercase", letterSpacing: "0.15em" } }}
-              helperText="친구에게 받은 추천 코드가 있다면 입력하세요."
+              helperText="친구에게 받은 추천 코드가 있다면 입력하세요. 나중에 설정에서도 입력할 수 있어요."
             />
 
             {error && <Alert severity="error">{error}</Alert>}

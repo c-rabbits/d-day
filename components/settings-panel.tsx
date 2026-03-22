@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
@@ -20,6 +21,7 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import CardGiftcardRoundedIcon from "@mui/icons-material/CardGiftcardRounded";
 
 const BUTTON_SX = {
   justifyContent: "center",
@@ -42,6 +44,11 @@ export function SettingsPanel() {
   const [shareMessage, setShareMessage] = useState("");
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [inviteCount, setInviteCount] = useState(0);
+  const [alreadyReferred, setAlreadyReferred] = useState(false);
+  const [inputCode, setInputCode] = useState("");
+  const [referralMessage, setReferralMessage] = useState("");
+  const [referralError, setReferralError] = useState(false);
+  const [isSubmittingCode, setIsSubmittingCode] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,6 +61,7 @@ export function SettingsPanel() {
       .then((data) => {
         setReferralCode(data.referralCode ?? null);
         setInviteCount(data.inviteCount ?? 0);
+        setAlreadyReferred(data.alreadyReferred ?? false);
       })
       .catch(() => {});
   }, []);
@@ -171,6 +179,71 @@ export function SettingsPanel() {
             </Stack>
           </CardContent>
         </Card>
+
+        {/* 추천 코드 입력 */}
+        {!alreadyReferred && (
+          <Card variant="outlined" sx={{ borderRadius: 2 }}>
+            <CardContent sx={{ p: 2.5 }}>
+              <Stack spacing={1.5}>
+                <Stack direction="row" alignItems="center" spacing={0.75}>
+                  <CardGiftcardRoundedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
+                  <Typography variant="subtitle2" fontWeight={700}>
+                    추천 코드 입력
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  친구에게 받은 추천 코드를 입력하면 500 XP를 받을 수 있어요!
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <TextField
+                    size="small"
+                    placeholder="코드 입력"
+                    value={inputCode}
+                    onChange={(e) => setInputCode(e.target.value.toUpperCase())}
+                    inputProps={{ maxLength: 6, style: { textTransform: "uppercase", letterSpacing: "0.15em", textAlign: "center" } }}
+                    sx={{ flex: 1 }}
+                  />
+                  <Button
+                    variant="contained"
+                    disabled={isSubmittingCode || inputCode.length < 4}
+                    onClick={async () => {
+                      setIsSubmittingCode(true);
+                      setReferralMessage("");
+                      setReferralError(false);
+                      try {
+                        const res = await fetch("/api/referral", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ code: inputCode }),
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                          setReferralMessage("추천 코드가 적용되었습니다! +500 XP");
+                          setAlreadyReferred(true);
+                          setInputCode("");
+                        } else {
+                          setReferralError(true);
+                          setReferralMessage(data.error ?? "오류가 발생했습니다.");
+                        }
+                      } catch {
+                        setReferralError(true);
+                        setReferralMessage("네트워크 오류가 발생했습니다.");
+                      } finally {
+                        setIsSubmittingCode(false);
+                      }
+                    }}
+                    sx={{ minWidth: 80 }}
+                  >
+                    {isSubmittingCode ? "..." : "적용"}
+                  </Button>
+                </Stack>
+                {referralMessage && (
+                  <Alert severity={referralError ? "error" : "success"}>{referralMessage}</Alert>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
 
         {/* 알림 */}
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
