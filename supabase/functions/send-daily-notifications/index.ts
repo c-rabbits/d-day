@@ -136,7 +136,7 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      const title = "디데이 알림";
+      const title = "머니게임 알림";
       const body =
         notif.notify_days_before === 1
           ? `내일 [${contract.title}]이(가) 만료됩니다.`

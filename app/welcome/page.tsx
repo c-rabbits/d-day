@@ -12,7 +12,7 @@ export default function WelcomePage() {
       <div className="relative mx-auto flex w-full max-w-mobile flex-col gap-7">
         <div className="inline-flex w-fit items-center gap-2 rounded-full border border-outline-variant bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
           <AutoAwesomeRoundedIcon sx={{ fontSize: 14, color: "primary.main" }} />
-          한 번 등록하면 끝까지 챙겨주는 디데이
+          한 번 등록하면 끝까지 챙겨주는 머니게임
         </div>
 
         <div>

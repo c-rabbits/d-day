@@ -1,5 +1,5 @@
-// 디데이 PWA — 최소 서비스 워커 (오프라인 캐시 기본)
-const CACHE_NAME = "dday-v1";
+// 머니게임 PWA — 최소 서비스 워커 (오프라인 캐시 기본)
+const CACHE_NAME = "moneygame-v1";
 
 self.addEventListener("install", () => {
   self.skipWaiting();

@@ -152,9 +152,9 @@ export function SettingsPanel() {
                 onClick={async () => {
                   const code = referralCode ?? "";
                   const shareData = {
-                    title: "D-Day - 계약 만료일 관리",
-                    text: `계약 만료일, 놓치지 마세요! D-Day로 간편하게 관리하세요.\n추천코드: ${code}`,
-                    url: "https://d-day-one.vercel.app",
+                    title: "머니게임 - 세상의 모든 알림",
+                    text: `불필요한 지출, 놓치지 마세요! 머니게임으로 간편하게 관리하세요.\n추천코드: ${code}`,
+                    url: "https://savemymoney.xyz",
                   };
                   try {
                     if (navigator.share) {

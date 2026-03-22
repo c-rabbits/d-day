@@ -48,7 +48,7 @@ export function AuthShellMui({
               }}
             >
               <Typography variant="h6" fontWeight={700}>
-                디데이
+                머니게임
               </Typography>
             </Link>
           )}

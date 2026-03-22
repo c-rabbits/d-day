@@ -7,7 +7,7 @@ const messaging = firebase.messaging();
 
 // 백그라운드에서 푸시 수신 시 (선택)
 messaging.onBackgroundMessage(function(payload) {
-  const title = payload.notification?.title || "디데이";
+  const title = payload.notification?.title || "머니게임";
   const options = { body: payload.notification?.body || "" };
   self.registration.showNotification(title, options);
 });

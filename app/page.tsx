@@ -52,15 +52,15 @@ async function HomeContent() {
         <section className="space-y-5 pt-2">
           <span className="inline-flex items-center gap-2 rounded-full border border-outline-variant bg-surface/80 px-3 py-1 text-xs font-medium text-muted-foreground">
             <AutoAwesomeRoundedIcon sx={{ fontSize: 14, color: "primary.main" }} />
-            계약 만료 알림을 더 똑똑하게
+            세상의 모든 알림을 한곳에
           </span>
           <div>
             <h1 className="text-[2.55rem] font-bold tracking-tight text-foreground">
-              디데이
+              머니게임
             </h1>
             <p className="mt-3 text-[0.95rem] leading-relaxed text-muted-foreground">
-              내가 맺은 계약의 끝을 대신 기억해주는 앱. 등록부터 알림까지, 중요한
-              날짜를 놓치지 않게 도와드려요.
+              불필요한 지출을 줄여주는 구독 알림 앱. 등록부터 알림까지, 새는 돈을
+              놓치지 않게 도와드려요.
             </p>
           </div>
         </section>

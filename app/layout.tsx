@@ -13,10 +13,10 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "디데이 — 생활 계약 만료 알림",
-  description: "내가 맺은 계약의 끝을 대신 기억해주는 앱",
+  title: "머니게임 — 세상의 모든 알림",
+  description: "불필요한 지출을 줄여주는 구독 알림 앱",
   manifest: "/manifest.json",
-  appleWebApp: { capable: true, title: "디데이" },
+  appleWebApp: { capable: true, title: "머니게임" },
 };
 
 export const viewport: Viewport = {

@@ -1,7 +1,7 @@
 {
-  "name": "디데이 — 생활 계약 만료 알림",
-  "short_name": "디데이",
-  "description": "내가 맺은 계약의 끝을 대신 기억해주는 앱",
+  "name": "머니게임 — 세상의 모든 알림",
+  "short_name": "머니게임",
+  "description": "불필요한 지출을 줄여주는 구독 알림 앱",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
