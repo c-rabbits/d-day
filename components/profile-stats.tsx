@@ -148,7 +148,7 @@ export function ProfileStats() {
 
         {/* 요약 카드 3개 */}
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1 }}>
-          <SummaryCard label="총 계약" value={`${monthlySubs.length}건`} color="#A96BFF" />
+          <SummaryCard label="총 계약" value={`${monthlySubs.length}건`} color="#44B2FF" />
           <SummaryCard
             label="7일 내 결제"
             value={`${monthly7.length}건`}
@@ -364,7 +364,17 @@ function SummaryCard({
         boxShadow: "none",
       }}
     >
-      <CardContent sx={{ p: 1.2, "&:last-child": { pb: 1.2 }, textAlign: "center" }}>
+      <CardContent
+        sx={{
+          p: 1.5,
+          "&:last-child": { pb: 1.5 },
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Typography variant="caption" sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.85)" }}>
           {label}
         </Typography>
