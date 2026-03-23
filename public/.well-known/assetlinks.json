@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "xyz.savemymoney.twa",
+        "sha256_cert_fingerprints": ["1C:F7:B5:AA:6D:DE:A8:54:34:2F:58:9E:1B:E7:B3:23:F3:60:7B:A3:87:3E:35:C8:6F:54:DB:A7:30:2A:DA:27"]
+      }
+    }]
