@@ -92,7 +92,7 @@ export function DashboardBanner() {
             width: "100%",
             aspectRatio: "16 / 9",
             overflow: "hidden",
-            borderRadius: 3,
+            borderRadius: 2,
           }}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
