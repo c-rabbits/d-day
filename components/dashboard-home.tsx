@@ -93,7 +93,9 @@ export function DashboardHome({
   return (
     <Box sx={{ px: 2, pt: 0, pb: 14 }}>
       <Stack spacing={2.4}>
-        <DashboardBanner />
+        <Box sx={{ mx: -2 }}>
+          <DashboardBanner />
+        </Box>
 
         <Box>
           <Typography variant="h5" fontWeight={700} gutterBottom>
