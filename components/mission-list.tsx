@@ -17,10 +17,9 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import LeaderboardRoundedIcon from "@mui/icons-material/LeaderboardRounded";
-import { getXP, isDailyDone, isOnetimeDone, getTodayKey, completeMission } from "@/lib/xp-store";
+import { getXP, isDailyDone, isOnetimeDone, getTodayKey, completeMission, syncFromServer } from "@/lib/xp-store";
 import { getLevelFromXP, getXPProgressInLevel, MAX_LEVEL } from "@/lib/level";
 import { MISSIONS, type Mission } from "@/lib/mission";
-import { useXpSync } from "@/lib/hooks/use-xp-sync";
 
 type MissionListProps = {
   contractCount?: number;
@@ -29,9 +28,6 @@ type MissionListProps = {
 
 export function MissionList({ contractCount: initialContractCount, hasNotification: initialHasNotification }: MissionListProps = {}) {
   const router = useRouter();
-
-  // DB -> localStorage 동기화
-  useXpSync();
 
   const [xp, setXp] = useState(0);
   const [dailyDone, setDailyDoneState] = useState(false);
@@ -61,42 +57,43 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     return () => window.removeEventListener("dday_xp_updated", onXpUpdated);
   }, []);
 
-  // 1회성 미션 조건 확인 API 호출
+  // XP 동기화 + 미션 상태 API를 병렬 호출
   useEffect(() => {
+    let cancelled = false;
+
+    const syncXp = syncFromServer();
+
     const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
     const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification", "invite_1", "invite_3", "invite_5", "invite_10", "invite_20", "invite_30"];
     const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
-    if (!needStatus) {
-      setStatusLoaded(true);
-      refresh();
-      return;
-    }
-    let cancelled = false;
-    fetch("/api/missions/status")
-      .then((res) => {
-        if (!res.ok) throw new Error("status failed");
-        return res.json();
-      })
-      .then((data: { contractCount: number; hasNotification: boolean; inviteCount: number }) => {
-        if (!cancelled) {
-          setContractCount(data.contractCount);
-          setHasNotification(data.hasNotification);
-          setInviteCount(data.inviteCount ?? 0);
-          setStatusLoaded(true);
-        }
-      })
-      .catch(() => setStatusLoaded(true))
-      .finally(() => {
-        if (!cancelled) refresh();
-      });
+
+    const fetchStatus = needStatus
+      ? fetch("/api/missions/status")
+          .then((res) => {
+            if (!res.ok) throw new Error("status failed");
+            return res.json();
+          })
+          .then((data: { contractCount: number; hasNotification: boolean; inviteCount: number }) => {
+            if (!cancelled) {
+              setContractCount(data.contractCount);
+              setHasNotification(data.hasNotification);
+              setInviteCount(data.inviteCount ?? 0);
+            }
+          })
+          .catch(() => {})
+      : Promise.resolve();
+
+    Promise.all([syncXp, fetchStatus]).then(() => {
+      if (!cancelled) {
+        setStatusLoaded(true);
+        refresh();
+      }
+    });
+
     return () => {
       cancelled = true;
     };
   }, []);
-
-  useEffect(() => {
-    if (statusLoaded) refresh();
-  }, [contractCount, hasNotification, statusLoaded]);
 
   // 탭 복귀 시 날짜 확인 (자정 리셋)
   useEffect(() => {
