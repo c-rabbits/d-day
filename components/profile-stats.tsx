@@ -345,7 +345,7 @@ export function ProfileStats() {
   );
 }
 
-/** 요약 카드 */
+/** 요약 카드 (색상 배경) */
 function SummaryCard({
   label,
   value,
@@ -357,17 +357,18 @@ function SummaryCard({
 }) {
   return (
     <Card
-      variant="outlined"
       sx={{
         borderRadius: 2,
-        borderTop: `3px solid ${color}`,
+        bgcolor: color,
+        border: "none",
+        boxShadow: "none",
       }}
     >
       <CardContent sx={{ p: 1.2, "&:last-child": { pb: 1.2 }, textAlign: "center" }}>
-        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.7rem" }}>
+        <Typography variant="caption" sx={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.85)" }}>
           {label}
         </Typography>
-        <Typography variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.3 }}>
+        <Typography variant="subtitle1" fontWeight={700} sx={{ lineHeight: 1.3, color: "#fff" }}>
           {value}
         </Typography>
       </CardContent>

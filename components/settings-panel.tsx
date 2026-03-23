@@ -121,52 +121,58 @@ export function SettingsPanel() {
               </Stack>
 
               {/* 내 추천 코드 */}
-              {referralCode && (
-                <Box
-                  sx={{
-                    bgcolor: "grey.100",
-                    borderRadius: 2,
-                    p: 2,
-                    textAlign: "center",
-                  }}
-                >
-                  <Typography variant="caption" color="text.secondary">
-                    내 추천 코드
-                  </Typography>
-                  <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5} sx={{ mt: 0.5 }}>
-                    <Typography
-                      variant="h5"
-                      fontWeight={800}
-                      letterSpacing="0.2em"
-                    >
-                      {referralCode}
+              <Box
+                sx={{
+                  bgcolor: "grey.100",
+                  borderRadius: 2,
+                  p: 2,
+                  textAlign: "center",
+                }}
+              >
+                <Typography variant="caption" color="text.secondary">
+                  내 추천 코드
+                </Typography>
+                {referralCode ? (
+                  <>
+                    <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5} sx={{ mt: 0.5 }}>
+                      <Typography
+                        variant="h5"
+                        fontWeight={800}
+                        letterSpacing="0.2em"
+                      >
+                        {referralCode}
+                      </Typography>
+                      <Box
+                        component="button"
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(referralCode);
+                          setCodeCopied(true);
+                          setTimeout(() => setCodeCopied(false), 2000);
+                        }}
+                        sx={{
+                          border: "none",
+                          bgcolor: "transparent",
+                          cursor: "pointer",
+                          p: 0.5,
+                          borderRadius: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          "&:hover": { bgcolor: "grey.200" },
+                        }}
+                      >
+                        <ContentCopyRoundedIcon sx={{ fontSize: 18, color: codeCopied ? "success.main" : "text.secondary" }} />
+                      </Box>
+                    </Stack>
+                    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+                      {inviteCount}/30명 초대 완료
                     </Typography>
-                    <Box
-                      component="button"
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(referralCode);
-                        setCodeCopied(true);
-                        setTimeout(() => setCodeCopied(false), 2000);
-                      }}
-                      sx={{
-                        border: "none",
-                        bgcolor: "transparent",
-                        cursor: "pointer",
-                        p: 0.5,
-                        borderRadius: 1,
-                        display: "flex",
-                        alignItems: "center",
-                        "&:hover": { bgcolor: "grey.200" },
-                      }}
-                    >
-                      <ContentCopyRoundedIcon sx={{ fontSize: 18, color: codeCopied ? "success.main" : "text.secondary" }} />
-                    </Box>
-                  </Stack>
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-                    {inviteCount}/30명 초대 완료
+                  </>
+                ) : (
+                  <Typography variant="h5" fontWeight={800} sx={{ mt: 0.5, color: "text.disabled" }}>
+                    ------
                   </Typography>
-                </Box>
-              )}
+                )}
+              </Box>
 
               <Button
                 variant="contained"

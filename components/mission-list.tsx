@@ -24,9 +24,10 @@ import { MISSIONS, type Mission } from "@/lib/mission";
 type MissionListProps = {
   contractCount?: number;
   hasNotification?: boolean;
+  inviteCount?: number;
 };
 
-export function MissionList({ contractCount: initialContractCount, hasNotification: initialHasNotification }: MissionListProps = {}) {
+export function MissionList({ contractCount: initialContractCount, hasNotification: initialHasNotification, inviteCount: initialInviteCount }: MissionListProps = {}) {
   const router = useRouter();
 
   const [xp, setXp] = useState(0);
@@ -34,8 +35,9 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [contractCount, setContractCount] = useState(initialContractCount ?? 0);
   const [hasNotification, setHasNotification] = useState(initialHasNotification ?? false);
-  const [inviteCount, setInviteCount] = useState(0);
-  const [statusLoaded, setStatusLoaded] = useState(false);
+  const [inviteCount, setInviteCount] = useState(initialInviteCount ?? 0);
+  const hasServerData = initialContractCount != null;
+  const [statusLoaded, setStatusLoaded] = useState(hasServerData);
   const [loadingMission, setLoadingMission] = useState<string | null>(null);
 
   const [todayKey, setTodayKey] = useState(() => getTodayKey());
@@ -57,31 +59,33 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
     return () => window.removeEventListener("dday_xp_updated", onXpUpdated);
   }, []);
 
-  // XP 동기화 + 미션 상태 API를 병렬 호출
+  // XP 동기화 + 미션 상태 API를 병렬 호출 (서버 데이터 있으면 status 스킵)
   useEffect(() => {
     let cancelled = false;
 
     const syncXp = syncFromServer();
 
-    const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
-    const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification", "invite_1", "invite_3", "invite_5", "invite_10", "invite_20", "invite_30"];
-    const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
-
-    const fetchStatus = needStatus
-      ? fetch("/api/missions/status")
-          .then((res) => {
-            if (!res.ok) throw new Error("status failed");
-            return res.json();
-          })
-          .then((data: { contractCount: number; hasNotification: boolean; inviteCount: number }) => {
-            if (!cancelled) {
-              setContractCount(data.contractCount);
-              setHasNotification(data.hasNotification);
-              setInviteCount(data.inviteCount ?? 0);
-            }
-          })
-          .catch(() => {})
-      : Promise.resolve();
+    const fetchStatus = hasServerData
+      ? Promise.resolve()
+      : (() => {
+          const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
+          const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification", "invite_1", "invite_3", "invite_5", "invite_10", "invite_20", "invite_30"];
+          const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
+          if (!needStatus) return Promise.resolve();
+          return fetch("/api/missions/status")
+            .then((res) => {
+              if (!res.ok) throw new Error("status failed");
+              return res.json();
+            })
+            .then((data: { contractCount: number; hasNotification: boolean; inviteCount: number }) => {
+              if (!cancelled) {
+                setContractCount(data.contractCount);
+                setHasNotification(data.hasNotification);
+                setInviteCount(data.inviteCount ?? 0);
+              }
+            })
+            .catch(() => {});
+        })();
 
     Promise.all([syncXp, fetchStatus]).then(() => {
       if (!cancelled) {
