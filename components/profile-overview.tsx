@@ -3,6 +3,7 @@
 import { Avatar, Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { ProfileXpBlock } from "@/components/profile-xp-block";
+import { ProfileStats } from "@/components/profile-stats";
 
 type ProfileOverviewProps = {
   email: string;
@@ -25,6 +26,7 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
           프로필
         </Typography>
 
+        {/* 유저 정보 카드 */}
         <Card variant="outlined" sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 3 }}>
             <Stack direction="row" spacing={2} alignItems="center">
@@ -62,6 +64,12 @@ export function ProfileOverview({ email, createdAt }: ProfileOverviewProps) {
             </Stack>
           </CardContent>
         </Card>
+
+        {/* 통계/차트 */}
+        <Typography variant="h6" fontWeight={700}>
+          내 지출 리포트
+        </Typography>
+        <ProfileStats />
       </Stack>
     </Box>
   );
