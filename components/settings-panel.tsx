@@ -22,6 +22,7 @@ import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import CardGiftcardRoundedIcon from "@mui/icons-material/CardGiftcardRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 const BUTTON_SX = {
   justifyContent: "center",
@@ -42,6 +43,7 @@ export function SettingsPanel() {
   const [isLoadingPush, setIsLoadingPush] = useState(false);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | null>(null);
   const [shareMessage, setShareMessage] = useState("");
+  const [codeCopied, setCodeCopied] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
   const [inviteCount, setInviteCount] = useState(0);
   const [alreadyReferred, setAlreadyReferred] = useState(false);
@@ -131,14 +133,35 @@ export function SettingsPanel() {
                   <Typography variant="caption" color="text.secondary">
                     내 추천 코드
                   </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight={800}
-                    letterSpacing="0.2em"
-                    sx={{ mt: 0.5 }}
-                  >
-                    {referralCode}
-                  </Typography>
+                  <Stack direction="row" alignItems="center" justifyContent="center" spacing={0.5} sx={{ mt: 0.5 }}>
+                    <Typography
+                      variant="h5"
+                      fontWeight={800}
+                      letterSpacing="0.2em"
+                    >
+                      {referralCode}
+                    </Typography>
+                    <Box
+                      component="button"
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(referralCode);
+                        setCodeCopied(true);
+                        setTimeout(() => setCodeCopied(false), 2000);
+                      }}
+                      sx={{
+                        border: "none",
+                        bgcolor: "transparent",
+                        cursor: "pointer",
+                        p: 0.5,
+                        borderRadius: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        "&:hover": { bgcolor: "grey.200" },
+                      }}
+                    >
+                      <ContentCopyRoundedIcon sx={{ fontSize: 18, color: codeCopied ? "success.main" : "text.secondary" }} />
+                    </Box>
+                  </Stack>
                   <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
                     {inviteCount}/30명 초대 완료
                   </Typography>
