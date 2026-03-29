@@ -83,10 +83,15 @@ export function BadgeCollection() {
     <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={2.5}>
         <Box>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            업적
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <IconButton onClick={() => router.back()} size="small">
+              <ArrowBackRoundedIcon />
+            </IconButton>
+            <Typography variant="h5" fontWeight={700}>
+              업적
+            </Typography>
+          </Stack>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             현재 레벨: Lv.{level}
           </Typography>
         </Box>
