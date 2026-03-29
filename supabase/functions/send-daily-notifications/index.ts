@@ -17,14 +17,13 @@ type ServiceAccount = {
 
 async function getFcmAccessToken(sa: ServiceAccount): Promise<string> {
   const key = await importPKCS8(sa.private_key.replace(/\\n/g, "\n"), "RS256");
-  const jwt = await new SignJWT({})
+  const jwt = await new SignJWT({ scope: "https://www.googleapis.com/auth/firebase.messaging" })
     .setProtectedHeader({ alg: "RS256" })
     .setIssuer(sa.client_email)
     .setSubject(sa.client_email)
     .setAudience("https://oauth2.googleapis.com/token")
     .setIssuedAt()
     .setExpirationTime("1h")
-    .setClaim("scope", "https://www.googleapis.com/auth/firebase.messaging")
     .sign(key);
 
   const res = await fetch("https://oauth2.googleapis.com/token", {
