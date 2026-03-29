@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Card,
   CardContent,
+  IconButton,
   Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { BADGES, type Badge } from "@/lib/badge";
 import { getXP } from "@/lib/xp-store";
@@ -21,6 +24,7 @@ type UnlockedBadge = {
 };
 
 export function BadgeCollection() {
+  const router = useRouter();
   useXpSync();
 
   const [unlockedBadges, setUnlockedBadges] = useState<UnlockedBadge[]>([]);
@@ -58,9 +62,14 @@ export function BadgeCollection() {
   if (loading) {
     return (
       <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
-          업적
-        </Typography>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <IconButton onClick={() => router.back()} size="small">
+            <ArrowBackRoundedIcon />
+          </IconButton>
+          <Typography variant="h5" fontWeight={700}>
+            업적
+          </Typography>
+        </Stack>
         <Stack spacing={1.5}>
           {[1, 2, 3].map((i) => (
             <Skeleton key={i} variant="rounded" height={100} />

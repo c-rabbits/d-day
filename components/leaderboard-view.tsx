@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Avatar,
   Box,
@@ -8,12 +9,14 @@ import {
   CardContent,
   Chip,
   Divider,
+  IconButton,
   Skeleton,
   Stack,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import { getLevelFromXP } from "@/lib/level";
 
@@ -38,6 +41,7 @@ const RANK_COLORS: Record<number, string> = {
 };
 
 export function LeaderboardView() {
+  const router = useRouter();
   const [tab, setTab] = useState<"all" | "weekly">("all");
   const [data, setData] = useState<LeaderboardData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,11 +62,14 @@ export function LeaderboardView() {
   return (
     <Box sx={{ px: 2, pt: 3.5, pb: 14 }}>
       <Stack spacing={2.5}>
-        <Box>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <IconButton onClick={() => router.back()} size="small">
+            <ArrowBackRoundedIcon />
+          </IconButton>
+          <Typography variant="h5" fontWeight={700}>
             리더보드
           </Typography>
-        </Box>
+        </Stack>
 
         {/* 탭 */}
         <Tabs
