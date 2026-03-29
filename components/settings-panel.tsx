@@ -68,29 +68,100 @@ export function SettingsPanel() {
       .catch(() => {});
   }, []);
 
+  const [pushEnabled, setPushEnabled] = useState(false);
+
+  // 푸시 토큰 등록 여부 확인
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      supabase
+        .from("push_tokens")
+        .select("token")
+        .eq("user_id", user.id)
+        .limit(1)
+        .then(({ data }) => {
+          if (data && data.length > 0) setPushEnabled(true);
+        });
+    });
+  }, []);
+
   const handlePushPermission = async () => {
     if (typeof Notification === "undefined") {
       setNotificationError(true);
       setNotificationMessage("이 브라우저는 알림을 지원하지 않습니다.");
       return;
     }
-    if (Notification.permission === "granted") {
-      setNotificationMessage("브라우저 설정에서 알림을 끌 수 있습니다.");
-      setNotificationError(false);
-      return;
-    }
+
     setIsLoadingPush(true);
     setNotificationError(false);
     setNotificationMessage("");
+
     try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setNotificationError(true);
+        setNotificationMessage("로그인이 필요합니다.");
+        return;
+      }
+
+      // 이미 활성화되어 있으면 → 해제
+      if (pushEnabled) {
+        await supabase.from("push_tokens").delete().eq("user_id", user.id);
+        setPushEnabled(false);
+        setNotificationMessage("푸시 알림이 해제되었습니다.");
+        return;
+      }
+
+      // 활성화 → 권한 요청 + 토큰 저장
       const permission = await Notification.requestPermission();
       setNotificationPermission(permission);
-      if (permission === "granted") {
-        setNotificationMessage("브라우저 알림이 허용되었습니다.");
-      } else {
+      if (permission !== "granted") {
         setNotificationError(true);
         setNotificationMessage("알림이 거부되었습니다. 브라우저 설정에서 변경해 주세요.");
+        return;
       }
+
+      const hasFirebase = !!(
+        process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+        process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+        process.env.NEXT_PUBLIC_FIREBASE_APP_ID &&
+        process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
+      );
+      if (!hasFirebase) {
+        setNotificationError(true);
+        setNotificationMessage("Firebase 설정이 필요합니다.");
+        return;
+      }
+
+      const { getFirebaseApp } = await import("@/lib/firebase");
+      const app = await getFirebaseApp();
+      if (!app) {
+        setNotificationError(true);
+        setNotificationMessage("Firebase 초기화 실패.");
+        return;
+      }
+      const { getMessaging, getToken } = await import("firebase/messaging");
+      const messaging = getMessaging(app);
+      const token = await getToken(messaging, {
+        vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+      });
+      if (!token) {
+        setNotificationError(true);
+        setNotificationMessage("FCM 토큰 발급 실패.");
+        return;
+      }
+
+      await supabase.from("push_tokens").upsert(
+        { user_id: user.id, token },
+        { onConflict: "user_id,token" },
+      );
+      setPushEnabled(true);
+      setNotificationMessage("푸시 알림이 활성화되었습니다.");
+    } catch (e) {
+      setNotificationError(true);
+      setNotificationMessage(e instanceof Error ? e.message : "설정에 실패했습니다.");
     } finally {
       setIsLoadingPush(false);
     }
@@ -291,7 +362,7 @@ export function SettingsPanel() {
                 fullWidth
                 sx={BUTTON_SX}
               >
-                {isLoadingPush ? "요청 중..." : notificationPermission === "granted" ? "알림 권한 끄기" : "알림 권한 켜기"}
+                {isLoadingPush ? "처리 중..." : pushEnabled ? "푸시 알림 끄기" : "푸시 알림 켜기"}
               </Button>
               {notificationMessage && (
                 <Alert severity={notificationError ? "error" : "success"}>{notificationMessage}</Alert>

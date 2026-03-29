@@ -40,6 +40,9 @@ async function getFcmAccessToken(sa: ServiceAccount): Promise<string> {
   return data.access_token;
 }
 
+/** FCM 발송 결과 */
+type FcmResult = { ok: true } | { ok: false; unregistered: boolean; error: string };
+
 async function sendFcmV1(
   projectId: string,
   accessToken: string,
@@ -47,7 +50,7 @@ async function sendFcmV1(
   title: string,
   body: string,
   data: Record<string, string>
-): Promise<boolean> {
+): Promise<FcmResult> {
   const res = await fetch(
     `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
     {
@@ -65,7 +68,11 @@ async function sendFcmV1(
       }),
     }
   );
-  return res.ok;
+  if (res.ok) return { ok: true };
+  const errText = await res.text().catch(() => "");
+  // 404 또는 UNREGISTERED → 토큰 만료/무효
+  const unregistered = res.status === 404 || errText.includes("UNREGISTERED");
+  return { ok: false, unregistered, error: errText };
 }
 
 Deno.serve(async (req) => {
@@ -121,6 +128,8 @@ Deno.serve(async (req) => {
     const contractMap = new Map((contracts ?? []).map((c) => [c.id, c]));
     const accessToken = await getFcmAccessToken(sa);
     let sent = 0;
+    let failed = 0;
+    const staleTokens: string[] = []; // 무효 토큰 수집
 
     for (const notif of notifications) {
       const contract = contractMap.get(notif.contract_id);
@@ -131,6 +140,7 @@ Deno.serve(async (req) => {
         .select("token")
         .eq("user_id", contract.user_id);
 
+      // 토큰이 없으면 발송할 수 없으므로 완료 처리
       if (!tokens?.length) {
         await supabase.from("notifications").update({ is_sent: true }).eq("id", notif.id);
         continue;
@@ -142,18 +152,40 @@ Deno.serve(async (req) => {
           ? `내일 [${contract.title}]이(가) 만료됩니다.`
           : `${notif.notify_days_before}일 후 [${contract.title}] 계약이 만료됩니다.`;
 
+      let anySent = false;
       for (const { token } of tokens) {
-        const ok = await sendFcmV1(sa.project_id, accessToken, token, title, body, {
+        const result = await sendFcmV1(sa.project_id, accessToken, token, title, body, {
           contract_id: contract.id,
         });
-        if (ok) sent++;
+        if (result.ok) {
+          sent++;
+          anySent = true;
+        } else {
+          console.error(`[FCM] 발송 실패 token=${token.slice(0, 12)}… error=${result.error}`);
+          // 무효/만료 토큰이면 삭제 대상에 추가
+          if (result.unregistered) {
+            staleTokens.push(token);
+          } else {
+            failed++;
+          }
+        }
       }
 
-      await supabase.from("notifications").update({ is_sent: true }).eq("id", notif.id);
+      // 최소 1건 성공 또는 모든 토큰이 무효 → 완료 처리
+      // 전부 일시적 실패면 is_sent = false 유지 → 다음날 재시도
+      if (anySent || staleTokens.length > 0) {
+        await supabase.from("notifications").update({ is_sent: true }).eq("id", notif.id);
+      }
+    }
+
+    // 무효 토큰 일괄 삭제
+    if (staleTokens.length > 0) {
+      await supabase.from("push_tokens").delete().in("token", staleTokens);
+      console.log(`[FCM] 무효 토큰 ${staleTokens.length}개 삭제`);
     }
 
     return new Response(
-      JSON.stringify({ ok: true, sent, total: notifications.length }),
+      JSON.stringify({ ok: true, sent, failed, staleTokensRemoved: staleTokens.length, total: notifications.length }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {
