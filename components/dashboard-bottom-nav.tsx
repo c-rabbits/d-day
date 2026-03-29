@@ -28,6 +28,8 @@ export function DashboardBottomNav() {
 
   const activeIndex = useMemo(() => {
     if (pathname.startsWith("/dashboard/missions")) return 1;
+    if (pathname.startsWith("/dashboard/achievements")) return 1;
+    if (pathname.startsWith("/dashboard/leaderboard")) return 1;
     if (pathname.startsWith("/dashboard/contracts/new")) return 2;
     if (pathname.startsWith("/dashboard/profile")) return 3;
     if (pathname.startsWith("/dashboard/settings")) return 4;

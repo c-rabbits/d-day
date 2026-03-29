@@ -1,4 +1,5 @@
 import { DashboardBottomNav } from "@/components/dashboard-bottom-nav";
+import { DashboardHeader } from "@/components/dashboard-header";
 import { OAuthPopupCloser } from "@/components/oauth-popup-closer";
 import { ViewportFix } from "@/components/viewport-fix";
 import { Suspense } from "react";
@@ -12,6 +13,7 @@ export default function DashboardLayout({
     <main className="relative flex h-screen min-h-0 max-h-screen flex-col overflow-hidden bg-background">
       <OAuthPopupCloser />
       <ViewportFix />
+      <DashboardHeader />
       <div
         className="dashboard-scroll relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-none"
         style={{ paddingBottom: "calc(7rem + env(safe-area-inset-bottom, 0px))" }}
