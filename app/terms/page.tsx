@@ -165,7 +165,7 @@ export default function TermsPage() {
             부칙
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-            이 약관은 2026년 2월 28일부터 시행합니다.
+            이 약관은 2026년 4월 2일부터 시행합니다.
           </Typography>
         </Box>
       </Container>
