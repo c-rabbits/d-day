@@ -12,7 +12,7 @@ const SECTIONS: Array<{
 }> = [
   {
     title: "1. 개인정보의 처리 목적",
-    body: "디데이(이하 \"회사\")는 다음 목적을 위해 개인정보를 처리합니다.",
+    body: "머니게임(이하 \"회사\")는 다음 목적을 위해 개인정보를 처리합니다.",
     items: [
       "회원 가입 및 관리",
       "계약 만료 알림 서비스 제공",
@@ -105,7 +105,7 @@ export default function PrivacyPage() {
         </Button>
 
         <Typography variant="h5" fontWeight={700} sx={{ mb: 3, color: "grey.900" }}>
-          디데이 개인정보처리방침
+          머니게임 개인정보처리방침
         </Typography>
 
         <Stack spacing={3}>
