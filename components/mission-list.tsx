@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -69,8 +69,8 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
       ? Promise.resolve()
       : (() => {
           const completedOneTime = MISSIONS.filter((m) => m.type === "one_time" && isOnetimeDone(m.id)).map((m) => m.id);
-          const oneTimeIdsNeedStatus = ["first_contract", "three_contracts", "set_notification", "invite_1", "invite_3", "invite_5", "invite_10", "invite_20", "invite_30"];
-          const needStatus = oneTimeIdsNeedStatus.some((id) => !completedOneTime.includes(id));
+          const oneTimeIds = MISSIONS.filter((m) => m.type === "one_time").map((m) => m.id);
+          const needStatus = oneTimeIds.some((id) => !completedOneTime.includes(id));
           if (!needStatus) return Promise.resolve();
           return fetch("/api/missions/status")
             .then((res) => {
@@ -291,7 +291,7 @@ export function MissionList({ contractCount: initialContractCount, hasNotificati
 
 const SKY_BLUE = "#44B2FF";
 
-function MissionCard({
+const MissionCard = memo(function MissionCard({
   mission,
   done,
   canClaim,
@@ -365,4 +365,4 @@ function MissionCard({
       </CardContent>
     </Card>
   );
-}
+});

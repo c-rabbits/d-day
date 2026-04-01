@@ -55,7 +55,10 @@ export function ProfileStats() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       const { data } = await supabase
         .from("contracts")
@@ -65,7 +68,7 @@ export function ProfileStats() {
 
       setContracts((data as Contract[]) ?? []);
       setLoading(false);
-    })();
+    })().catch(() => setLoading(false));
   }, []);
 
   if (loading) {

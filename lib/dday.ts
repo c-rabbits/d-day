@@ -1,14 +1,19 @@
 const SUBSCRIPTION_END_DATE = "9999-12-31";
 
+/** KST 기준 오늘 날짜 (YYYY-MM-DD) */
+function getTodayKST(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+}
+
 /**
- * end_date(YYYY-MM-DD) 기준 D-day 계산
+ * end_date(YYYY-MM-DD) 기준 D-day 계산 (KST 기준)
  * @returns 만료일까지 남은 일수. 오늘=0, 과거=음수
  */
 export function getDday(endDate: string): number {
   const end = new Date(endDate);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = new Date(getTodayKST());
   end.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
   const diff = end.getTime() - today.getTime();
   return Math.round(diff / (1000 * 60 * 60 * 24));
 }
@@ -25,7 +30,7 @@ function getMaxDay(year: number, month: number): number {
 
 /** 다음 월 지출일(해당 일자) 날짜 반환. 이미 지났으면 다음 달 */
 export function getNextPaymentDate(paymentDay: number): Date {
-  const today = new Date();
+  const today = new Date(getTodayKST());
   today.setHours(0, 0, 0, 0);
   const y = today.getFullYear();
   const m = today.getMonth();
@@ -46,7 +51,7 @@ export function getNextPaymentDate(paymentDay: number): Date {
  */
 export function getDdayForPaymentDay(paymentDay: number): number {
   const next = getNextPaymentDate(paymentDay);
-  const today = new Date();
+  const today = new Date(getTodayKST());
   today.setHours(0, 0, 0, 0);
   const diff = next.getTime() - today.getTime();
   const days = Math.round(diff / (1000 * 60 * 60 * 24));
