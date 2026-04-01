@@ -32,7 +32,7 @@ export default function WelcomePage() {
         <div className="grid gap-3 rounded-2xl border border-outline-variant/70 bg-surface/80 p-5">
           {[
             "카테고리별로 계약을 정리해 한눈에 확인",
-            "D-day 중심으로 만료 임박 계약 자동 정렬",
+            "만료 임박 계약 자동 정렬",
             "원하는 시점(D-30, D-7, D-1) 알림 설정",
           ].map((item) => (
             <div key={item} className="flex items-start gap-3">

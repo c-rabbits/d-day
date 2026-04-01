@@ -1,4 +1,4 @@
-// D-Day 앱 공통 타입 (DB 스키마와 일치)
+// 머니게임 앱 공통 타입 (DB 스키마와 일치)
 
 export const CONTRACT_CATEGORIES = [
   "RENT",

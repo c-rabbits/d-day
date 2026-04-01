@@ -1,4 +1,4 @@
-// 디데이 — 매일 scheduled_date가 오늘인 알림을 찾아 FCM 푸시 발송 (HTTP v1 API)
+// 머니게임 — 매일 scheduled_date가 오늘인 알림을 찾아 FCM 푸시 발송 (HTTP v1 API)
 // Cron으로 매일 호출. FCM_SERVICE_ACCOUNT_JSON 시크릿 필요 (Legacy 서버 키 사용 중지됨).
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
