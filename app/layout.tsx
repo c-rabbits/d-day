@@ -51,6 +51,13 @@ export default function RootLayout({
             __html: `(function(){var c='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover';function fix(){var m=document.querySelector('meta[name=viewport]');if(m){m.setAttribute('content',c);}else{var e=document.createElement('meta');e.name='viewport';e.content=c;document.head.appendChild(e);}}fix();document.addEventListener('DOMContentLoaded',fix);window.addEventListener('pageshow',fix);if(location.search.indexOf('from=oauth')!==-1&&!sessionStorage.getItem('__viewport_reloaded')){document.documentElement.style.visibility='hidden';}})();`,
           }}
         />
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8517574017463111"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <PwaRegister />
         <ThemeProvider
           attribute="class"
